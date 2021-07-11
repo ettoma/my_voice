@@ -1,8 +1,6 @@
-import 'dart:convert';
-
 import 'package:audio_journal/models/app_bar.dart';
+import 'package:audio_journal/models/sound_recorder.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_sound/public/flutter_sound_recorder.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Recording extends StatefulWidget {
@@ -13,47 +11,36 @@ class Recording extends StatefulWidget {
 }
 
 class _RecordingState extends State<Recording> {
-  FlutterSoundRecorder _myRecorder = FlutterSoundRecorder();
-  bool _myRecorderIsInited = false;
-  bool _isRecording = false;
+  final recorder = SoundRecorder();
+  // bool isRecording = recorder.isRecording;
 
   @override
   void initState() {
     super.initState();
-    _myRecorder.openAudioSession().then((value) {
-      setState(() {
-        _myRecorderIsInited = true;
-      });
-    });
+    recorder.init();
   }
 
   @override
   void dispose() {
-    _myRecorder.closeAudioSession();
+    recorder.dispose();
     super.dispose();
-  }
-
-  Future<void> record() async {
-    await _myRecorder.startRecorder(toFile: 'test_audio');
-  }
-
-// it doesn't work yet, need to check videos
-  Future<void> stopRecorder() async {
-    await _myRecorder.stopRecorder();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: appBar(),
-        body: Column(
-          children: [
-            IconButton(
-                onPressed: () {
-                  _isRecording == false ? record() : stopRecorder();
-                },
-                icon: FaIcon(FontAwesomeIcons.microphone)),
-          ],
-        ));
+      appBar: appBar(),
+      body: Column(
+        children: [
+          IconButton(
+            onPressed: () async {
+              final isRecording = await recorder.toggleRecording();
+              setState(() {});
+            },
+            icon: const FaIcon(FontAwesomeIcons.recordVinyl),
+          )
+        ],
+      ),
+    );
   }
 }
