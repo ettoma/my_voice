@@ -61,5 +61,9 @@
       </array>
       <key>NSMicrophoneUsageDescription</key>
       <string>MyApp uses the microphone to record your speech and convert it to text.</string>
+	  <key>LSSupportsOpeningDocumentsInPlace</key>
+	  <true/>
+	  <key>UIFileSharingEnabled</key>
+      <true/>
 </dict>
 </plist>

@@ -15,9 +15,9 @@ class Home extends StatelessWidget {
       body: const Padding(
         padding: EdgeInsets.symmetric(horizontal: 16),
         child: Center(
-          heightFactor: 8,
+          heightFactor: 10,
           child: Text(
-            'What do you want today to be remembered for?',
+            'Take 10 seconds for yourself',
             style: TextStyle(
                 fontSize: 27,
                 fontWeight: FontWeight.w400,
