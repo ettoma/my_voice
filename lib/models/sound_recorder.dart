@@ -28,7 +28,6 @@ class SoundRecorder {
   }
 
   Future init() async {
-    getFileName();
     await getDirectory();
     _audioRecorder = FlutterSoundRecorder();
     // final status = await Permission.microphone.request();
@@ -46,6 +45,7 @@ class SoundRecorder {
   }
 
   Future record() async {
+    getFileName();
     if (!_isRecorderInitialised) return;
     await _audioRecorder!.startRecorder(toFile: '$_directoryPath/$_fileName');
   }
@@ -53,6 +53,7 @@ class SoundRecorder {
   Future stop() async {
     if (!_isRecorderInitialised) return;
     await _audioRecorder!.stopRecorder();
+    _fileName = null;
   }
 
   Future toggleRecording() async {
