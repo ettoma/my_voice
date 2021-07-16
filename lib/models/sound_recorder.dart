@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:path_provider/path_provider.dart';
@@ -23,7 +24,8 @@ class SoundRecorder {
     String? _date; // to keep more than one file per day.
     _date = DateTime.now().day.toString() +
         DateTime.now().month.toString() +
-        DateTime.now().year.toString();
+        DateTime.now().year.toString() +
+        DateTime.now().microsecondsSinceEpoch.toString();
     return _fileName = _date + '.aac';
   }
 
