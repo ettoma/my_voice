@@ -20,12 +20,13 @@ class SoundRecorder {
   }
 
   String getFileName() {
-    // Consider adding more fields if you want
-    String? _date; // to keep more than one file per day.
+    String? _date;
     _date = DateTime.now().day.toString() +
         DateTime.now().month.toString() +
         DateTime.now().year.toString() +
-        DateTime.now().microsecondsSinceEpoch.toString();
+        DateTime.now().hour.toString() +
+        DateTime.now().minute.toString() +
+        DateTime.now().second.toString();
     return _fileName = _date + '.aac';
   }
 

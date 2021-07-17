@@ -15,15 +15,31 @@ class Recording extends StatefulWidget {
 
 class _RecordingState extends State<Recording> {
   final recorder = SoundRecorder();
-  List file = [];
+  List<FileSystemEntity>? file;
+  List fileName = [];
   Directory? directory;
   // bool isRecording = recorder.isRecording;
 
   void getDirectory() async {
     directory = await getApplicationDocumentsDirectory();
-    setState(() {
-      file = directory!.listSync();
-    });
+    file = directory!.listSync();
+    setState(
+      () {
+        for (var element in file!) {
+          fileName.add(element.path.split('/').last);
+        }
+        getListFiles();
+      },
+    );
+  }
+
+  ListView getListFiles() {
+    return ListView.builder(
+      itemCount: fileName.length,
+      itemBuilder: (BuildContext context, int index) {
+        return Text(fileName[index]);
+      },
+    );
   }
 
   @override
@@ -48,19 +64,13 @@ class _RecordingState extends State<Recording> {
           IconButton(
             onPressed: () async {
               final isRecording = await recorder.toggleRecording();
-              getDirectory();
-              setState(() {});
+              setState(() {
+                getDirectory();
+              });
             },
             icon: const FaIcon(FontAwesomeIcons.recordVinyl),
           ),
-          Expanded(
-            // height: 600,
-            child: ListView.builder(
-                itemCount: file.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Text(file[index].toString());
-                }),
-          )
+          Expanded(child: getListFiles()),
         ],
       ),
     );
