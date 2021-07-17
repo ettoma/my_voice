@@ -1,3 +1,4 @@
+import 'package:audio_journal/pages/audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -10,7 +11,7 @@ PreferredSizeWidget appBar() {
     brightness: Brightness.light,
     actions: [
       IconButton(
-        onPressed: () => print('pressed'),
+        onPressed: () {},
         icon: const FaIcon(
           FontAwesomeIcons.bars,
         ),
