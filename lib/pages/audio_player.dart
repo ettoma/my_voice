@@ -91,7 +91,10 @@ class _AudioPlayerState extends State<AudioPlayer> {
       appBar: appBar(),
       body: Column(
         children: [
-          Expanded(child: getListFiles()),
+          Expanded(
+              child: fileNames.length < 1
+                  ? Text('Go record something')
+                  : getListFiles()),
         ],
       ),
     );
