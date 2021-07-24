@@ -92,7 +92,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
       body: Column(
         children: [
           Expanded(
-              child: fileNames.length < 1
+              child: fileNames.isEmpty
                   ? Text('Go record something')
                   : getListFiles()),
         ],
