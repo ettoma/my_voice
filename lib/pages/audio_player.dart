@@ -29,7 +29,10 @@ class _AudioPlayerState extends State<AudioPlayer> {
         for (var element in file!) {
           if (element.path.contains('.Trash')) {
           } else {
-            fileNames.add(element.path.split('/').last);
+            String fileName = element.path.split('/').last;
+            fileNames.add(fileName);
+            String newFile = fileName.split('2021').last;
+            print(newFile);
           }
         }
         getListFiles();

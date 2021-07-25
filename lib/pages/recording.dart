@@ -28,6 +28,18 @@ class _RecordingState extends State<Recording> {
     super.dispose();
   }
 
+  void handleTimer() async {
+    String _time = _controller.getTime();
+    if (_time == '0') {
+      _controller.start();
+    } else if (_time == '10') {
+      _controller.restart();
+    } else {
+      _controller.resume();
+    }
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,19 +55,24 @@ class _RecordingState extends State<Recording> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 CircularCountDownTimer(
-                    controller: _controller,
-                    autoStart: false,
-                    width: 200,
-                    height: 200,
-                    duration: _duration,
-                    fillColor: Colors.blueAccent,
-                    ringColor: Colors.orangeAccent),
-                IconButton(
-                  onPressed: () async {
-                    final _time = _controller.getTime();
-                    final isRecording = await recorder.toggleRecording();
+                  controller: _controller,
+                  autoStart: false,
+                  width: 200,
+                  height: 200,
+                  duration: _duration,
+                  fillColor: Colors.blueAccent,
+                  ringColor: Colors.orangeAccent,
+                  onStart: () async {
+                    await recorder.toggleRecording();
                     setState(() {});
                   },
+                  onComplete: () async {
+                    await recorder.toggleRecording();
+                    setState(() {});
+                  },
+                ),
+                IconButton(
+                  onPressed: handleTimer,
                   icon: const FaIcon(FontAwesomeIcons.recordVinyl),
                 ),
               ],
