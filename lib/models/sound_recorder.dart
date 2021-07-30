@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:audio_journal/models/audio_file_model.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
+// import 'package:permission_handler/permission_handler.dart';
 
 class SoundRecorder {
+  AudioFiles audioFileList = AudioFiles();
   FlutterSoundRecorder? _audioRecorder;
   bool _isRecorderInitialised = false;
   bool get isRecording => _audioRecorder!.isRecording;
@@ -20,12 +22,10 @@ class SoundRecorder {
 
   String getFileName() {
     String? _date;
-    _date = DateTime.now().day.toString() +
-        DateTime.now().month.toString() +
+    _date = DateTime.now().day.toString().padLeft(2, '0') +
+        DateTime.now().month.toString().padLeft(2, '0') +
         DateTime.now().year.toString() +
-        DateTime.now().hour.toString() +
-        DateTime.now().minute.toString() +
-        DateTime.now().second.toString();
+        DateTime.now().hour.toString().padLeft(2, '0');
     return _fileName = _date + '.aac';
   }
 
@@ -50,6 +50,7 @@ class SoundRecorder {
     getFileName();
     if (!_isRecorderInitialised) return;
     await _audioRecorder!.startRecorder(toFile: '$_directoryPath/$_fileName');
+    audioFileList.addFile(_fileName!.split('.aac').first);
   }
 
   Future stop() async {
