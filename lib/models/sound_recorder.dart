@@ -22,10 +22,8 @@ class SoundRecorder {
 
   String getFileName() {
     String? _date;
-    _date = DateTime.now().day.toString().padLeft(2, '0') +
-        DateTime.now().month.toString().padLeft(2, '0') +
-        DateTime.now().year.toString() +
-        DateTime.now().hour.toString().padLeft(2, '0');
+
+    _date = DateTime.now().millisecondsSinceEpoch.toString();
     return _fileName = _date + '.aac';
   }
 

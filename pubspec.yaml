@@ -39,6 +39,7 @@ dependencies:
   path_provider: ^2.0.2
   circular_countdown_timer: ^0.2.0
   provider: ^5.0.0
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

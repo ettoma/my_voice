@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:intl/intl.dart';
 
 import 'package:audio_journal/models/app_bar.dart';
 import 'package:audio_journal/models/player.dart';
@@ -23,16 +24,18 @@ class _AudioPlayerState extends State<AudioPlayer> {
     directory = await getApplicationDocumentsDirectory();
     file = directory!.listSync();
     file!.remove('.Trash');
-    // file!.sort((a,b) => a > b);
+
     setState(
       () {
         for (var element in file!) {
           if (element.path.contains('.Trash')) {
           } else {
-            String fileName = element.path.split('/').last;
-            fileNames.add(fileName);
-            String newFile = fileName.split('2021').last;
-            print(newFile);
+            String fileName = element.path.split('/').last.split('.aac').first;
+            DateTime parsedDate =
+                DateTime.fromMillisecondsSinceEpoch(int.parse(fileName));
+            final format = DateFormat('dd.MM.yyyy HH:mm');
+            final formatDate = format.format(parsedDate);
+            fileNames.add(formatDate);
           }
         }
         getListFiles();
@@ -96,7 +99,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
         children: [
           Expanded(
               child: fileNames.isEmpty
-                  ? Text('Go record something')
+                  ? const Text('Go record something')
                   : getListFiles()),
         ],
       ),
