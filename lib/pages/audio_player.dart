@@ -17,13 +17,13 @@ class AudioPlayer extends StatefulWidget {
 class _AudioPlayerState extends State<AudioPlayer> {
   final player = SoundPlayer();
   List<FileSystemEntity>? file;
+  List fileURLs = [];
   List fileNames = [];
   Directory? directory;
 
   void getDirectory() async {
     directory = await getApplicationDocumentsDirectory();
     file = directory!.listSync();
-    file!.remove('.Trash');
 
     setState(
       () {
@@ -31,6 +31,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
           if (element.path.contains('.Trash')) {
           } else {
             String fileName = element.path.split('/').last.split('.aac').first;
+            fileURLs.add(fileName);
             DateTime parsedDate =
                 DateTime.fromMillisecondsSinceEpoch(int.parse(fileName));
             final format = DateFormat('dd.MM.yyyy HH:mm');
@@ -62,7 +63,8 @@ class _AudioPlayerState extends State<AudioPlayer> {
                   await player.togglePlaying(
                       whenFinished: () => setState(() {}),
                       fileName: directory!.uri.toFilePath(windows: false) +
-                          fileNames[index]);
+                          fileURLs[index] +
+                          '.aac');
                   setState(() {});
                 },
                 icon: const FaIcon(
