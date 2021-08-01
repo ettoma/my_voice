@@ -1,4 +1,4 @@
-import 'package:audio_journal/models/app_bar.dart';
+// import 'package:audio_journal/models/app_bar.dart';
 import 'package:audio_journal/pages/audio_player.dart';
 import 'package:audio_journal/pages/recording.dart';
 import 'package:flutter/material.dart';
@@ -11,56 +11,68 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(),
+      // appBar: appBar(),
       backgroundColor: Colors.white,
       body: Center(
         child: Column(
           children: [
-            const Text(
-              'Take 10 seconds for yourself',
-              style: TextStyle(
-                  fontSize: 27,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: 'Gill Sans'),
-              textAlign: TextAlign.center,
-            ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Container(
+              padding: const EdgeInsets.only(left: 34.0),
+              child: SizedBox(
                 width: MediaQuery.of(context).size.width,
-                color: Colors.blue,
                 height: MediaQuery.of(context).size.height * 0.8,
-                child: Row(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        IconButton(
-                            onPressed: () {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return const Recording();
-                              }));
-                            },
-                            icon: const FaIcon(FontAwesomeIcons.penAlt)),
-                        const Text('Record'),
+                        Row(
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return const Recording();
+                                    },
+                                  ),
+                                );
+                              },
+                              child: const Text(
+                                'record',
+                                style: TextStyle(
+                                    color: Color.fromRGBO(70, 108, 132, 1),
+                                    fontSize: 58,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            IconButton(
+                                onPressed: () {},
+                                icon: const FaIcon(FontAwesomeIcons.arrowRight))
+                          ],
+                        )
                       ],
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        IconButton(
-                            onPressed: () {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return const AudioPlayer();
-                              }));
-                            },
-                            icon: const FaIcon(FontAwesomeIcons.bookOpen)),
-                        const Text('Play')
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return const AudioPlayer();
+                            }));
+                          },
+                          child: const Text('all recordings',
+                              style: TextStyle(
+                                  color: Color.fromRGBO(141, 150, 155, 1),
+                                  fontSize: 32)),
+                        )
                       ],
                     ),
                   ],

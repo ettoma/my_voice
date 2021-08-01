@@ -47,9 +47,8 @@ class _RecordingState extends State<Recording> {
       body: Center(
         child: Padding(
           padding: const EdgeInsets.only(bottom: 24.0, left: 8, right: 8),
-          child: Container(
+          child: SizedBox(
             width: MediaQuery.of(context).size.width,
-            color: Colors.green,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
