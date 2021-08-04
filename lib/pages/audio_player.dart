@@ -72,7 +72,15 @@ class _AudioPlayerState extends State<AudioPlayer> {
                   size: 18,
                   color: Colors.black38,
                 ),
-              )
+              ),
+              IconButton(
+                  onPressed: () => setState(() {
+                        fileNames.remove(fileNames[index]);
+                        final targetFile = File(// It doesnt work!
+                            "${directory!.path}/audio_journal/${fileURLs[index]}.aac");
+                        targetFile.deleteSync(recursive: false);
+                      }),
+                  icon: const FaIcon(FontAwesomeIcons.trashAlt))
             ],
           ),
         );
