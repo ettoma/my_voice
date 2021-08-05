@@ -59,14 +59,18 @@ class _RecordingState extends State<Recording> {
                   width: 200,
                   height: 200,
                   duration: _duration,
-                  fillColor: Colors.blueAccent,
+                  fillColor: Colors.blueAccent.shade700.withOpacity(0.40),
                   ringColor: Colors.orangeAccent,
+                  strokeWidth: 24,
+                  ringGradient: const LinearGradient(
+                      colors: [Colors.blueAccent, Colors.greenAccent],
+                      stops: [0, 100]),
                   onStart: () async {
                     await recorder.toggleRecording();
                     setState(() {});
                   },
                   onComplete: () async {
-                    await recorder.toggleRecording();
+                    recorder.toggleRecording();
                     setState(() {});
                   },
                 ),

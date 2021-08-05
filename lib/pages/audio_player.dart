@@ -74,12 +74,14 @@ class _AudioPlayerState extends State<AudioPlayer> {
                 ),
               ),
               IconButton(
-                  onPressed: () => setState(() {
-                        fileNames.remove(fileNames[index]);
-                        final targetFile = File(// It doesnt work!
-                            "${directory!.path}/audio_journal/${fileURLs[index]}.aac");
-                        targetFile.deleteSync(recursive: false);
-                      }),
+                  onPressed: () {
+                    setState(() {
+                      fileNames.remove(fileNames[index]);
+                      final targetFile =
+                          File("${directory!.path}/${fileURLs[index]}.aac");
+                      targetFile.deleteSync(recursive: true);
+                    });
+                  },
                   icon: const FaIcon(FontAwesomeIcons.trashAlt))
             ],
           ),
