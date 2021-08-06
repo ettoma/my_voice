@@ -2,7 +2,6 @@ import 'package:audio_journal/models/app_bar.dart';
 import 'package:audio_journal/models/sound_recorder.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 
 class Recording extends StatefulWidget {
   const Recording({Key? key}) : super(key: key);
@@ -13,8 +12,6 @@ class Recording extends StatefulWidget {
 
 class _RecordingState extends State<Recording> {
   final recorder = SoundRecorder();
-  final CountDownController _controller = CountDownController();
-  final int _duration = 10;
 
   @override
   void initState() {
@@ -26,18 +23,6 @@ class _RecordingState extends State<Recording> {
   void dispose() {
     recorder.dispose();
     super.dispose();
-  }
-
-  void handleTimer() async {
-    String _time = _controller.getTime();
-    if (_time == '0') {
-      _controller.start();
-    } else if (_time == '10') {
-      _controller.restart();
-    } else {
-      _controller.resume();
-    }
-    setState(() {});
   }
 
   @override
@@ -53,29 +38,12 @@ class _RecordingState extends State<Recording> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                CircularCountDownTimer(
-                  controller: _controller,
-                  autoStart: false,
-                  width: 200,
-                  height: 200,
-                  duration: _duration,
-                  fillColor: Colors.blueAccent.shade700.withOpacity(0.40),
-                  ringColor: Colors.orangeAccent,
-                  strokeWidth: 24,
-                  ringGradient: const LinearGradient(
-                      colors: [Colors.blueAccent, Colors.greenAccent],
-                      stops: [0, 100]),
-                  onStart: () async {
-                    await recorder.toggleRecording();
-                    setState(() {});
-                  },
-                  onComplete: () async {
+                const Text('Recorder'),
+                IconButton(
+                  onPressed: () async {
                     recorder.toggleRecording();
                     setState(() {});
                   },
-                ),
-                IconButton(
-                  onPressed: handleTimer,
                   icon: const FaIcon(FontAwesomeIcons.recordVinyl),
                 ),
               ],

@@ -25,6 +25,5 @@ class AudioFiles {
 
   void addFile(fileName) {
     fileList.add(fileName);
-    print(fileList.toString());
   }
 }

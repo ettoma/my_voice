@@ -23,7 +23,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
 
   void getDirectory() async {
     directory = await getApplicationDocumentsDirectory();
-    file = directory!.listSync();
+    file = directory!.listSync(recursive: true);
 
     setState(
       () {
@@ -76,10 +76,11 @@ class _AudioPlayerState extends State<AudioPlayer> {
               IconButton(
                   onPressed: () {
                     setState(() {
-                      fileNames.remove(fileNames[index]);
                       final targetFile =
                           File("${directory!.path}/${fileURLs[index]}.aac");
                       targetFile.deleteSync(recursive: true);
+                      fileURLs.remove(fileURLs[index]);
+                      fileNames.remove(fileNames[index]);
                     });
                   },
                   icon: const FaIcon(FontAwesomeIcons.trashAlt))

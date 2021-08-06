@@ -1,10 +1,9 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:audio_journal/models/audio_file_model.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:path_provider/path_provider.dart';
-// import 'package:permission_handler/permission_handler.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class SoundRecorder {
   AudioFiles audioFileList = AudioFiles();
@@ -15,18 +14,14 @@ class SoundRecorder {
   String? _directoryPath;
   String? _fileName;
 
-  Future getDirectory() async {
+  Future<void> getDirectory() async {
     _directory = await getApplicationDocumentsDirectory();
     _directoryPath = _directory!.path;
-    return _directoryPath;
   }
 
   String getFileName() {
     String? _date;
     _date = DateTime.now().millisecondsSinceEpoch.toString();
-    // _date = DateTime.now().hour.toString() +
-    //     DateTime.now().minute.toString() +
-    //     DateTime.now().second.toString();
     return _fileName = _date + '.aac';
   }
 
@@ -35,7 +30,7 @@ class SoundRecorder {
     _audioRecorder = FlutterSoundRecorder();
     // final status = await Permission.microphone.request();
     // if (status != PermissionStatus.granted) {
-    // throw RecordingPermissionException('Microphone permission not granted');
+    //   throw RecordingPermissionException('Microphone permission not granted');
     // }
     await _audioRecorder!.openAudioSession();
     _isRecorderInitialised = true;

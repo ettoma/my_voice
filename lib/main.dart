@@ -1,6 +1,6 @@
-import 'package:audio_journal/models/audio_file_model.dart';
+// import 'package:audio_journal/models/audio_file_model.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+// import 'package:provider/provider.dart';
 
 import 'pages/home.dart';
 
@@ -13,11 +13,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Material App',
-      home: ChangeNotifierProvider(
-          create: (context) => AudioFileModel(), child: const Home()),
+      home: Home(),
     );
   }
 }
