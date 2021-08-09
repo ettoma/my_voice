@@ -44,7 +44,9 @@ class _RecordingState extends State<Recording> {
                     recorder.toggleRecording();
                     setState(() {});
                   },
-                  icon: const FaIcon(FontAwesomeIcons.recordVinyl),
+                  icon: recorder.isRecording
+                      ? const FaIcon(FontAwesomeIcons.stop)
+                      : const FaIcon(FontAwesomeIcons.solidCircle),
                 ),
               ],
             ),
