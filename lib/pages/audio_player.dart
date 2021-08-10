@@ -31,6 +31,10 @@ class _AudioPlayerState extends State<AudioPlayer> {
 
     setState(
       () {
+        print(fileData.toString());
+        for (var element in fileData!) {
+          print(element.fileName);
+        }
         // for (var element in file!) {
         //   if (element.path.contains('.Trash')) {
         //   } else {
