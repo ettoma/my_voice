@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:audio_journal/data/audio_file_model.dart';
+import 'package:provider/provider.dart';
 
 class AudioPlayer extends StatefulWidget {
   const AudioPlayer({Key? key}) : super(key: key);
@@ -17,24 +18,22 @@ class AudioPlayer extends StatefulWidget {
 
 class _AudioPlayerState extends State<AudioPlayer> {
   final player = SoundPlayer();
+
   List<FileSystemEntity>? file;
   List fileURLs = [];
   List fileNames = [];
   Directory? directory;
-  AudioFiles audioFileList = AudioFiles();
+  // AudioFiles audioFileList = AudioFiles();
   List<RecordedFile>? fileData;
 
   void getDirectory() async {
     directory = await getApplicationDocumentsDirectory();
     file = directory!.listSync(recursive: true);
-    fileData = audioFileList.fileList;
+    // fileData = audioFileList.fileList;
 
     setState(
       () {
-        print(fileData.toString());
-        for (var element in fileData!) {
-          print(element.fileName);
-        }
+        // for (var element in fileData!) {}
         // for (var element in file!) {
         //   if (element.path.contains('.Trash')) {
         //   } else {
@@ -47,7 +46,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
         //     fileNames.add(formatDate);
         //   }
         // }
-        fileData!.map((e) => fileNames.add(e.fileName));
+        // fileData!.map((e) => fileNames.add(e.fileName));
       },
     );
     // fileData!.map(
@@ -66,7 +65,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
     //   }
     // }
 
-    getListFiles();
+    // getListFiles();
   }
 
   ListView getListFiles() {
@@ -131,16 +130,22 @@ class _AudioPlayerState extends State<AudioPlayer> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<AudioFileModel>(context);
+    final files = provider.fileList;
     return Scaffold(
       appBar: appBar(),
-      body: Column(
-        children: [
-          Expanded(
-              child: fileNames.isEmpty
-                  ? const Text('Go record something')
-                  : getListFiles()),
-        ],
-      ),
+      // body: Column(
+      //   children: [
+      //     Expanded(
+      //         child: fileNames.isEmpty
+      //             ? const Text('Go record something')
+      //             : getListFiles()),
+      body: ListView.separated(
+          itemBuilder: (context, index) {
+            return Text(files[index].fileName);
+          },
+          separatorBuilder: (context, index) => Container(height: 8),
+          itemCount: files.length),
     );
   }
 }

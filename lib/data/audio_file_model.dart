@@ -1,34 +1,18 @@
-// class AudioFileModel extends ChangeNotifier {
-//   final List<String> _list = [];
+import 'package:flutter/cupertino.dart';
 
-//   UnmodifiableListView<String> get items => UnmodifiableListView(_list);
-
-//   int get totalPrice => _list.length;
-
-//   void add(String item) {
-//     _list.add(item);
-//     notifyListeners();
-//   }
-
-//   void removeAll() {
-//     _list.clear();
-//     notifyListeners();
-//   }
-// }
-class RecordedFile {
-  String fileName = '';
-  int timeStamp = 0;
-  String tag = '';
-  String mood = '';
-
-  RecordedFile(this.fileName, this.timeStamp, this.tag, this.mood);
-}
-
-class AudioFiles {
+class AudioFileModel extends ChangeNotifier {
   List<RecordedFile> fileList = [];
 
   void addFile(fileName, timeStamp, tag, mood) {
     fileList.add(RecordedFile(fileName, timeStamp, tag, mood));
-    print(fileList.first.fileName);
   }
+}
+
+class RecordedFile {
+  String fileName;
+  int timeStamp;
+  String tag;
+  String mood;
+
+  RecordedFile(this.fileName, this.timeStamp, this.tag, this.mood);
 }

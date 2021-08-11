@@ -41,7 +41,7 @@ class _RecordingState extends State<Recording> {
                 const Text('Recorder'),
                 IconButton(
                   onPressed: () async {
-                    recorder.toggleRecording();
+                    recorder.toggleRecording(context);
                     setState(() {});
                   },
                   icon: recorder.isRecording

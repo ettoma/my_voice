@@ -3,17 +3,17 @@ import 'dart:io';
 import 'package:audio_journal/data/audio_file_model.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 // import 'package:permission_handler/permission_handler.dart';
 
 class SoundRecorder {
-  AudioFiles audioFileList = AudioFiles();
   FlutterSoundRecorder? _audioRecorder;
   bool _isRecorderInitialised = false;
-  // bool get isRecording => _audioRecorder!.isRecording;
   bool isRecording = false;
   Directory? _directory;
   String? _directoryPath;
   String? _fileName;
+  AudioFileModel audioFileModel = AudioFileModel();
 
   Future<void> getDirectory() async {
     _directory = await getApplicationDocumentsDirectory();
@@ -43,12 +43,13 @@ class SoundRecorder {
     _isRecorderInitialised = false;
   }
 
-  Future record() async {
+  Future record(context) async {
+    final provider = Provider.of<AudioFileModel>(context, listen: false);
     getFileName();
     isRecording = true;
     if (!_isRecorderInitialised) return;
     await _audioRecorder!.startRecorder(toFile: '$_directoryPath/$_fileName');
-    audioFileList.addFile(_fileName!.split('.aac').first,
+    provider.addFile(_fileName!.split('.aac').first,
         int.parse(_fileName!.split('.aac').first), 'tag', 'mood');
   }
 
@@ -59,9 +60,9 @@ class SoundRecorder {
     _fileName = null;
   }
 
-  Future toggleRecording() async {
+  Future toggleRecording(context) async {
     if (_audioRecorder!.isStopped) {
-      await record();
+      await record(context);
     } else {
       await stop();
     }

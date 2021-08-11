@@ -9,6 +9,8 @@ PODS:
     - Flutter
   - "permission_handler (5.1.0+2)":
     - Flutter
+  - shared_preferences (0.0.1):
+    - Flutter
   - tau_core (8.1.9)
 
 DEPENDENCIES:
@@ -16,6 +18,7 @@ DEPENDENCIES:
   - flutter_sound (from `.symlinks/plugins/flutter_sound/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
+  - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
 
 SPEC REPOS:
   trunk:
@@ -31,6 +34,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/path_provider/ios"
   permission_handler:
     :path: ".symlinks/plugins/permission_handler/ios"
+  shared_preferences:
+    :path: ".symlinks/plugins/shared_preferences/ios"
 
 SPEC CHECKSUMS:
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
@@ -38,6 +43,7 @@ SPEC CHECKSUMS:
   mobile-ffmpeg-full: f17c82219b4ff9e4018b5e21f88b78c28a3475db
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
+  shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   tau_core: 454483d8e963c24dc0f7a4b75281c9b375f1d3f2
 
 PODFILE CHECKSUM: 48a7aa8f530cd48ceea8fe41a26d81aa49ede6df
