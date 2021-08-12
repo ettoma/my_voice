@@ -58,10 +58,23 @@ class _AudioPlayerState extends State<AudioPlayer> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(format
-                        .format(DateTime.fromMillisecondsSinceEpoch(
-                            int.parse(files[index].fileName)))
-                        .toString()),
+                    Column(
+                      children: [
+                        Text(format
+                            .format(DateTime.fromMillisecondsSinceEpoch(
+                                int.parse(files[index].fileName)))
+                            .toString()),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(files[index].tag),
+                            Text(files[index].mood)
+                          ],
+                        )
+                      ],
+                    ),
                     IconButton(
                       icon: const FaIcon(FontAwesomeIcons.play),
                       onPressed: () async {

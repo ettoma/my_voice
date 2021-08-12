@@ -49,8 +49,7 @@ class SoundRecorder {
     isRecording = true;
     if (!_isRecorderInitialised) return;
     await _audioRecorder!.startRecorder(toFile: '$_directoryPath/$_fileName');
-    provider.addFile(_fileName!.split('.aac').first,
-        int.parse(_fileName!.split('.aac').first), 'tag', 'mood');
+    provider.addFile(_fileName!.split('.aac').first, 'tag', 'mood');
   }
 
   Future stop() async {
