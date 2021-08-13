@@ -20,10 +20,11 @@ class AudioFileModel extends ChangeNotifier {
       jsonFileList.add(rawData);
     }
     prefs.setStringList('fileList', jsonFileList);
-    // print(jsonFileList.toString());
-    var decodedList = jsonDecode(prefs.getStringList('fileList').toString());
-    print(decodedList);
+    // var decodedList = jsonDecode(prefs.getStringList('fileList').toString());
+    // print(decodedList);
   }
+
+  void deleteFile() {}
 }
 
 class RecordedFile {
@@ -32,4 +33,12 @@ class RecordedFile {
   String mood;
 
   RecordedFile(this.fileName, this.tag, this.mood);
+
+  factory RecordedFile.fromJson(Map<String, dynamic> json) {
+    return RecordedFile(
+      json['fileName'],
+      json['tag'],
+      json['mood'],
+    );
+  }
 }
