@@ -38,7 +38,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/shared_preferences/ios"
 
 SPEC CHECKSUMS:
-  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   flutter_sound: a23b5cd88c927cd88d0db0e1d8222897809b697e
   mobile-ffmpeg-full: f17c82219b4ff9e4018b5e21f88b78c28a3475db
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
@@ -46,6 +46,6 @@ SPEC CHECKSUMS:
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   tau_core: 454483d8e963c24dc0f7a4b75281c9b375f1d3f2
 
-PODFILE CHECKSUM: 48a7aa8f530cd48ceea8fe41a26d81aa49ede6df
+PODFILE CHECKSUM: 7400f1788b241294325000230ee09f35c5de995c
 
 COCOAPODS: 1.10.2
