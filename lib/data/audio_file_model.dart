@@ -20,11 +20,14 @@ class AudioFileModel extends ChangeNotifier {
       jsonFileList.add(rawData);
     }
     prefs.setStringList('fileList', jsonFileList);
-    // var decodedList = jsonDecode(prefs.getStringList('fileList').toString());
-    // print(decodedList);
   }
 
-  void deleteFile() {}
+  void deleteFile(fileToDelete) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var fileListStorage = prefs.getStringList('fileList');
+    fileListStorage!.remove(fileToDelete);
+    prefs.setStringList('fileList', fileListStorage);
+  }
 }
 
 class RecordedFile {
