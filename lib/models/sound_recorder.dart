@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:audio_journal/data/audio_file_db.dart';
 import 'package:audio_journal/data/audio_file_model.dart';
 import 'package:audio_journal/data/audio_model.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:path_provider/path_provider.dart';
 // import 'package:provider/provider.dart';
@@ -46,18 +47,20 @@ class SoundRecorder {
     _isRecorderInitialised = false;
   }
 
-  Future record(context) async {
+  Future record() async {
     getFileName();
     isRecording = true;
     if (!_isRecorderInitialised) return;
     await _audioRecorder!
         .startRecorder(toFile: '$_directoryPath/$_fileName' + '.aac');
+    // await getTagAndMood();
+  }
+
+  Future updateDB(mood, tag) async {
     final db = await AudioDatabase.instance;
     db.create(AudioFile(
-        id: int.parse(_fileName!),
-        fileName: _fileName!,
-        mood: 'mood',
-        tag: 'tag'));
+        id: int.parse(_fileName!), fileName: _fileName!, mood: mood, tag: tag));
+    await stop();
   }
 
   Future stop() async {
@@ -67,9 +70,9 @@ class SoundRecorder {
     _fileName = null;
   }
 
-  Future toggleRecording(context) async {
+  Future toggleRecording() async {
     if (_audioRecorder!.isStopped) {
-      await record(context);
+      await record();
     } else {
       await stop();
     }

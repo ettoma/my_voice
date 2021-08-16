@@ -17,7 +17,7 @@ class AudioPlayer extends StatefulWidget {
 }
 
 class _AudioPlayerState extends State<AudioPlayer> {
-  late List<AudioFile> audioFiles;
+  List<AudioFile> audioFiles = [];
   bool isLoading = false;
 
   final player = SoundPlayer();
@@ -32,10 +32,10 @@ class _AudioPlayerState extends State<AudioPlayer> {
 
   @override
   void initState() {
-    refreshAudioFileList();
     player.init();
     super.initState();
     getDirectory();
+    refreshAudioFileList();
   }
 
   @override

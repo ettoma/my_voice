@@ -27,6 +27,10 @@ class _RecordingState extends State<Recording> {
 
   @override
   Widget build(BuildContext context) {
+    bool isFileRecorded = false;
+    String? mood;
+    String? tag;
+
     return Scaffold(
       appBar: appBar(),
       body: Center(
@@ -41,7 +45,17 @@ class _RecordingState extends State<Recording> {
                 const Text('Recorder'),
                 IconButton(
                   onPressed: () async {
-                    recorder.toggleRecording(context);
+                    if (recorder.isRecording != false) {
+                      await showDialog(
+                        // barrierDismissible: false,
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text('Popup'),
+                        ),
+                      );
+                      recorder.updateDB('mood', 'tag');
+                    }
+                    recorder.toggleRecording();
                     setState(() {});
                   },
                   icon: recorder.isRecording
