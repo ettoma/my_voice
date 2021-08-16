@@ -1,5 +1,6 @@
-import 'dart:convert';
 import 'dart:io';
+import 'package:audio_journal/data/audio_file_db.dart';
+import 'package:audio_journal/data/audio_model.dart';
 import 'package:intl/intl.dart';
 
 import 'package:audio_journal/models/app_bar.dart';
@@ -7,9 +8,6 @@ import 'package:audio_journal/models/player.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:audio_journal/data/audio_file_model.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AudioPlayer extends StatefulWidget {
   const AudioPlayer({Key? key}) : super(key: key);
@@ -19,8 +17,10 @@ class AudioPlayer extends StatefulWidget {
 }
 
 class _AudioPlayerState extends State<AudioPlayer> {
+  late List<AudioFile> audioFiles;
+  bool isLoading = false;
+
   final player = SoundPlayer();
-  List parsed = [];
 
   List<FileSystemEntity>? file;
   Directory? directory;
@@ -30,21 +30,12 @@ class _AudioPlayerState extends State<AudioPlayer> {
     file = directory!.listSync(recursive: true);
   }
 
-  void getFilesFromStorage() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    parsed = jsonDecode(prefs.getStringList('fileList').toString())
-        .cast<Map<String, dynamic>>();
-    setState(() {
-      parsed.map<RecordedFile>((json) => RecordedFile.fromJson(json)).toList();
-    });
-  }
-
   @override
   void initState() {
+    refreshAudioFileList();
     player.init();
     super.initState();
     getDirectory();
-    getFilesFromStorage();
   }
 
   @override
@@ -53,37 +44,40 @@ class _AudioPlayerState extends State<AudioPlayer> {
     super.dispose();
   }
 
+  Future refreshAudioFileList() async {
+    setState(() => isLoading = true);
+    this.audioFiles =
+        await AudioDatabase.instance.readAllAudioFiles().whenComplete(() {
+      setState(() => isLoading = false);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    // final provider = Provider.of<AudioFileModel>(context);
     final format = DateFormat('dd.MM.yyyy HH:mm');
 
     return Scaffold(
       appBar: appBar(),
-      body: parsed.isEmpty
+      body: audioFiles.isEmpty
           ? const Center(
               child: Text('No audio files to play'),
             )
           : ListView.separated(
               itemBuilder: (context, index) {
+                final audio = audioFiles[index];
                 return Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Column(
                       children: [
-                        Text(format
-                            .format(DateTime.fromMillisecondsSinceEpoch(
-                                int.parse(parsed[index]['fileName'])))
-                            .toString()),
+                        Text(format.format(DateTime.fromMillisecondsSinceEpoch(
+                            int.parse(audio.fileName.split('.aac').first)))),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           mainAxisSize: MainAxisSize.max,
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(parsed[index]['tag']),
-                            Text(parsed[index]['mood'])
-                          ],
+                          children: [Text(audio.tag), Text(audio.mood)],
                         )
                       ],
                     ),
@@ -94,30 +88,27 @@ class _AudioPlayerState extends State<AudioPlayer> {
                             whenFinished: () => setState(() {}),
                             fileName:
                                 directory!.uri.toFilePath(windows: false) +
-                                    parsed[index]['fileName'] +
+                                    audioFiles[index].fileName +
                                     '.aac');
                         setState(() {});
                       },
                     ),
                     IconButton(
-                        onPressed: () async {
-                          SharedPreferences prefs =
-                              await SharedPreferences.getInstance();
-                          final targetFile = File(
-                              "${directory!.path}/${parsed[index]['fileName']}.aac");
-                          targetFile.deleteSync(recursive: true);
-                          parsed.remove(parsed[index]);
-                          // var fileListStorage = prefs.getStringList('fileList');
-                          // fileListStorage!.remove(parsed[index]);
-                          // prefs.setStringList('fileList', parsed);
-                          setState(() {});
-                        },
-                        icon: const FaIcon(FontAwesomeIcons.trashAlt))
+                      icon: const FaIcon(FontAwesomeIcons.trash),
+                      onPressed: () async {
+                        await AudioDatabase.instance
+                            .delete(audioFiles[index].id!);
+                        final targetFile = File(
+                            "${directory!.path}/${audioFiles[index].fileName}.aac");
+                        targetFile.deleteSync(recursive: true);
+                        refreshAudioFileList();
+                      },
+                    )
                   ],
                 );
               },
               separatorBuilder: (context, index) => Container(height: 8),
-              itemCount: parsed.length),
+              itemCount: audioFiles.length),
     );
   }
 }

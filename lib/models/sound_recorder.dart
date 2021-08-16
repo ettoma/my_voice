@@ -1,9 +1,12 @@
 import 'dart:io';
+import 'dart:math';
 
+import 'package:audio_journal/data/audio_file_db.dart';
 import 'package:audio_journal/data/audio_file_model.dart';
+import 'package:audio_journal/data/audio_model.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:provider/provider.dart';
+// import 'package:provider/provider.dart';
 // import 'package:permission_handler/permission_handler.dart';
 
 class SoundRecorder {
@@ -23,7 +26,7 @@ class SoundRecorder {
   String getFileName() {
     String? _date;
     _date = DateTime.now().millisecondsSinceEpoch.toString();
-    return _fileName = _date + '.aac';
+    return _fileName = _date.toString();
   }
 
   Future init() async {
@@ -44,12 +47,17 @@ class SoundRecorder {
   }
 
   Future record(context) async {
-    final provider = Provider.of<AudioFileModel>(context, listen: false);
     getFileName();
     isRecording = true;
     if (!_isRecorderInitialised) return;
-    await _audioRecorder!.startRecorder(toFile: '$_directoryPath/$_fileName');
-    provider.addFile(_fileName!.split('.aac').first, 'tag', 'mood');
+    await _audioRecorder!
+        .startRecorder(toFile: '$_directoryPath/$_fileName' + '.aac');
+    final db = await AudioDatabase.instance;
+    db.create(AudioFile(
+        id: int.parse(_fileName!),
+        fileName: _fileName!,
+        mood: 'mood',
+        tag: 'tag'));
   }
 
   Future stop() async {

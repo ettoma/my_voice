@@ -65,7 +65,7 @@ class Home extends StatelessWidget {
                           onPressed: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
-                              return const AudioPlayer();
+                              return AudioPlayer();
                             }));
                           },
                           child: const Text('all recordings',

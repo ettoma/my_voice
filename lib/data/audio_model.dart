@@ -1,6 +1,8 @@
 final String audioFiles = 'audioFiles';
 
 class AudioFileFields {
+  static final List<String> values = [id, fileName, mood, tag];
+
   static final String id = '_id';
   static final String fileName = 'fileName';
   static final String mood = 'mood';
@@ -32,4 +34,10 @@ class AudioFile {
         AudioFileFields.mood: mood,
         AudioFileFields.tag: tag,
       };
+
+  static AudioFile fromJson(Map<String, Object?> json) => AudioFile(
+      id: json[AudioFileFields.id] as int?,
+      fileName: json[AudioFileFields.fileName] as String,
+      tag: json[AudioFileFields.tag] as String,
+      mood: json[AudioFileFields.mood] as String);
 }

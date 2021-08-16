@@ -44,6 +44,43 @@ class AudioDatabase {
     return audioFile.copy(id: id);
   }
 
+  Future<AudioFile> readAudioFile(int id) async {
+    final db = await instance.database;
+
+    final maps = await db.query(
+      audioFiles,
+      columns: AudioFileFields.values,
+      where: '${AudioFileFields.id} = ?',
+      whereArgs: [id],
+    );
+    if (maps.isNotEmpty) {
+      return AudioFile.fromJson(maps.first);
+    } else {
+      throw Exception('ID $id not found');
+    }
+  }
+
+  Future<List<AudioFile>> readAllAudioFiles() async {
+    final db = await instance.database;
+
+    final orderBy = '${AudioFileFields.fileName} ASC';
+    final result = await db.query(audioFiles, orderBy: orderBy);
+    return result.map((json) => AudioFile.fromJson(json)).toList();
+  }
+
+  Future<int> update(AudioFile audioFile) async {
+    final db = await instance.database;
+    return db.update(audioFiles, audioFile.toJson(),
+        where: '${AudioFileFields.id} = ?', whereArgs: [audioFile.id]);
+  }
+
+  Future<int> delete(int id) async {
+    final db = await instance.database;
+
+    return await db.delete(audioFiles,
+        where: '${AudioFileFields.id} = ?', whereArgs: [id]);
+  }
+
   Future close() async {
     final db = await instance.database;
     db.close();
