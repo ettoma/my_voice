@@ -27,9 +27,11 @@ class _RecordingState extends State<Recording> {
 
   @override
   Widget build(BuildContext context) {
-    bool isFileRecorded = false;
-    String? mood;
-    String? tag;
+    // bool isFileRecorded = false;
+    String mood = '';
+    String tag = '';
+    TextEditingController _moodTextController = TextEditingController();
+    TextEditingController _tagTextController = TextEditingController();
 
     return Scaffold(
       appBar: appBar(),
@@ -45,17 +47,43 @@ class _RecordingState extends State<Recording> {
                 const Text('Recorder'),
                 IconButton(
                   onPressed: () async {
-                    if (recorder.isRecording != false) {
+                    recorder.toggleRecording();
+                    if (recorder.isRecordingCompleted == true) {
                       await showDialog(
-                        // barrierDismissible: false,
+                        barrierDismissible: false,
                         context: context,
-                        builder: (context) => AlertDialog(
-                          title: Text('Popup'),
+                        builder: (context) => Dialog(
+                          child: Container(
+                            height: MediaQuery.of(context).size.height * 0.6,
+                            width: MediaQuery.of(context).size.width * 0.85,
+                            child: Column(
+                              children: [
+                                TextField(
+                                  controller: _moodTextController,
+                                  onChanged: (e) =>
+                                      mood = _moodTextController.text,
+                                  decoration:
+                                      InputDecoration(labelText: 'Mood'),
+                                ),
+                                TextField(
+                                  controller: _tagTextController,
+                                  onChanged: (e) =>
+                                      tag = _tagTextController.text,
+                                  decoration: InputDecoration(labelText: 'Tag'),
+                                ),
+                                IconButton(
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(),
+                                    icon: FaIcon(FontAwesomeIcons.check))
+                              ],
+                            ),
+                          ),
                         ),
                       );
-                      recorder.updateDB('mood', 'tag');
+                      recorder.updateDB(mood.isNotEmpty ? mood : '',
+                          tag.isNotEmpty ? tag : '');
                     }
-                    recorder.toggleRecording();
+
                     setState(() {});
                   },
                   icon: recorder.isRecording

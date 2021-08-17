@@ -74,15 +74,21 @@ class _AudioPlayerState extends State<AudioPlayer> {
                         Text(format.format(DateTime.fromMillisecondsSinceEpoch(
                             int.parse(audio.fileName.split('.aac').first)))),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          mainAxisSize: MainAxisSize.max,
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [Text(audio.tag), Text(audio.mood)],
+                          children: [
+                            Text('#' + audio.tag),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            Text(audio.mood)
+                          ],
                         )
                       ],
                     ),
                     IconButton(
-                      icon: const FaIcon(FontAwesomeIcons.play),
+                      icon: player.isPlaying == false
+                          ? FaIcon(FontAwesomeIcons.play)
+                          : FaIcon(FontAwesomeIcons.pause),
                       onPressed: () async {
                         await player.togglePlaying(
                             whenFinished: () => setState(() {}),
