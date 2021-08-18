@@ -47,9 +47,11 @@ class _AudioPlayerState extends State<AudioPlayer> {
   Future refreshAudioFileList() async {
     setState(() => isLoading = true);
     this.audioFiles =
-        await AudioDatabase.instance.readAllAudioFiles().whenComplete(() {
-      setState(() => isLoading = false);
-    });
+        await AudioDatabase.instance.readAllAudioFiles().whenComplete(
+      () {
+        setState(() => isLoading = false);
+      },
+    );
   }
 
   @override
@@ -86,7 +88,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
                       ],
                     ),
                     IconButton(
-                      icon: player.isPlaying == false
+                      icon: player.isPlaying == false //Not ideal
                           ? FaIcon(FontAwesomeIcons.play)
                           : FaIcon(FontAwesomeIcons.pause),
                       onPressed: () async {
@@ -102,11 +104,35 @@ class _AudioPlayerState extends State<AudioPlayer> {
                     IconButton(
                       icon: const FaIcon(FontAwesomeIcons.trash),
                       onPressed: () async {
-                        await AudioDatabase.instance
-                            .delete(audioFiles[index].id!);
-                        final targetFile = File(
-                            "${directory!.path}/${audioFiles[index].fileName}.aac");
-                        targetFile.deleteSync(recursive: true);
+                        await showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (context) => Dialog(
+                            child: Container(
+                              padding: EdgeInsets.all(12),
+                              child: Row(
+                                children: [
+                                  Text('Are you sure?'),
+                                  IconButton(
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(),
+                                      icon: FaIcon(FontAwesomeIcons.times)),
+                                  IconButton(
+                                    onPressed: () async {
+                                      await AudioDatabase.instance
+                                          .delete(audioFiles[index].id!);
+                                      final targetFile = File(
+                                          "${directory!.path}/${audioFiles[index].fileName}.aac");
+                                      targetFile.deleteSync(recursive: true);
+                                      Navigator.of(context).pop();
+                                    },
+                                    icon: FaIcon(FontAwesomeIcons.check),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
                         refreshAudioFileList();
                       },
                     )
