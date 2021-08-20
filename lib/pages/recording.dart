@@ -29,6 +29,7 @@ class _RecordingState extends State<Recording> {
 
   @override
   Widget build(BuildContext context) {
+    bool isButtonRecording = false;
     String mood = '';
     String tag = '';
     TextEditingController _moodTextController = TextEditingController();
@@ -54,8 +55,11 @@ class _RecordingState extends State<Recording> {
                   duration: 5,
                   ringColor: Colors.blue,
                   fillColor: Colors.green,
-                  onStart: () => recorder.record(),
+                  onStart: () {
+                    recorder.record();
+                  },
                   onComplete: () async {
+                    isButtonRecording = false;
                     recorder.stop();
                     if (recorder.isRecordingCompleted == true) {
                       await showDialog(
@@ -100,7 +104,7 @@ class _RecordingState extends State<Recording> {
                   onPressed: () {
                     _timerController.start();
                   },
-                  icon: recorder.isRecording
+                  icon: isButtonRecording == true
                       ? const FaIcon(FontAwesomeIcons.stop)
                       : const FaIcon(FontAwesomeIcons.solidCircle),
                 ),
