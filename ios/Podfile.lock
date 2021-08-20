@@ -1,13 +1,13 @@
 PODS:
   - Flutter (1.0.0)
-  - flutter_sound (8.1.9):
+  - flutter_sound (8.3.9):
     - Flutter
-    - mobile-ffmpeg-full (= 4.4.LTS)
-    - tau_core (= 8.1.9)
+    - mobile-ffmpeg-audio (= 4.4.LTS)
+    - tau_core (= 8.3.9)
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
-  - mobile-ffmpeg-full (4.4.LTS)
+  - mobile-ffmpeg-audio (4.4.LTS)
   - path_provider (0.0.1):
     - Flutter
   - "permission_handler (5.1.0+2)":
@@ -17,7 +17,7 @@ PODS:
   - sqflite (0.0.2):
     - Flutter
     - FMDB (>= 2.7.5)
-  - tau_core (8.1.9)
+  - tau_core (8.3.9)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
@@ -30,7 +30,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - FMDB
-    - mobile-ffmpeg-full
+    - mobile-ffmpeg-audio
     - tau_core
 
 EXTERNAL SOURCES:
@@ -49,15 +49,15 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
-  flutter_sound: a23b5cd88c927cd88d0db0e1d8222897809b697e
+  flutter_sound: 91c069f33d811a4c98b9aa7cec9cd1dbfd1786d9
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  mobile-ffmpeg-full: f17c82219b4ff9e4018b5e21f88b78c28a3475db
+  mobile-ffmpeg-audio: 1e0a053f8a6de57114e50ff48b3a85ff1c60f902
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
-  tau_core: 454483d8e963c24dc0f7a4b75281c9b375f1d3f2
+  tau_core: f7bbd1c6a632f52c2fa7c14feea385ab966b1e45
 
-PODFILE CHECKSUM: 7400f1788b241294325000230ee09f35c5de995c
+PODFILE CHECKSUM: 48a7aa8f530cd48ceea8fe41a26d81aa49ede6df
 
-COCOAPODS: 1.10.2
+COCOAPODS: 1.11.0.beta.2
