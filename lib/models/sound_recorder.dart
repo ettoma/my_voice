@@ -1,10 +1,8 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:audio_journal/data/audio_file_db.dart';
 import 'package:audio_journal/data/audio_file_model.dart';
 import 'package:audio_journal/data/audio_model.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:path_provider/path_provider.dart';
 // import 'package:provider/provider.dart';

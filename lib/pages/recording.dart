@@ -1,5 +1,6 @@
 import 'package:audio_journal/models/app_bar.dart';
 import 'package:audio_journal/models/sound_recorder.dart';
+import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -12,6 +13,7 @@ class Recording extends StatefulWidget {
 
 class _RecordingState extends State<Recording> {
   final recorder = SoundRecorder();
+  final CountDownController _timerController = CountDownController();
 
   @override
   void initState() {
@@ -27,7 +29,6 @@ class _RecordingState extends State<Recording> {
 
   @override
   Widget build(BuildContext context) {
-    // bool isFileRecorded = false;
     String mood = '';
     String tag = '';
     TextEditingController _moodTextController = TextEditingController();
@@ -44,10 +45,18 @@ class _RecordingState extends State<Recording> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Text('Recorder'),
-                IconButton(
-                  onPressed: () async {
-                    recorder.toggleRecording();
+                CircularCountDownTimer(
+                  controller: _timerController,
+                  textFormat: 's',
+                  autoStart: false,
+                  width: 100,
+                  height: 100,
+                  duration: 5,
+                  ringColor: Colors.blue,
+                  fillColor: Colors.green,
+                  onStart: () => recorder.record(),
+                  onComplete: () async {
+                    recorder.stop();
                     if (recorder.isRecordingCompleted == true) {
                       await showDialog(
                         barrierDismissible: false,
@@ -73,9 +82,9 @@ class _RecordingState extends State<Recording> {
                                   decoration: InputDecoration(labelText: 'Tag'),
                                 ),
                                 IconButton(
-                                    onPressed: () =>
-                                        Navigator.of(context).pop(),
-                                    icon: FaIcon(FontAwesomeIcons.check))
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  icon: FaIcon(FontAwesomeIcons.check),
+                                )
                               ],
                             ),
                           ),
@@ -84,8 +93,12 @@ class _RecordingState extends State<Recording> {
                       recorder.updateDB(mood.isNotEmpty ? mood : '',
                           tag.isNotEmpty ? tag : '');
                     }
-
                     setState(() {});
+                  },
+                ),
+                IconButton(
+                  onPressed: () {
+                    _timerController.start();
                   },
                   icon: recorder.isRecording
                       ? const FaIcon(FontAwesomeIcons.stop)
