@@ -1,5 +1,6 @@
 import 'package:audio_journal/models/app_bar.dart';
 import 'package:audio_journal/pages/recording.dart';
+import 'package:audio_journal/utils/colours.dart';
 import 'package:flutter/material.dart';
 
 class GetStarted extends StatelessWidget {
@@ -13,8 +14,9 @@ class GetStarted extends StatelessWidget {
       body: Center(
         child: Container(
           width: MediaQuery.of(context).size.width * 0.85,
-          color: Colors.amberAccent,
+          // color: Colors.amberAccent,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 '“The happiness of your life depends on the quality of your thoughts”',
@@ -33,11 +35,14 @@ class GetStarted extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.black87),
               ),
+              SizedBox(
+                height: 150,
+              ),
               Container(
                 decoration: BoxDecoration(
-                    color: Colors.green,
+                    color: AppColours().buttonBackground,
                     borderRadius: BorderRadius.all(Radius.circular(50))),
-                width: 240,
+                width: MediaQuery.of(context).size.width * 0.60,
                 height: 50,
                 child: TextButton(
                   child: Text(
