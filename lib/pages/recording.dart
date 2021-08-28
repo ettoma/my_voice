@@ -36,7 +36,7 @@ class _RecordingState extends State<Recording> {
     TextEditingController _tagTextController = TextEditingController();
 
     return Scaffold(
-      appBar: appBar(),
+      appBar: appBar(context),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.only(bottom: 24.0, left: 8, right: 8),
