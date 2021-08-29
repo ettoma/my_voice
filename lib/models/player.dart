@@ -22,6 +22,7 @@ class SoundPlayer {
 
   Future _stop() async {
     await _audioPlayer!.stopPlayer();
+    isPlaying = false;
   }
 
   Future togglePlaying(

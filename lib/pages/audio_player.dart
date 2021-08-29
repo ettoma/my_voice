@@ -104,7 +104,9 @@ class _AudioPlayerState extends State<AudioPlayer> {
                                 : FaIcon(FontAwesomeIcons.pause),
                             onPressed: () async {
                               await player.togglePlaying(
-                                  whenFinished: () => setState(() {}),
+                                  whenFinished: () {
+                                    setState(() {});
+                                  },
                                   fileName: directory!.uri
                                           .toFilePath(windows: false) +
                                       audioFiles[index].fileName +
