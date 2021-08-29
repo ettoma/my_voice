@@ -1,5 +1,5 @@
 name: audio_journal
-description: A new Flutter project.
+description: Audio journal.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -37,7 +37,6 @@ dependencies:
   flutter_sound: ^8.1.9
   permission_handler: ^8.1.2
   path_provider: ^2.0.2
-  circular_countdown_timer: ^0.2.0
   provider: ^5.0.0
   intl: ^0.17.0
   shared_preferences: ^2.0.6
