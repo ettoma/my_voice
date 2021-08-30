@@ -74,6 +74,7 @@ class _RecordingState extends State<Recording> {
                           });
                           if (number == 0) {
                             animationTimer!.cancel();
+                            number = 5;
                           }
                         });
                         Timer(

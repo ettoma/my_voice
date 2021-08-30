@@ -1,4 +1,5 @@
 import 'package:audio_journal/pages/get_started.dart';
+import 'package:audio_journal/pages/recording.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -21,7 +22,8 @@ class _MyAppState extends State<MyApp> {
           fontFamily: 'Poppins'),
       debugShowCheckedModeBanner: false,
       title: 'my voice',
-      home: GetStarted(),
+      // home: GetStarted(),
+      home: Recording(),
     );
   }
 }
