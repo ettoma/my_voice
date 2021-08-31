@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:audio_journal/data/audio_file_db.dart';
 import 'package:audio_journal/data/audio_model.dart';
+import 'package:flutter/gestures.dart';
 import 'package:intl/intl.dart';
 
 import 'package:audio_journal/models/app_bar.dart';
@@ -76,7 +77,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
                   )
                 : ListView.separated(
                     itemBuilder: (context, index) {
-                      final audio = audioFiles[index];
+                      final audio = audioFiles[audioFiles.length - 1 - index];
                       return Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,

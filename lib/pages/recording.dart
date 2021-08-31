@@ -104,8 +104,10 @@ class _RecordingState extends State<Recording> {
                                         controller: _tagTextController,
                                         onChanged: (e) =>
                                             tag = _tagTextController.text,
-                                        decoration:
-                                            InputDecoration(labelText: 'Tag'),
+                                        decoration: InputDecoration(
+                                            labelText: 'Tag',
+                                            errorText:
+                                                'Please fill in the field'),
                                       ),
                                       IconButton(
                                         onPressed: () {
