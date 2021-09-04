@@ -1,6 +1,7 @@
 import 'package:audio_journal/pages/get_started.dart';
 import 'package:audio_journal/pages/recording.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,8 +19,9 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-          backgroundColor: Color.fromRGBO(250, 249, 249, 1),
-          fontFamily: 'Poppins'),
+          backgroundColor: Colors.white,
+          textTheme: TextTheme(headline1: GoogleFonts.aBeeZee()),
+          canvasColor: Colors.white),
       debugShowCheckedModeBanner: false,
       title: 'my voice',
       // home: GetStarted(),
