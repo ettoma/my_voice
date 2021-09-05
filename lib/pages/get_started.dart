@@ -1,8 +1,8 @@
 import 'dart:async';
 
+import 'package:audio_journal/data/quotes.dart';
 import 'package:audio_journal/models/app_bar.dart';
 import 'package:audio_journal/pages/recording.dart';
-import 'package:audio_journal/utils/colours.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
@@ -11,29 +11,21 @@ class GetStarted extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Map<String, String>> quotes = [
-      {
-        'quote':
-            '“The happiness of your life depends on the quality of your thoughts”',
-        'author': 'Marcus Aurelius'
-      },
-      {'quote': 'You wanna die?', 'author': 'Jinseo Kim'}
-    ];
-    int randomQuoteInt = Random().nextInt(quotes.length);
+    final quotes = Quotes();
+    int randomQuoteInt = Random().nextInt(quotes.quotes.length);
 
-    Timer(Duration(seconds: 5), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) {
-            return const Recording();
-          },
-        ),
-      );
-    });
+    // Timer(Duration(seconds: 5), () {
+    //   Navigator.pushReplacement(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder: (context) {
+    //         return const Recording();
+    //       },
+    //     ),
+    //   );
+    // });
     return Scaffold(
       appBar: appBar(context),
-      backgroundColor: Theme.of(context).backgroundColor,
       body: Center(
         child: Container(
           width: MediaQuery.of(context).size.width * 0.85,
@@ -42,10 +34,10 @@ class GetStarted extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                quotes[randomQuoteInt]['quote'].toString(),
+                quotes.quotes[randomQuoteInt]['quote'].toString(),
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: Colors.black87, fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.headline2!.copyWith(
+                    fontWeight: FontWeight.bold, color: Colors.black87),
               ),
               Container(
                 margin: EdgeInsets.symmetric(vertical: 5),
@@ -54,9 +46,12 @@ class GetStarted extends StatelessWidget {
                 color: Colors.black,
               ),
               Text(
-                quotes[randomQuoteInt]['author'].toString(),
+                quotes.quotes[randomQuoteInt]['author'].toString(),
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.black87),
+                style: Theme.of(context)
+                    .textTheme
+                    .headline3!
+                    .copyWith(color: Colors.black87),
               ),
               SizedBox(
                 height: 150,

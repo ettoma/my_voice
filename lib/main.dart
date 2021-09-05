@@ -24,6 +24,8 @@ class _MyAppState extends State<MyApp> {
           textTheme: GoogleFonts.poppinsTextTheme(
             TextTheme(
                 headline1: TextStyle(fontSize: 50),
+                headline2: TextStyle(fontSize: 24),
+                headline3: TextStyle(fontSize: 20),
                 headline4: TextStyle(
                     //Primary button
                     fontWeight: FontWeight.bold,
@@ -37,8 +39,8 @@ class _MyAppState extends State<MyApp> {
           canvasColor: Colors.white),
       debugShowCheckedModeBanner: false,
       title: 'my voice',
-      // home: GetStarted(),
-      home: Recording(),
+      home: GetStarted(),
+      // home: Recording(),
     );
   }
 }
