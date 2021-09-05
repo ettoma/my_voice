@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:audio_journal/models/app_bar.dart';
 import 'package:audio_journal/models/sound_recorder.dart';
+import 'package:flutter/cupertino.dart';
 // import 'package:audio_journal/utils/colours.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 
@@ -56,11 +58,12 @@ class _RecordingState extends State<Recording> with TickerProviderStateMixin {
               style: Theme.of(context).textTheme.headline1,
             ),
             Lottie.asset(
-              'assets/recording_animation.json',
+              'assets/yoga_light.json',
               repeat: false,
               controller: _animationController,
             ),
-            TextButton(
+            CupertinoButton(
+              color: Colors.greenAccent,
               onPressed: _isButtonDisabled == true
                   ? null
                   : () {
@@ -72,42 +75,40 @@ class _RecordingState extends State<Recording> with TickerProviderStateMixin {
                         Duration(seconds: 5),
                         () async {
                           recorder.stop();
-                          await showDialog(
+                          await showCupertinoDialog(
                             barrierDismissible: false,
                             context: context,
-                            builder: (context) => Dialog(
-                              child: Container(
-                                padding: EdgeInsets.all(12),
-                                height:
-                                    MediaQuery.of(context).size.height * 0.4,
-                                width: MediaQuery.of(context).size.width * 0.85,
-                                child: Column(
-                                  children: [
-                                    TextField(
-                                      controller: _moodTextController,
-                                      onChanged: (e) =>
-                                          mood = _moodTextController.text,
-                                      decoration:
-                                          InputDecoration(labelText: 'Mood'),
-                                    ),
-                                    TextField(
-                                      controller: _tagTextController,
-                                      onChanged: (e) =>
-                                          tag = _tagTextController.text,
-                                      decoration: InputDecoration(
-                                          labelText: 'Tag',
-                                          errorText:
-                                              'Please fill in the field'),
-                                    ),
-                                    IconButton(
-                                      onPressed: () {
-                                        _animationController!.reset();
-                                        Navigator.of(context).pop();
-                                      },
-                                      icon: FaIcon(FontAwesomeIcons.check),
-                                    )
-                                  ],
-                                ),
+                            builder: (context) => CupertinoAlertDialog(
+                              title: Text('save'),
+                              actions: [
+                                CupertinoDialogAction(
+                                  onPressed: () {
+                                    _animationController!.reset();
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: FaIcon(FontAwesomeIcons.check),
+                                )
+                              ],
+                              content: Column(
+                                children: [
+                                  CupertinoTextField(
+                                    autofocus: true,
+                                    autocorrect: false,
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 5, horizontal: 10),
+                                    maxLength: 15,
+                                    maxLengthEnforcement:
+                                        MaxLengthEnforcement.enforced,
+                                    controller: _moodTextController,
+                                    onChanged: (e) =>
+                                        mood = _moodTextController.text,
+                                  ),
+                                  CupertinoTextField(
+                                    controller: _tagTextController,
+                                    onChanged: (e) =>
+                                        tag = _tagTextController.text,
+                                  ),
+                                ],
                               ),
                             ),
                           );
@@ -129,8 +130,8 @@ class _RecordingState extends State<Recording> with TickerProviderStateMixin {
                     },
               child: Text('start recording'),
             ),
-            TextButton(
-              child: Text('Player'),
+            CupertinoButton(
+              child: Text('player'),
               onPressed: _isButtonDisabled == true
                   ? null
                   : () {

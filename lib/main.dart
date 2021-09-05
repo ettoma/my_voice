@@ -2,6 +2,7 @@ import 'package:audio_journal/pages/get_started.dart';
 import 'package:audio_journal/pages/recording.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 
 void main() {
   runApp(const MyApp());

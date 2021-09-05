@@ -64,8 +64,8 @@ class _AudioPlayerState extends State<AudioPlayer> {
       body: Column(
         children: [
           Text(
-            'Audio player',
-            style: TextStyle(fontWeight: FontWeight.bold),
+            'play',
+            style: Theme.of(context).textTheme.headline1,
           ),
           SizedBox(
             height: 24,
