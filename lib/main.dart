@@ -21,7 +21,19 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       theme: ThemeData(
           backgroundColor: Colors.white,
-          textTheme: TextTheme(headline1: GoogleFonts.aBeeZee()),
+          textTheme: GoogleFonts.poppinsTextTheme(
+            TextTheme(
+                headline1: TextStyle(fontSize: 50),
+                headline4: TextStyle(
+                    //Primary button
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24),
+                headline5: TextStyle(
+                  // Secondary button
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                )),
+          ),
           canvasColor: Colors.white),
       debugShowCheckedModeBanner: false,
       title: 'my voice',
