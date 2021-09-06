@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:audio_journal/models/app_bar.dart';
 import 'package:audio_journal/models/sound_recorder.dart';
 import 'package:flutter/cupertino.dart';
-// import 'package:audio_journal/utils/colours.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
+import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 
 import 'audio_player.dart';
 
@@ -20,8 +20,9 @@ class Recording extends StatefulWidget {
 
 class _RecordingState extends State<Recording> with TickerProviderStateMixin {
   final recorder = SoundRecorder();
-  bool _isButtonDisabled = false;
+  bool _isRecording = false;
   AnimationController? _animationController;
+  int _currentValue = 0;
 
   @override
   void initState() {
@@ -51,7 +52,7 @@ class _RecordingState extends State<Recording> with TickerProviderStateMixin {
           padding: EdgeInsets.all(16),
           children: [
             Text(
-              'record',
+              _isRecording ? 'recording...' : 'record',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.headline1,
             ),
@@ -64,6 +65,20 @@ class _RecordingState extends State<Recording> with TickerProviderStateMixin {
                 repeat: false,
                 controller: _animationController,
               ),
+            ),
+            Container(
+              child: _currentValue == 0
+                  ? null
+                  // TODO: style progress bar
+                  : FAProgressBar(
+                      currentValue: _currentValue,
+                      maxValue: 46,
+                      size: 20,
+                      backgroundColor: Colors.amberAccent,
+                      progressColor: Colors.blueAccent,
+                      changeColorValue: 32,
+                      changeProgressColor: Colors.green,
+                    ),
             ),
             SizedBox(
               height: MediaQuery.of(context).size.height / 12,
@@ -80,13 +95,26 @@ class _RecordingState extends State<Recording> with TickerProviderStateMixin {
                       .copyWith(color: Colors.white),
                 ),
                 color: Color.fromRGBO(152, 182, 105, 1),
-                onPressed: _isButtonDisabled == true
+                onPressed: _isRecording == true
                     ? null
                     : () {
                         _animationController!.forward();
-                        _isButtonDisabled = true;
-                        setState(() {});
+
+                        setState(() {
+                          _isRecording = true;
+                        });
                         recorder.record();
+                        Timer.periodic(Duration(milliseconds: 100), (timer) {
+                          if (_currentValue == 50) {
+                            _currentValue = -1;
+                            // setState(() {});
+                            timer.cancel();
+                          }
+                          setState(() {
+                            _currentValue = _currentValue + 1;
+                          });
+                        });
+
                         Timer(
                           Duration(seconds: 5),
                           () async {
@@ -168,7 +196,7 @@ class _RecordingState extends State<Recording> with TickerProviderStateMixin {
                             );
                             recorder.updateDB(mood.isNotEmpty ? mood : '',
                                 tag.isNotEmpty ? tag : '');
-                            _isButtonDisabled = false;
+                            _isRecording = false;
                             setState(() {});
 
                             Navigator.push(
@@ -191,11 +219,11 @@ class _RecordingState extends State<Recording> with TickerProviderStateMixin {
                 child: Text(
                   'player',
                   style: Theme.of(context).textTheme.headline5!.copyWith(
-                      color: _isButtonDisabled
+                      color: _isRecording
                           ? Colors.grey.shade100
                           : Colors.blueAccent),
                 ),
-                onPressed: _isButtonDisabled == true
+                onPressed: _isRecording == true
                     ? null
                     : () {
                         Navigator.push(

@@ -44,6 +44,7 @@ dependencies:
   path: ^1.8.0
   google_fonts: ^2.1.0
   lottie: ^1.1.0
+  flutter_animation_progress_bar: ^2.0.1
 
 dev_dependencies:
   flutter_test:
