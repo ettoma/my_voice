@@ -1,8 +1,9 @@
 import 'package:audio_journal/pages/first_time_user.dart';
 // import 'package:audio_journal/pages/daily_quote.dart';
-// import 'package:audio_journal/pages/recording.dart';
+import 'package:audio_journal/pages/recording.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,6 +17,25 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  String _name = '';
+  SharedPreferences? _prefs;
+
+  void getStoredData() async {
+    _prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _name = _prefs!.getString('name') ?? 'empty';
+    });
+    debugPrint('Saved name: $_name');
+  }
+
+  //TODO: Save name in state to use across the app
+
+  @override
+  void initState() {
+    super.initState();
+    getStoredData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -41,7 +61,7 @@ class _MyAppState extends State<MyApp> {
       title: 'my voice',
       // home: DailyQuote(),
       // home: Recording(),
-      home: FirstTimeUser(),
+      home: _name.isEmpty ? FirstTimeUser() : Recording(),
     );
   }
 }

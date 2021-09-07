@@ -1,5 +1,7 @@
 import 'package:audio_journal/models/app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FirstTimeUser extends StatefulWidget {
   const FirstTimeUser({Key? key}) : super(key: key);
@@ -10,29 +12,46 @@ class FirstTimeUser extends StatefulWidget {
 
 class _FirstTimeUserState extends State<FirstTimeUser> {
   TextEditingController _controller = TextEditingController();
+  String _name = '';
+  SharedPreferences? _prefs;
+
+  void getStoredData() async {
+    _prefs = await SharedPreferences.getInstance();
+    // setState(() {
+    //   _name = _prefs!.getString('name') ?? 'empty';
+    // });
+    // debugPrint('Saved name: $_name');
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getStoredData();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(context),
       body: Center(
-        child: Column(
-          children: [
-            Text(
-              'What\'s your name?',
-              style: Theme.of(context).textTheme.headline2,
-            ),
-            TextFormField(
-              textAlign: TextAlign.center,
-              autocorrect: false,
-              controller: _controller,
-              onChanged: (_) => print(_controller.text),
+          child: Column(
+        children: [
+          Text(
+            'What\'s your name?',
+            style: Theme.of(context).textTheme.headline2,
+          ),
+          TextFormField(
+            textAlign: TextAlign.center,
+            autocorrect: false,
+            controller: _controller,
 
-              // TODO: Implement shared preferences save
-            ),
-          ],
-        ),
-      ),
+            // TODO: Improve shared preferences save
+          ),
+          IconButton(
+              onPressed: () => _prefs!.setString('name', _controller.text),
+              icon: FaIcon(FontAwesomeIcons.save))
+        ],
+      )),
     );
   }
 }
