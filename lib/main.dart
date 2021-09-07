@@ -28,7 +28,7 @@ class _MyAppState extends State<MyApp> {
     debugPrint('Saved name: $_name');
   }
 
-  //TODO: Save name in state to use across the app
+  //TODO: Save name in state to use across the app. To be implemented in Daily Quote
 
   @override
   void initState() {
