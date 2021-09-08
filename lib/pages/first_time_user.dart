@@ -1,6 +1,8 @@
+import 'package:audio_journal/data/app_state.dart';
 import 'package:audio_journal/models/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FirstTimeUser extends StatefulWidget {
@@ -12,21 +14,12 @@ class FirstTimeUser extends StatefulWidget {
 
 class _FirstTimeUserState extends State<FirstTimeUser> {
   TextEditingController _controller = TextEditingController();
-  String _name = '';
   SharedPreferences? _prefs;
-
-  void getStoredData() async {
-    _prefs = await SharedPreferences.getInstance();
-    // setState(() {
-    //   _name = _prefs!.getString('name') ?? 'empty';
-    // });
-    // debugPrint('Saved name: $_name');
-  }
 
   @override
   void initState() {
     super.initState();
-    getStoredData();
+    // getStoredData();
   }
 
   @override
@@ -44,8 +37,6 @@ class _FirstTimeUserState extends State<FirstTimeUser> {
             textAlign: TextAlign.center,
             autocorrect: false,
             controller: _controller,
-
-            // TODO: Improve shared preferences save
           ),
           IconButton(
               onPressed: () => _prefs!.setString('name', _controller.text),
