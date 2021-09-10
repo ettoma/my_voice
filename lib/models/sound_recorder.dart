@@ -48,11 +48,11 @@ class SoundRecorder {
     isRecording = true;
     if (!_isRecorderInitialised) return;
     await _audioRecorder!
-        .startRecorder(toFile: '$_directoryPath/$_fileName' + '.aac');
+        .startRecorder(toFile: '$_directoryPath/$_fileName.aac');
   }
 
   Future updateDB(mood, tag) async {
-    final db = await AudioDatabase.instance;
+    final db = AudioDatabase.instance;
     db.create(AudioFile(
         id: int.parse(_fileName!), fileName: _fileName!, mood: mood, tag: tag));
     _fileName = null;

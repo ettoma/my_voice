@@ -16,7 +16,7 @@ class Quotes {
     },
     {
       'quote':
-          '"You can waste your lives drawing lines. Or you can live your life crossing them."',
+          '"You can waste your life drawing lines. Or you can live your life crossing them."',
       'author': 'Shonda Rhimes'
     },
     {

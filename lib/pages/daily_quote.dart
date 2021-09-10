@@ -1,8 +1,9 @@
-// import 'dart:async';
+import 'dart:async';
 
 import 'package:audio_journal/data/quotes.dart';
-// import 'package:audio_journal/models/app_bar.dart';
-// import 'package:audio_journal/pages/recording.dart';
+import 'package:audio_journal/pages/first_time_user.dart';
+import 'package:audio_journal/pages/recording.dart';
+import 'package:audio_journal/utils/shared_prefs.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
@@ -14,22 +15,23 @@ class DailyQuote extends StatelessWidget {
     final quotes = Quotes();
     int randomQuoteInt = Random().nextInt(quotes.quotes.length);
 
-    // Timer(Duration(seconds: 5), () {
-    //   Navigator.pushReplacement(
-    //     context,
-    //     MaterialPageRoute(
-    //       builder: (context) {
-    //         return const Recording();
-    //       },
-    //     ),
-    //   );
-    // });
+    Timer(const Duration(seconds: 5), () {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) {
+            return sharedPrefs.username.isEmpty
+                ? const FirstTimeUser()
+                : const Recording();
+          },
+        ),
+      );
+    });
     return Scaffold(
       // appBar: appBar(context),
       body: Center(
-        child: Container(
+        child: SizedBox(
           width: MediaQuery.of(context).size.width * 0.85,
-          // color: Colors.amberAccent,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -42,7 +44,7 @@ class DailyQuote extends StatelessWidget {
                     .copyWith(fontWeight: FontWeight.bold),
               ),
               Container(
-                margin: EdgeInsets.symmetric(vertical: 5),
+                margin: const EdgeInsets.symmetric(vertical: 5),
                 height: 14,
                 width: 1,
                 color: Colors.black,
@@ -52,7 +54,7 @@ class DailyQuote extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.headline3,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 150,
               ),
             ],

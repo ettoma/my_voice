@@ -46,8 +46,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
 
   Future refreshAudioFileList() async {
     setState(() => isLoading = true);
-    this.audioFiles =
-        await AudioDatabase.instance.readAllAudioFiles().whenComplete(
+    audioFiles = await AudioDatabase.instance.readAllAudioFiles().whenComplete(
       () {
         setState(() => isLoading = false);
       },
@@ -77,7 +76,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
                   )
                 : ListView.separated(
                     itemBuilder: (context, index) {
-                      final audio = audioFiles[audioFiles.length - 1 - index];
+                      final audio = audioFiles[index];
                       return Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -91,7 +90,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text('#' + audio.tag),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 8,
                                   ),
                                   Text(audio.mood)
@@ -100,6 +99,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
                             ],
                           ),
                           IconButton(
+                            // TODO: fix icon when playing
                             icon: player.isPlaying == false //Not ideal
                                 ? FaIcon(FontAwesomeIcons.play)
                                 : FaIcon(FontAwesomeIcons.pause),
