@@ -30,7 +30,7 @@ class _RecordingState extends State<Recording> with TickerProviderStateMixin {
     super.initState();
     recorder.init();
     _animationController =
-        AnimationController(vsync: this, duration: Duration(seconds: 5));
+        AnimationController(vsync: this, duration: const Duration(seconds: 5));
   }
 
   @override
@@ -49,14 +49,14 @@ class _RecordingState extends State<Recording> with TickerProviderStateMixin {
     return Scaffold(
       appBar: appBar(context),
       body: Center(
-        child: ListView(padding: EdgeInsets.all(16), children: [
+        child: ListView(padding: const EdgeInsets.all(16), children: [
           Text(
-            _isRecording ? 'recording...' : 'record',
+            _isRecording ? '' : 'record',
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.headline1,
           ),
           Container(
-            padding: EdgeInsets.only(top: 16),
+            padding: const EdgeInsets.only(top: 16),
             alignment: Alignment.center,
             child: Lottie.asset(
               'assets/yoga_light.json',
@@ -86,14 +86,9 @@ class _RecordingState extends State<Recording> with TickerProviderStateMixin {
             // Start recording button
             alignment: Alignment.center,
             child: CupertinoButton(
-              child: Text(
-                'start recording',
-                style: Theme.of(context)
-                    .textTheme
-                    .headline4!
-                    .copyWith(color: Colors.white),
-              ),
-              color: Color.fromRGBO(152, 182, 105, 1),
+              child: Text(!_isRecording ? 'start recording' : 'recording...',
+                  style: Theme.of(context).textTheme.headline4!.copyWith(
+                      color: _isRecording ? Colors.grey : Colors.blueAccent)),
               onPressed: _isRecording == true
                   ? null
                   : () {
@@ -103,10 +98,10 @@ class _RecordingState extends State<Recording> with TickerProviderStateMixin {
                         _isRecording = true;
                       });
                       recorder.record();
-                      Timer.periodic(Duration(milliseconds: 100), (timer) {
+                      Timer.periodic(const Duration(milliseconds: 100),
+                          (timer) {
                         if (_currentValue == 50) {
                           _currentValue = -1;
-                          // setState(() {});
                           timer.cancel();
                         }
                         setState(() {
@@ -115,21 +110,21 @@ class _RecordingState extends State<Recording> with TickerProviderStateMixin {
                       });
 
                       Timer(
-                        Duration(seconds: 5),
+                        const Duration(seconds: 5),
                         () async {
                           recorder.stop();
                           await showCupertinoModalPopup(
                             barrierDismissible: false,
                             context: context,
                             builder: (context) => CupertinoAlertDialog(
-                              title: Text('tag and mood'),
+                              title: const Text('tag and mood'),
                               actions: [
                                 CupertinoDialogAction(
                                   onPressed: () {
                                     _animationController!.reset();
                                     Navigator.of(context).pop();
                                   },
-                                  child: FaIcon(FontAwesomeIcons.check),
+                                  child: const FaIcon(FontAwesomeIcons.check),
                                 )
                               ],
                               content: Column(
@@ -141,18 +136,19 @@ class _RecordingState extends State<Recording> with TickerProviderStateMixin {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Container(
-                                          child: Text('tag'),
-                                          padding: EdgeInsets.only(bottom: 5),
+                                          child: const Text('tag'),
+                                          padding:
+                                              const EdgeInsets.only(bottom: 5),
                                         ),
                                         CupertinoTextField(
                                           placeholder: 'add a tag',
                                           prefix: Container(
-                                              padding: EdgeInsets.all(4),
-                                              child: FaIcon(
+                                              padding: const EdgeInsets.all(4),
+                                              child: const FaIcon(
                                                   FontAwesomeIcons.hashtag)),
                                           autofocus: true,
                                           autocorrect: false,
-                                          padding: EdgeInsets.symmetric(
+                                          padding: const EdgeInsets.symmetric(
                                               vertical: 5, horizontal: 10),
                                           maxLength: 15,
                                           maxLengthEnforcement:
@@ -171,13 +167,14 @@ class _RecordingState extends State<Recording> with TickerProviderStateMixin {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Container(
-                                          child: Text('mood'),
-                                          padding: EdgeInsets.only(bottom: 5),
+                                          child: const Text('mood'),
+                                          padding:
+                                              const EdgeInsets.only(bottom: 5),
                                         ),
                                         CupertinoTextField(
                                           placeholder: 'register your mood',
                                           autocorrect: false,
-                                          padding: EdgeInsets.symmetric(
+                                          padding: const EdgeInsets.symmetric(
                                               vertical: 5, horizontal: 10),
                                           maxLength: 15,
                                           maxLengthEnforcement:
@@ -202,7 +199,7 @@ class _RecordingState extends State<Recording> with TickerProviderStateMixin {
                             context,
                             MaterialPageRoute(
                               builder: (context) {
-                                return AudioPlayer();
+                                return const AudioPlayer();
                               },
                             ),
                           );
@@ -220,7 +217,7 @@ class _RecordingState extends State<Recording> with TickerProviderStateMixin {
                 style: Theme.of(context).textTheme.headline5!.copyWith(
                     color: _isRecording
                         ? Colors.grey.shade100
-                        : Colors.blueAccent),
+                        : Colors.lightBlueAccent),
               ),
               onPressed: _isRecording == true
                   ? null
@@ -229,7 +226,7 @@ class _RecordingState extends State<Recording> with TickerProviderStateMixin {
                         context,
                         MaterialPageRoute(
                           builder: (context) {
-                            return AudioPlayer();
+                            return const AudioPlayer();
                           },
                         ),
                       );
@@ -245,7 +242,7 @@ class _RecordingState extends State<Recording> with TickerProviderStateMixin {
                       },
                     ),
                   ),
-              child: Text('first time user')),
+              child: const Text('first time user')),
         ]),
       ),
     );

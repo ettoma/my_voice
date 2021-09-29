@@ -18,7 +18,7 @@ class AudioPlayer extends StatefulWidget {
 
 class _AudioPlayerState extends State<AudioPlayer> {
   List<AudioFile> audioFiles = [];
-  bool isLoading = false;
+  bool _isLoading = false;
 
   final player = SoundPlayer();
 
@@ -45,10 +45,10 @@ class _AudioPlayerState extends State<AudioPlayer> {
   }
 
   Future refreshAudioFileList() async {
-    setState(() => isLoading = true);
+    setState(() => _isLoading = true);
     audioFiles = await AudioDatabase.instance.readAllAudioFiles().whenComplete(
       () {
-        setState(() => isLoading = false);
+        setState(() => _isLoading = false);
       },
     );
   }
@@ -69,7 +69,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
           SizedBox(
             height: 24,
           ),
-          Flexible(
+          Expanded(
             child: audioFiles.isEmpty
                 ? const Center(
                     child: Text('No audio files to play'),
@@ -123,7 +123,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
                                 context: context,
                                 builder: (context) => Dialog(
                                   child: Container(
-                                    padding: EdgeInsets.all(12),
+                                    padding: const EdgeInsets.all(12),
                                     child: Row(
                                       children: [
                                         Text('Are you sure?'),
