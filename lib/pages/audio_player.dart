@@ -19,6 +19,7 @@ class AudioPlayer extends StatefulWidget {
 class _AudioPlayerState extends State<AudioPlayer> {
   List<AudioFile> audioFiles = [];
   bool _isLoading = false;
+  Color color = Colors.transparent;
 
   final player = SoundPlayer();
 
@@ -66,7 +67,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
             'play',
             style: Theme.of(context).textTheme.headline1,
           ),
-          SizedBox(
+          const SizedBox(
             height: 24,
           ),
           Expanded(
@@ -74,92 +75,144 @@ class _AudioPlayerState extends State<AudioPlayer> {
                 ? const Center(
                     child: Text('No audio files to play'),
                   )
-                : ListView.separated(
+                : ListView.builder(
                     itemBuilder: (context, index) {
                       final audio = audioFiles[index];
-                      return Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Column(
-                            children: [
-                              Text(format.format(
-                                  DateTime.fromMillisecondsSinceEpoch(int.parse(
-                                      audio.fileName.split('.aac').first)))),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text('#' + audio.tag),
-                                  const SizedBox(
-                                    width: 8,
-                                  ),
-                                  Text(audio.mood)
-                                ],
-                              )
-                            ],
-                          ),
-                          IconButton(
-                            // TODO: fix icon when playing
-                            icon: player.isPlaying == false //Not ideal
-                                ? FaIcon(FontAwesomeIcons.play)
-                                : FaIcon(FontAwesomeIcons.pause),
-                            onPressed: () async {
-                              await player.togglePlaying(
-                                  whenFinished: () {
-                                    setState(() {});
-                                  },
-                                  fileName: directory!.uri
-                                          .toFilePath(windows: false) +
-                                      audioFiles[index].fileName +
-                                      '.aac');
-                              setState(() {});
-                            },
-                          ),
-                          IconButton(
-                            icon: const FaIcon(FontAwesomeIcons.trash),
-                            onPressed: () async {
-                              await showDialog(
-                                barrierDismissible: false,
-                                context: context,
-                                builder: (context) => Dialog(
-                                  child: Container(
-                                    padding: const EdgeInsets.all(12),
-                                    child: Row(
-                                      children: [
-                                        Text('Are you sure?'),
-                                        IconButton(
-                                            onPressed: () =>
-                                                Navigator.of(context).pop(),
-                                            icon:
-                                                FaIcon(FontAwesomeIcons.times)),
-                                        IconButton(
-                                          onPressed: () async {
-                                            await AudioDatabase.instance
-                                                .delete(audioFiles[index].id!);
-                                            final targetFile = File(
-                                                "${directory!.path}/${audioFiles[index].fileName}.aac");
-                                            targetFile.deleteSync(
-                                                recursive: true);
-                                            Navigator.of(context).pop();
-                                          },
-                                          icon: FaIcon(FontAwesomeIcons.check),
-                                        ),
-                                      ],
+                      return Dismissible(
+                        direction: DismissDirection.endToStart,
+                        confirmDismiss: (direction) async {
+                          await showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (context) => Dialog(
+                              child: Container(
+                                padding: const EdgeInsets.all(12),
+                                child: Row(
+                                  children: [
+                                    const Text('Are you sure?'),
+                                    IconButton(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(),
+                                        icon: const FaIcon(
+                                            FontAwesomeIcons.times)),
+                                    IconButton(
+                                      onPressed: () async {
+                                        await AudioDatabase.instance
+                                            .delete(audioFiles[index].id!);
+                                        final targetFile = File(
+                                            "${directory!.path}/${audioFiles[index].fileName}.aac");
+                                        targetFile.deleteSync(recursive: true);
+                                        Navigator.of(context).pop();
+                                      },
+                                      icon:
+                                          const FaIcon(FontAwesomeIcons.check),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                              );
-                              refreshAudioFileList();
-                            },
-                          )
-                        ],
+                              ),
+                            ),
+                          );
+                          refreshAudioFileList();
+                        },
+                        onDismissed: (direction) {
+                          AudioDatabase.instance.delete(audioFiles[index].id!);
+                          final targetFile = File(
+                              "${directory!.path}/${audioFiles[index].fileName}.aac");
+                          targetFile.deleteSync(recursive: true);
+                          audioFiles.removeAt(index);
+                          setState(() {});
+                        },
+                        key: Key(audioFiles[index].id.toString()),
+                        background: stackBehindDismiss(),
+                        child: ElevatedButton(
+                          // style: ButtonStyle(
+                          //     padding: MaterialStateProperty.all(),
+                          //     backgroundColor: MaterialStateColor.resolveWith(
+                          //         (states) => Colors.white),
+                          //     foregroundColor: MaterialStateColor.resolveWith(
+                          //         (states) => Colors.black)),
+                          onPressed: () async {
+                            await player.togglePlaying(
+                                whenFinished: () {
+                                  setState(() {});
+                                },
+                                fileName:
+                                    directory!.uri.toFilePath(windows: false) +
+                                        audioFiles[index].fileName +
+                                        '.aac');
+                            setState(() {});
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 5),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Column(
+                                  children: [
+                                    Text(format.format(
+                                        DateTime.fromMillisecondsSinceEpoch(
+                                            int.parse(audio.fileName
+                                                .split('.aac')
+                                                .first)))),
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text('#' + audio.tag),
+                                        const SizedBox(
+                                          width: 8,
+                                        ),
+                                        Text(audio.mood)
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      // TODO: fix icon when playing
+                                      icon:
+                                          player.isPlaying == false //Not ideal
+                                              ? FaIcon(FontAwesomeIcons.play)
+                                              : FaIcon(FontAwesomeIcons.pause),
+                                      onPressed: () async {
+                                        await player.togglePlaying(
+                                            whenFinished: () {
+                                              setState(() {});
+                                            },
+                                            fileName: directory!.uri.toFilePath(
+                                                    windows: false) +
+                                                audioFiles[index].fileName +
+                                                '.aac');
+                                        setState(() {});
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       );
                     },
-                    separatorBuilder: (context, index) => Container(height: 8),
                     itemCount: audioFiles.length),
           ),
         ],
       ),
     );
   }
+}
+
+Widget stackBehindDismiss() {
+  return Container(
+    alignment: Alignment.centerRight,
+    padding: const EdgeInsets.only(right: 20.0),
+    color: Colors.red,
+    child: const Icon(
+      Icons.delete,
+      color: Colors.white,
+    ),
+  );
 }
