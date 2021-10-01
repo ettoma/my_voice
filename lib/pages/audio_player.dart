@@ -124,14 +124,11 @@ class _AudioPlayerState extends State<AudioPlayer> {
                         },
                         key: Key(audioFiles[index].id.toString()),
                         background: stackBehindDismiss(),
-                        child: ElevatedButton(
-                          // style: ButtonStyle(
-                          //     padding: MaterialStateProperty.all(),
-                          //     backgroundColor: MaterialStateColor.resolveWith(
-                          //         (states) => Colors.white),
-                          //     foregroundColor: MaterialStateColor.resolveWith(
-                          //         (states) => Colors.black)),
-                          onPressed: () async {
+                        child: InkWell(
+                          // highlightColor: Colors.lightBlueAccent,
+                          // focusColor: Colors.lightBlueAccent,
+                          splashColor: Colors.lightBlueAccent,
+                          onTap: () async {
                             await player.togglePlaying(
                                 whenFinished: () {
                                   setState(() {});
@@ -145,52 +142,23 @@ class _AudioPlayerState extends State<AudioPlayer> {
                           child: Container(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 10, horizontal: 5),
+                            margin: const EdgeInsets.only(bottom: 10),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
+                                Text(format.format(DateTime
+                                    .fromMillisecondsSinceEpoch(int.parse(
+                                        audio.fileName.split('.aac').first)))),
                                 Column(
                                   children: [
-                                    Text(format.format(
-                                        DateTime.fromMillisecondsSinceEpoch(
-                                            int.parse(audio.fileName
-                                                .split('.aac')
-                                                .first)))),
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Text('#' + audio.tag),
-                                        const SizedBox(
-                                          width: 8,
-                                        ),
-                                        Text(audio.mood)
-                                      ],
-                                    )
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    IconButton(
-                                      // TODO: fix icon when playing
-                                      icon:
-                                          player.isPlaying == false //Not ideal
-                                              ? FaIcon(FontAwesomeIcons.play)
-                                              : FaIcon(FontAwesomeIcons.pause),
-                                      onPressed: () async {
-                                        await player.togglePlaying(
-                                            whenFinished: () {
-                                              setState(() {});
-                                            },
-                                            fileName: directory!.uri.toFilePath(
-                                                    windows: false) +
-                                                audioFiles[index].fileName +
-                                                '.aac');
-                                        setState(() {});
-                                      },
+                                    Text('#' + audio.tag),
+                                    const SizedBox(
+                                      width: 8,
                                     ),
+                                    Text(audio.mood)
                                   ],
-                                ),
+                                )
                               ],
                             ),
                           ),

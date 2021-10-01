@@ -38,6 +38,6 @@ class AudioFile {
   static AudioFile fromJson(Map<String, Object?> json) => AudioFile(
       id: json[AudioFileFields.id] as int?,
       fileName: json[AudioFileFields.fileName] as String,
-      tag: json[AudioFileFields.tag] as String,
-      mood: json[AudioFileFields.mood] as String);
+      mood: json[AudioFileFields.mood] as String,
+      tag: json[AudioFileFields.tag] as String);
 }

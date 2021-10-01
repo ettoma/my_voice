@@ -24,8 +24,8 @@ class AudioDatabase {
   }
 
   Future _createDB(Database db, int version) async {
-    final textType = 'TEXT NOT NULL';
-    final idType = 'INTEGER PRIMARY KEY AUTOINCREMENT';
+    const textType = 'TEXT NOT NULL';
+    const idType = 'INTEGER PRIMARY KEY AUTOINCREMENT';
 
     await db.execute('''
     CREATE TABLE $audioFiles(

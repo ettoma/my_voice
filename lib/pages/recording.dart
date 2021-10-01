@@ -153,9 +153,9 @@ class _RecordingState extends State<Recording> with TickerProviderStateMixin {
                                           maxLength: 15,
                                           maxLengthEnforcement:
                                               MaxLengthEnforcement.enforced,
-                                          controller: _moodTextController,
+                                          controller: _tagTextController,
                                           onChanged: (e) =>
-                                              mood = _moodTextController.text,
+                                              tag = _tagTextController.text,
                                         ),
                                       ],
                                     ),
@@ -179,9 +179,9 @@ class _RecordingState extends State<Recording> with TickerProviderStateMixin {
                                           maxLength: 15,
                                           maxLengthEnforcement:
                                               MaxLengthEnforcement.enforced,
-                                          controller: _tagTextController,
+                                          controller: _moodTextController,
                                           onChanged: (e) =>
-                                              tag = _tagTextController.text,
+                                              mood = _moodTextController.text,
                                         ),
                                       ],
                                     ),
