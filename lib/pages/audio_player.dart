@@ -140,24 +140,38 @@ class _AudioPlayerState extends State<AudioPlayer> {
                             setState(() {});
                           },
                           child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 5),
-                            margin: const EdgeInsets.only(bottom: 10),
+                            decoration: BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(
+                                        width: 1,
+                                        color: Colors.grey.withOpacity(0.2)))),
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            margin: const EdgeInsets.only(bottom: 5),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(format.format(DateTime
-                                    .fromMillisecondsSinceEpoch(int.parse(
-                                        audio.fileName.split('.aac').first)))),
-                                Column(
-                                  children: [
-                                    Text('#' + audio.tag),
-                                    const SizedBox(
-                                      width: 8,
-                                    ),
-                                    Text(audio.mood)
-                                  ],
+                                Container(
+                                  margin: const EdgeInsets.only(left: 40),
+                                  child: Text(
+                                      format.format(
+                                          DateTime.fromMillisecondsSinceEpoch(
+                                              int.parse(audio.fileName
+                                                  .split('.aac')
+                                                  .first))),
+                                      style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w700)),
+                                ),
+                                Container(
+                                  margin: const EdgeInsets.only(right: 40),
+                                  child: Row(
+                                    children: [
+                                      // Text(audio.mood),
+                                      Text(audio.tag,
+                                          style: TextStyle(fontSize: 16)),
+                                    ],
+                                  ),
                                 )
                               ],
                             ),
