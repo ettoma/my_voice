@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:audio_journal/data/audio_file_db.dart';
 import 'package:audio_journal/data/audio_model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
 import 'package:audio_journal/models/app_bar.dart';
@@ -59,14 +60,13 @@ class _AudioPlayerState extends State<AudioPlayer> {
     final format = DateFormat('dd.MM.yyyy HH:mm');
 
     return Scaffold(
-      // TODO: style this page
       appBar: appBar(context),
       body: Column(
         children: [
-          Text(
-            'play',
-            style: Theme.of(context).textTheme.headline1,
-          ),
+          // Text(
+          //   'play',
+          //   style: Theme.of(context).textTheme.headline1,
+          // ),
           const SizedBox(
             height: 24,
           ),
@@ -75,27 +75,33 @@ class _AudioPlayerState extends State<AudioPlayer> {
                 ? const Center(
                     child: Text('No audio files to play'),
                   )
-                : ListView.builder(
-                    itemBuilder: (context, index) {
-                      final audio = audioFiles[index];
-                      return Dismissible(
-                        direction: DismissDirection.endToStart,
-                        confirmDismiss: (direction) async {
-                          await showDialog(
-                            barrierDismissible: false,
-                            context: context,
-                            builder: (context) => Dialog(
-                              child: Container(
-                                padding: const EdgeInsets.all(12),
-                                child: Row(
-                                  children: [
-                                    const Text('Are you sure?'),
-                                    IconButton(
+                : Align(
+                    alignment: Alignment.topCenter,
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        // reverse: true,
+                        itemBuilder: (context, index) {
+                          final audio = audioFiles[index];
+                          return Dismissible(
+                            direction: DismissDirection.endToStart,
+                            confirmDismiss: (direction) async {
+                              await showCupertinoModalPopup(
+                                barrierDismissible: false,
+                                context: context,
+                                builder: (context) => CupertinoAlertDialog(
+                                  title: const Text(
+                                    'Are you sure?',
+                                    style: TextStyle(fontSize: 20),
+                                  ),
+                                  content: const Text('This can\'t be undone',
+                                      style: TextStyle(fontSize: 16)),
+                                  actions: [
+                                    CupertinoDialogAction(
                                         onPressed: () =>
                                             Navigator.of(context).pop(),
-                                        icon: const FaIcon(
+                                        child: const FaIcon(
                                             FontAwesomeIcons.times)),
-                                    IconButton(
+                                    CupertinoDialogAction(
                                       onPressed: () async {
                                         await AudioDatabase.instance
                                             .delete(audioFiles[index].id!);
@@ -104,82 +110,85 @@ class _AudioPlayerState extends State<AudioPlayer> {
                                         targetFile.deleteSync(recursive: true);
                                         Navigator.of(context).pop();
                                       },
-                                      icon:
+                                      child:
                                           const FaIcon(FontAwesomeIcons.check),
                                     ),
+                                  ],
+                                ),
+                              );
+                              refreshAudioFileList();
+                            },
+                            onDismissed: (direction) {
+                              AudioDatabase.instance
+                                  .delete(audioFiles[index].id!);
+                              final targetFile = File(
+                                  "${directory!.path}/${audioFiles[index].fileName}.aac");
+                              targetFile.deleteSync(recursive: true);
+                              audioFiles.removeAt(index);
+                              setState(() {});
+                            },
+                            key: Key(audioFiles[index].id.toString()),
+                            background: stackBehindDismiss(),
+                            child: InkWell(
+                              // highlightColor: Colors.lightBlueAccent,
+                              // focusColor: Colors.lightBlueAccent,
+                              splashColor: Colors.lightBlueAccent,
+                              onTap: () async {
+                                await player.togglePlaying(
+                                    whenFinished: () {
+                                      setState(() {});
+                                    },
+                                    fileName: directory!.uri
+                                            .toFilePath(windows: false) +
+                                        audioFiles[index].fileName +
+                                        '.aac');
+                                setState(() {});
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border(
+                                        bottom: BorderSide(
+                                            width: 1,
+                                            color:
+                                                Colors.grey.withOpacity(0.2)))),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 20),
+                                margin: const EdgeInsets.only(bottom: 5),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.only(left: 40),
+                                      child: Text(
+                                          format.format(DateTime
+                                              .fromMillisecondsSinceEpoch(
+                                                  int.parse(audio.fileName
+                                                      .split('.aac')
+                                                      .first))),
+                                          style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w700)),
+                                    ),
+                                    Container(
+                                      margin: const EdgeInsets.only(right: 40),
+                                      child: Row(
+                                        children: [
+                                          // Text(audio.mood),
+                                          Text('#${audio.tag}',
+                                              style: TextStyle(fontSize: 16)),
+                                        ],
+                                      ),
+                                    )
                                   ],
                                 ),
                               ),
                             ),
                           );
-                          refreshAudioFileList();
                         },
-                        onDismissed: (direction) {
-                          AudioDatabase.instance.delete(audioFiles[index].id!);
-                          final targetFile = File(
-                              "${directory!.path}/${audioFiles[index].fileName}.aac");
-                          targetFile.deleteSync(recursive: true);
-                          audioFiles.removeAt(index);
-                          setState(() {});
-                        },
-                        key: Key(audioFiles[index].id.toString()),
-                        background: stackBehindDismiss(),
-                        child: InkWell(
-                          // highlightColor: Colors.lightBlueAccent,
-                          // focusColor: Colors.lightBlueAccent,
-                          splashColor: Colors.lightBlueAccent,
-                          onTap: () async {
-                            await player.togglePlaying(
-                                whenFinished: () {
-                                  setState(() {});
-                                },
-                                fileName:
-                                    directory!.uri.toFilePath(windows: false) +
-                                        audioFiles[index].fileName +
-                                        '.aac');
-                            setState(() {});
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(
-                                        width: 1,
-                                        color: Colors.grey.withOpacity(0.2)))),
-                            padding: const EdgeInsets.symmetric(vertical: 20),
-                            margin: const EdgeInsets.only(bottom: 5),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  margin: const EdgeInsets.only(left: 40),
-                                  child: Text(
-                                      format.format(
-                                          DateTime.fromMillisecondsSinceEpoch(
-                                              int.parse(audio.fileName
-                                                  .split('.aac')
-                                                  .first))),
-                                      style: const TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w700)),
-                                ),
-                                Container(
-                                  margin: const EdgeInsets.only(right: 40),
-                                  child: Row(
-                                    children: [
-                                      // Text(audio.mood),
-                                      Text(audio.tag,
-                                          style: TextStyle(fontSize: 16)),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                    itemCount: audioFiles.length),
+                        itemCount: audioFiles.length),
+                  ),
           ),
         ],
       ),
