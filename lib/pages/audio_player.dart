@@ -19,6 +19,7 @@ class AudioPlayer extends StatefulWidget {
 
 class _AudioPlayerState extends State<AudioPlayer> {
   List<AudioFile> audioFiles = [];
+  List<AudioFile> reversedAudioFileList = [];
   bool _isLoading = false;
   Color color = Colors.transparent;
 
@@ -53,6 +54,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
         setState(() => _isLoading = false);
       },
     );
+    reversedAudioFileList = audioFiles.reversed.toList();
   }
 
   @override
@@ -67,9 +69,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
           //   'play',
           //   style: Theme.of(context).textTheme.headline1,
           // ),
-          const SizedBox(
-            height: 24,
-          ),
+
           Expanded(
             child: audioFiles.isEmpty
                 ? const Center(
@@ -78,10 +78,8 @@ class _AudioPlayerState extends State<AudioPlayer> {
                 : Align(
                     alignment: Alignment.topCenter,
                     child: ListView.builder(
-                        shrinkWrap: true,
-                        // reverse: true,
                         itemBuilder: (context, index) {
-                          final audio = audioFiles[index];
+                          final audio = reversedAudioFileList[index];
                           return Dismissible(
                             direction: DismissDirection.endToStart,
                             confirmDismiss: (direction) async {
@@ -103,10 +101,10 @@ class _AudioPlayerState extends State<AudioPlayer> {
                                             FontAwesomeIcons.times)),
                                     CupertinoDialogAction(
                                       onPressed: () async {
-                                        await AudioDatabase.instance
-                                            .delete(audioFiles[index].id!);
+                                        await AudioDatabase.instance.delete(
+                                            reversedAudioFileList[index].id!);
                                         final targetFile = File(
-                                            "${directory!.path}/${audioFiles[index].fileName}.aac");
+                                            "${directory!.path}/${reversedAudioFileList[index].fileName}.aac");
                                         targetFile.deleteSync(recursive: true);
                                         Navigator.of(context).pop();
                                       },
@@ -120,14 +118,15 @@ class _AudioPlayerState extends State<AudioPlayer> {
                             },
                             onDismissed: (direction) {
                               AudioDatabase.instance
-                                  .delete(audioFiles[index].id!);
+                                  .delete(reversedAudioFileList[index].id!);
                               final targetFile = File(
-                                  "${directory!.path}/${audioFiles[index].fileName}.aac");
+                                  "${directory!.path}/${reversedAudioFileList[index].fileName}.aac");
                               targetFile.deleteSync(recursive: true);
-                              audioFiles.removeAt(index);
+                              reversedAudioFileList.removeAt(index);
                               setState(() {});
                             },
-                            key: Key(audioFiles[index].id.toString()),
+                            key:
+                                Key(reversedAudioFileList[index].id.toString()),
                             background: stackBehindDismiss(),
                             child: InkWell(
                               // highlightColor: Colors.lightBlueAccent,
@@ -140,7 +139,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
                                     },
                                     fileName: directory!.uri
                                             .toFilePath(windows: false) +
-                                        audioFiles[index].fileName +
+                                        reversedAudioFileList[index].fileName +
                                         '.aac');
                                 setState(() {});
                               },
