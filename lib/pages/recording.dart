@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:audio_journal/models/app_bar.dart';
 import 'package:audio_journal/models/sound_recorder.dart';
+import 'package:audio_journal/utils/shared_prefs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
-import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 
 import 'audio_player.dart';
 import 'first_time_user.dart';
@@ -65,20 +65,20 @@ class _RecordingState extends State<Recording> with TickerProviderStateMixin {
               controller: _animationController,
             ),
           ),
-          Container(
-            child: _currentValue == 0
-                ? null
-                // TODO: style progress bar
-                : FAProgressBar(
-                    currentValue: _currentValue,
-                    maxValue: 46,
-                    size: 20,
-                    backgroundColor: Colors.amberAccent,
-                    progressColor: Colors.blueAccent,
-                    changeColorValue: 32,
-                    changeProgressColor: Colors.green,
-                  ),
-          ),
+          // Container(
+          //   child: _currentValue == 0
+          //       ? null
+          //       // TODO: style progress bar
+          //       : FAProgressBar(
+          //           currentValue: _currentValue,
+          //           maxValue: 46,
+          //           size: 20,
+          //           backgroundColor: Colors.amberAccent,
+          //           progressColor: Colors.blueAccent,
+          //           changeColorValue: 32,
+          //           changeProgressColor: Colors.green,
+          //         ),
+          // ),
           SizedBox(
             height: MediaQuery.of(context).size.height / 12,
           ),
@@ -93,6 +93,8 @@ class _RecordingState extends State<Recording> with TickerProviderStateMixin {
                   ? null
                   : () {
                       _animationController!.forward();
+                      sharedPrefs.todayDate = DateTime.now().day.toString() +
+                          DateTime.now().month.toString();
 
                       setState(() {
                         _isRecording = true;

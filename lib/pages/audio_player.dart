@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:audio_journal/data/audio_file_db.dart';
 import 'package:audio_journal/data/audio_model.dart';
+import 'package:audio_journal/utils/shared_prefs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
@@ -64,12 +65,13 @@ class _AudioPlayerState extends State<AudioPlayer> {
     return Scaffold(
       appBar: appBar(context),
       body: Column(
+        // crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Text(
-          //   'play',
-          //   style: Theme.of(context).textTheme.headline1,
-          // ),
-
+          Text(
+            'play',
+            style: Theme.of(context).textTheme.headline1,
+          ),
+          const SizedBox(height: 24),
           Expanded(
             child: audioFiles.isEmpty
                 ? const Center(
@@ -129,8 +131,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
                                 Key(reversedAudioFileList[index].id.toString()),
                             background: stackBehindDismiss(),
                             child: InkWell(
-                              // highlightColor: Colors.lightBlueAccent,
-                              // focusColor: Colors.lightBlueAccent,
+                              focusColor: Colors.lightBlueAccent,
                               splashColor: Colors.lightBlueAccent,
                               onTap: () async {
                                 await player.togglePlaying(
@@ -176,7 +177,8 @@ class _AudioPlayerState extends State<AudioPlayer> {
                                         children: [
                                           // Text(audio.mood),
                                           Text('#${audio.tag}',
-                                              style: TextStyle(fontSize: 16)),
+                                              style: const TextStyle(
+                                                  fontSize: 16)),
                                         ],
                                       ),
                                     )

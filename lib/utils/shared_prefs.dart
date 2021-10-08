@@ -13,6 +13,12 @@ class SharedPrefs {
     _sharedPrefs!.setString(keyName, value);
   }
 
+  String get todayDate => _sharedPrefs!.getString(todayDateKey) ?? '';
+
+  set todayDate(String value) {
+    _sharedPrefs!.setString(todayDateKey, value);
+  }
+
   clear() {
     _sharedPrefs!.clear();
   }
@@ -20,3 +26,4 @@ class SharedPrefs {
 
 final sharedPrefs = SharedPrefs();
 const String keyName = 'name';
+const String todayDateKey = 'today';
