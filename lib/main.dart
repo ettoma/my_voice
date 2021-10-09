@@ -24,7 +24,10 @@ class _MyAppState extends State<MyApp> {
           backgroundColor: Colors.white,
           textTheme: GoogleFonts.poppinsTextTheme(
             const TextTheme(
-              headline1: TextStyle(fontSize: 50),
+              headline1: TextStyle(
+                  fontSize: 32,
+                  color: Colors.black87,
+                  fontWeight: FontWeight.bold),
               headline2: TextStyle(fontSize: 24, color: Colors.black87),
               headline3: TextStyle(fontSize: 20, color: Colors.black87),
               headline4: TextStyle(
