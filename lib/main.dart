@@ -22,12 +22,12 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       theme: ThemeData(
           backgroundColor: Colors.white,
-          textTheme: GoogleFonts.poppinsTextTheme(
+          textTheme: GoogleFonts.montserratTextTheme(
             const TextTheme(
               headline1: TextStyle(
                   fontSize: 32,
-                  color: Colors.black87,
-                  fontWeight: FontWeight.bold),
+                  color: Color.fromRGBO(46, 48, 64, 1),
+                  fontWeight: FontWeight.w500),
               headline2: TextStyle(fontSize: 24, color: Colors.black87),
               headline3: TextStyle(fontSize: 20, color: Colors.black87),
               headline4: TextStyle(
