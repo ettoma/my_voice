@@ -46,6 +46,7 @@ dependencies:
   google_fonts: ^2.1.0
   lottie: ^1.1.0
   flutter_animation_progress_bar: ^2.0.1
+  animated_text_kit: ^4.2.1
 
 dev_dependencies:
   flutter_test:

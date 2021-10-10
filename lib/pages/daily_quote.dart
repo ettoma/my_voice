@@ -28,7 +28,6 @@ class DailyQuote extends StatelessWidget {
       );
     });
     return Scaffold(
-      // appBar: appBar(context),
       body: Center(
         child: SizedBox(
           width: MediaQuery.of(context).size.width * 0.85,

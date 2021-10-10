@@ -1,7 +1,10 @@
-import 'package:audio_journal/pages/daily_quote.dart';
+// import 'package:audio_journal/pages/daily_quote.dart';
+import 'package:audio_journal/pages/recording.dart';
 import 'package:audio_journal/utils/shared_prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import 'pages/splash.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,7 +31,8 @@ class _MyAppState extends State<MyApp> {
                   fontSize: 32,
                   color: Color.fromRGBO(46, 48, 64, 1),
                   fontWeight: FontWeight.w500),
-              headline2: TextStyle(fontSize: 24, color: Colors.black87),
+              headline2:
+                  TextStyle(fontSize: 24, color: Color.fromRGBO(46, 48, 64, 1)),
               headline3: TextStyle(fontSize: 20, color: Colors.black87),
               headline4: TextStyle(
                   //Primary button
@@ -44,7 +48,7 @@ class _MyAppState extends State<MyApp> {
           canvasColor: Colors.white),
       debugShowCheckedModeBanner: false,
       title: 'my voice',
-      home: const DailyQuote(),
+      home: const Recording(),
     );
   }
 }

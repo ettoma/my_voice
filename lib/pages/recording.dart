@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:audio_journal/models/app_bar.dart';
 import 'package:audio_journal/models/sound_recorder.dart';
 import 'package:audio_journal/utils/shared_prefs.dart';
@@ -26,6 +27,7 @@ class _RecordingState extends State<Recording> with TickerProviderStateMixin {
   bool _isRecording = false;
   AnimationController? _animationController;
   int _currentValue = 0;
+  bool _isAnimationGoingBack = true;
 
   @override
   void initState() {
@@ -75,14 +77,20 @@ class _RecordingState extends State<Recording> with TickerProviderStateMixin {
               style: const TextStyle(color: Colors.lightBlueAccent),
             ),
             const SizedBox(height: 8),
-            Text(
-              'Good ${_timeOfTheDay()}, \n${sharedPrefs.username}',
-              // _isRecording ? '' : 'record',
-              // textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.headline1,
+            SizedBox(
+              height: 85,
+              child: AnimatedTextKit(
+                isRepeatingAnimation: false,
+                animatedTexts: [
+                  TyperAnimatedText(
+                    'Good ${_timeOfTheDay()}, \n${sharedPrefs.username}',
+                    speed: const Duration(milliseconds: 125),
+                    textStyle: Theme.of(context).textTheme.headline1,
+                  )
+                ],
+              ),
             ),
             Container(
-              margin: const EdgeInsets.only(top: 16),
               alignment: Alignment.center,
               child: Lottie.asset(
                 'assets/yoga_light.json',
@@ -91,26 +99,24 @@ class _RecordingState extends State<Recording> with TickerProviderStateMixin {
                 controller: _animationController,
               ),
             ),
-            Container(
-              child: FAProgressBar(
-                animatedDuration: const Duration(seconds: 5),
-                currentValue: 0,
-                maxValue: 46,
-                size: 20,
-                backgroundColor: Colors.amberAccent,
-                progressColor: Colors.blueAccent,
-                changeColorValue: 32,
-                changeProgressColor: Colors.green,
-              ),
+            FAProgressBar(
+              animatedDuration: const Duration(seconds: 5),
+              currentValue: _currentValue,
+              maxValue: 46,
+              size: 5,
+              progressColor: Colors.blueAccent.withOpacity(0.1),
+              changeColorValue: 20,
+              changeProgressColor: Colors.blueAccent.withOpacity(0.75),
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height / 12,
+            const SizedBox(
+              height: 24,
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 shape: const CircleBorder(),
-                elevation: 3,
-                primary: !_isRecording ? Colors.blueAccent : Colors.grey,
+                elevation: 2,
+                primary:
+                    !_isRecording ? Colors.white : Colors.grey.withOpacity(0.5),
               ),
               child: SizedBox(
                 height: 80,
@@ -118,7 +124,9 @@ class _RecordingState extends State<Recording> with TickerProviderStateMixin {
                 child: Center(
                   child: FaIcon(
                     FontAwesomeIcons.microphone,
-                    color: Colors.white.withOpacity(0.85),
+                    color: !_isRecording
+                        ? Colors.blueAccent.withOpacity(0.85)
+                        : Colors.grey.withOpacity(0.75),
                   ),
                 ),
               ),
@@ -126,28 +134,22 @@ class _RecordingState extends State<Recording> with TickerProviderStateMixin {
                   ? null
                   : () {
                       _animationController!.forward();
-                      sharedPrefs.todayDate = DateTime.now().day.toString() +
-                          DateTime.now().month.toString();
-
                       setState(() {
+                        _isAnimationGoingBack = false;
                         _isRecording = true;
                       });
+                      _currentValue = 46;
+                      sharedPrefs.todayDate = DateTime.now().day.toString() +
+                          DateTime.now().month.toString();
                       recorder.record();
-                      // Timer.periodic(const Duration(milliseconds: 100),
-                      //     (timer) {
-                      //   if (_currentValue == 50) {
-                      //     _currentValue = -1;
-                      //     timer.cancel();
-                      //   }
-                      //   setState(() {
-                      //     _currentValue = _currentValue + 1;
-                      //   });
-                      // });
-
                       Timer(
                         const Duration(seconds: 5),
                         () async {
                           recorder.stop();
+                          setState(() {
+                            _isAnimationGoingBack = true;
+                          });
+                          _currentValue = 0;
                           await showCupertinoModalPopup(
                             barrierDismissible: false,
                             context: context,
