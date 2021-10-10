@@ -33,16 +33,6 @@ class _MyAppState extends State<MyApp> {
                   fontWeight: FontWeight.w500),
               headline2:
                   TextStyle(fontSize: 24, color: Color.fromRGBO(46, 48, 64, 1)),
-              headline3: TextStyle(fontSize: 20, color: Colors.black87),
-              headline4: TextStyle(
-                  //Primary button
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24),
-              headline5: TextStyle(
-                // Secondary button
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              ),
             ),
           ),
           canvasColor: Colors.white),

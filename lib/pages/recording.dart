@@ -27,7 +27,7 @@ class _RecordingState extends State<Recording> with TickerProviderStateMixin {
   bool _isRecording = false;
   AnimationController? _animationController;
   int _currentValue = 0;
-  bool _isAnimationGoingBack = true;
+  bool selected = false;
 
   @override
   void initState() {
@@ -81,6 +81,11 @@ class _RecordingState extends State<Recording> with TickerProviderStateMixin {
               height: 85,
               child: AnimatedTextKit(
                 isRepeatingAnimation: false,
+                onFinished: () {
+                  setState(() {
+                    selected = !selected;
+                  });
+                },
                 animatedTexts: [
                   TyperAnimatedText(
                     'Good ${_timeOfTheDay()}, \n${sharedPrefs.username}',
@@ -111,174 +116,201 @@ class _RecordingState extends State<Recording> with TickerProviderStateMixin {
             const SizedBox(
               height: 24,
             ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: const CircleBorder(),
-                elevation: 2,
-                primary:
-                    !_isRecording ? Colors.white : Colors.grey.withOpacity(0.5),
-              ),
-              child: SizedBox(
-                height: 80,
-                width: 80,
-                child: Center(
-                  child: FaIcon(
-                    FontAwesomeIcons.microphone,
-                    color: !_isRecording
-                        ? Colors.blueAccent.withOpacity(0.85)
-                        : Colors.grey.withOpacity(0.75),
+            SizedBox(
+              height: 100,
+              width: MediaQuery.of(context).size.width,
+              child: Stack(children: [
+                AnimatedPositioned(
+                  top: selected ? 0 : 100,
+                  //TODO: fix this to be responsive
+                  right: MediaQuery.of(context).size.width / 3.5,
+                  duration: const Duration(seconds: 1),
+                  child: Center(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: const CircleBorder(),
+                        elevation: 2,
+                        primary: !_isRecording
+                            ? Colors.white
+                            : Colors.grey.withOpacity(0.5),
+                      ),
+                      child: SizedBox(
+                        height: 80,
+                        width: 80,
+                        child: Center(
+                          child: FaIcon(
+                            FontAwesomeIcons.microphone,
+                            color: !_isRecording
+                                ? Colors.blueAccent.withOpacity(0.85)
+                                : Colors.grey.withOpacity(0.75),
+                          ),
+                        ),
+                      ),
+                      onPressed: _isRecording == true
+                          ? null
+                          : () {
+                              _animationController!.forward();
+                              setState(() {
+                                _isRecording = true;
+                              });
+                              _currentValue = 46;
+                              sharedPrefs.todayDate =
+                                  DateTime.now().day.toString() +
+                                      DateTime.now().month.toString();
+                              recorder.record();
+                              Timer(
+                                const Duration(seconds: 5),
+                                () async {
+                                  recorder.stop();
+                                  _currentValue = 0;
+                                  await showCupertinoModalPopup(
+                                    barrierDismissible: false,
+                                    context: context,
+                                    builder: (context) => CupertinoAlertDialog(
+                                      title: const Text('tag and mood'),
+                                      actions: [
+                                        CupertinoDialogAction(
+                                          onPressed: () {
+                                            _animationController!.reset();
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const FaIcon(
+                                              FontAwesomeIcons.check),
+                                        )
+                                      ],
+                                      content: Column(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                  child: const Text('tag'),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          bottom: 5),
+                                                ),
+                                                CupertinoTextField(
+                                                  placeholder: 'add a tag',
+                                                  prefix: Container(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              4),
+                                                      child: const FaIcon(
+                                                          FontAwesomeIcons
+                                                              .hashtag)),
+                                                  autofocus: true,
+                                                  autocorrect: false,
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      vertical: 5,
+                                                      horizontal: 10),
+                                                  maxLength: 15,
+                                                  maxLengthEnforcement:
+                                                      MaxLengthEnforcement
+                                                          .enforced,
+                                                  controller:
+                                                      _tagTextController,
+                                                  onChanged: (e) => tag =
+                                                      _tagTextController.text,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                  child: const Text('mood'),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          bottom: 5),
+                                                ),
+                                                CupertinoTextField(
+                                                  placeholder:
+                                                      'register your mood',
+                                                  autocorrect: false,
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      vertical: 5,
+                                                      horizontal: 10),
+                                                  maxLength: 15,
+                                                  maxLengthEnforcement:
+                                                      MaxLengthEnforcement
+                                                          .enforced,
+                                                  controller:
+                                                      _moodTextController,
+                                                  onChanged: (e) => mood =
+                                                      _moodTextController.text,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                  recorder.updateDB(mood.isNotEmpty ? mood : '',
+                                      tag.isNotEmpty ? tag : '');
+                                  _isRecording = false;
+                                  setState(() {});
+
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        return const AudioPlayer();
+                                      },
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                    ),
                   ),
                 ),
-              ),
-              onPressed: _isRecording == true
-                  ? null
-                  : () {
-                      _animationController!.forward();
-                      setState(() {
-                        _isAnimationGoingBack = false;
-                        _isRecording = true;
-                      });
-                      _currentValue = 46;
-                      sharedPrefs.todayDate = DateTime.now().day.toString() +
-                          DateTime.now().month.toString();
-                      recorder.record();
-                      Timer(
-                        const Duration(seconds: 5),
-                        () async {
-                          recorder.stop();
-                          setState(() {
-                            _isAnimationGoingBack = true;
-                          });
-                          _currentValue = 0;
-                          await showCupertinoModalPopup(
-                            barrierDismissible: false,
-                            context: context,
-                            builder: (context) => CupertinoAlertDialog(
-                              title: const Text('tag and mood'),
-                              actions: [
-                                CupertinoDialogAction(
-                                  onPressed: () {
-                                    _animationController!.reset();
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: const FaIcon(FontAwesomeIcons.check),
-                                )
-                              ],
-                              content: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          child: const Text('tag'),
-                                          padding:
-                                              const EdgeInsets.only(bottom: 5),
-                                        ),
-                                        CupertinoTextField(
-                                          placeholder: 'add a tag',
-                                          prefix: Container(
-                                              padding: const EdgeInsets.all(4),
-                                              child: const FaIcon(
-                                                  FontAwesomeIcons.hashtag)),
-                                          autofocus: true,
-                                          autocorrect: false,
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 5, horizontal: 10),
-                                          maxLength: 15,
-                                          maxLengthEnforcement:
-                                              MaxLengthEnforcement.enforced,
-                                          controller: _tagTextController,
-                                          onChanged: (e) =>
-                                              tag = _tagTextController.text,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          child: const Text('mood'),
-                                          padding:
-                                              const EdgeInsets.only(bottom: 5),
-                                        ),
-                                        CupertinoTextField(
-                                          placeholder: 'register your mood',
-                                          autocorrect: false,
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 5, horizontal: 10),
-                                          maxLength: 15,
-                                          maxLengthEnforcement:
-                                              MaxLengthEnforcement.enforced,
-                                          controller: _moodTextController,
-                                          onChanged: (e) =>
-                                              mood = _moodTextController.text,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                          recorder.updateDB(mood.isNotEmpty ? mood : '',
-                              tag.isNotEmpty ? tag : '');
-                          _isRecording = false;
-                          setState(() {});
-
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return const AudioPlayer();
-                              },
-                            ),
-                          );
-                        },
-                      );
-                    },
+              ]),
             ),
-            Container(
-              // Player button
-              alignment: Alignment.center,
-              child: CupertinoButton(
-                child: Text(
-                  'player',
-                  style: Theme.of(context).textTheme.headline5!.copyWith(
-                      color: _isRecording
-                          ? Colors.grey.shade100
-                          : Colors.lightBlueAccent),
-                ),
-                onPressed: _isRecording == true
-                    ? null
-                    : () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return const AudioPlayer();
-                            },
-                          ),
-                        );
-                      },
-              ),
-            ),
-            TextButton(
-                onPressed: () => Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return const FirstTimeUser();
-                        },
-                      ),
-                    ),
-                child: const Text('first time user')),
+            // Container(
+            //   // Player button
+            //   alignment: Alignment.center,
+            //   child: CupertinoButton(
+            //     child: Text(
+            //       'player',
+            //       style: Theme.of(context).textTheme.headline5!.copyWith(
+            //           color: _isRecording
+            //               ? Colors.grey.shade100
+            //               : Colors.lightBlueAccent),
+            //     ),
+            //     onPressed: _isRecording == true
+            //         ? null
+            //         : () {
+            //             Navigator.push(
+            //               context,
+            //               MaterialPageRoute(
+            //                 builder: (context) {
+            //                   return const AudioPlayer();
+            //                 },
+            //               ),
+            //             );
+            //           },
+            //   ),
+            // ),
+            // TextButton(
+            //     onPressed: () => Navigator.pushReplacement(
+            //           context,
+            //           MaterialPageRoute(
+            //             builder: (context) {
+            //               return const FirstTimeUser();
+            //             },
+            //           ),
+            //         ),
+            //     child: const Text('first time user')),
           ]),
     );
   }
