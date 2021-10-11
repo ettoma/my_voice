@@ -146,7 +146,7 @@ class _RecordingState extends State<Recording> with TickerProviderStateMixin {
                           ),
                         ),
                       ),
-                      onPressed: _isRecording == true
+                      onPressed: _isRecording == true || _currentValue != 0
                           ? null
                           : () {
                               _animationController!.forward();
@@ -162,12 +162,14 @@ class _RecordingState extends State<Recording> with TickerProviderStateMixin {
                                 const Duration(seconds: 5),
                                 () async {
                                   recorder.stop();
-                                  _currentValue = 0;
+                                  setState(() {
+                                    _currentValue = 0;
+                                  });
                                   await showCupertinoModalPopup(
                                     barrierDismissible: false,
                                     context: context,
                                     builder: (context) => CupertinoAlertDialog(
-                                      title: const Text('tag and mood'),
+                                      title: const Text('Assign a tag'),
                                       actions: [
                                         CupertinoDialogAction(
                                           onPressed: () {
@@ -186,12 +188,12 @@ class _RecordingState extends State<Recording> with TickerProviderStateMixin {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                Container(
-                                                  child: const Text('tag'),
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          bottom: 5),
-                                                ),
+                                                // Container(
+                                                //   child: const Text('tag'),
+                                                //   padding:
+                                                //       const EdgeInsets.only(
+                                                //           bottom: 5),
+                                                // ),
                                                 CupertinoTextField(
                                                   placeholder: 'add a tag',
                                                   prefix: Container(
@@ -219,38 +221,38 @@ class _RecordingState extends State<Recording> with TickerProviderStateMixin {
                                               ],
                                             ),
                                           ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Container(
-                                                  child: const Text('mood'),
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          bottom: 5),
-                                                ),
-                                                CupertinoTextField(
-                                                  placeholder:
-                                                      'register your mood',
-                                                  autocorrect: false,
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      vertical: 5,
-                                                      horizontal: 10),
-                                                  maxLength: 15,
-                                                  maxLengthEnforcement:
-                                                      MaxLengthEnforcement
-                                                          .enforced,
-                                                  controller:
-                                                      _moodTextController,
-                                                  onChanged: (e) => mood =
-                                                      _moodTextController.text,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
+                                          // Padding(
+                                          //   padding: const EdgeInsets.all(8.0),
+                                          //   child: Column(
+                                          //     crossAxisAlignment:
+                                          //         CrossAxisAlignment.start,
+                                          //     children: [
+                                          //       Container(
+                                          //         child: const Text('mood'),
+                                          //         padding:
+                                          //             const EdgeInsets.only(
+                                          //                 bottom: 5),
+                                          //       ),
+                                          //       CupertinoTextField(
+                                          //         placeholder:
+                                          //             'register your mood',
+                                          //         autocorrect: false,
+                                          //         padding: const EdgeInsets
+                                          //                 .symmetric(
+                                          //             vertical: 5,
+                                          //             horizontal: 10),
+                                          //         maxLength: 15,
+                                          //         maxLengthEnforcement:
+                                          //             MaxLengthEnforcement
+                                          //                 .enforced,
+                                          //         controller:
+                                          //             _moodTextController,
+                                          //         onChanged: (e) => mood =
+                                          //             _moodTextController.text,
+                                          //       ),
+                                          //     ],
+                                          //   ),
+                                          // ),
                                         ],
                                       ),
                                     ),
