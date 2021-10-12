@@ -1,0 +1,50 @@
+import 'package:audio_journal/models/app_bar.dart';
+import 'package:audio_journal/models/sound_recorder.dart';
+import 'package:audio_journal/pages/audio_player.dart';
+import 'package:audio_journal/pages/record_screen.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+class Home extends StatefulWidget {
+  const Home({Key? key}) : super(key: key);
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> with TickerProviderStateMixin {
+  final recorder = SoundRecorder();
+  bool selected = false;
+  int _selectedIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    void _onItemTapped(int index) {
+      if (recorder.isRecording) {
+        return;
+      } else {
+        setState(() {
+          _selectedIndex = index;
+        });
+      }
+    }
+
+    return Scaffold(
+      appBar: appBar(context),
+      body: _selectedIndex == 0 ? const RecordScreen() : const AudioPlayer(),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: recorder.isRecording ? null : _onItemTapped,
+        selectedItemColor: Colors.red,
+        unselectedItemColor: Colors.grey.withOpacity(0.75),
+        items: const [
+          BottomNavigationBarItem(
+              icon: FaIcon(FontAwesomeIcons.home), label: 'Home'),
+          BottomNavigationBarItem(
+              icon: FaIcon(FontAwesomeIcons.magic), label: 'Play')
+        ],
+      ),
+    );
+  }
+}

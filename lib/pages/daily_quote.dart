@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:audio_journal/data/quotes.dart';
 import 'package:audio_journal/pages/first_time_user.dart';
-import 'package:audio_journal/pages/recording.dart';
+import 'package:audio_journal/pages/home.dart';
 import 'package:audio_journal/utils/shared_prefs.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
@@ -22,7 +22,7 @@ class DailyQuote extends StatelessWidget {
           builder: (context) {
             return sharedPrefs.username.isEmpty
                 ? const FirstTimeUser()
-                : const Recording();
+                : const Home();
           },
         ),
       );

@@ -1,10 +1,10 @@
 // import 'package:audio_journal/pages/daily_quote.dart';
-import 'package:audio_journal/pages/recording.dart';
+import 'package:audio_journal/pages/home.dart';
 import 'package:audio_journal/utils/shared_prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'pages/splash.dart';
+// import 'pages/splash.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,7 +38,7 @@ class _MyAppState extends State<MyApp> {
           canvasColor: Colors.white),
       debugShowCheckedModeBanner: false,
       title: 'my voice',
-      home: const Recording(),
+      home: const Home(),
     );
   }
 }
