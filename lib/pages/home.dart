@@ -14,16 +14,13 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> with TickerProviderStateMixin {
-  final recorder = SoundRecorder();
   bool selected = false;
   int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     void _onItemTapped(int index) {
-      if (recorder.isRecording) {
-        return;
-      } else {
+      if (SoundRecorder.isRecording != true) {
         setState(() {
           _selectedIndex = index;
         });
@@ -35,14 +32,14 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       body: _selectedIndex == 0 ? const RecordScreen() : const AudioPlayer(),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
-        onTap: recorder.isRecording ? null : _onItemTapped,
-        selectedItemColor: Colors.red,
+        onTap: _onItemTapped,
+        selectedItemColor: Colors.red.shade300,
         unselectedItemColor: Colors.grey.withOpacity(0.75),
         items: const [
           BottomNavigationBarItem(
               icon: FaIcon(FontAwesomeIcons.home), label: 'Home'),
           BottomNavigationBarItem(
-              icon: FaIcon(FontAwesomeIcons.magic), label: 'Play')
+              icon: FaIcon(FontAwesomeIcons.itunesNote), label: 'Play')
         ],
       ),
     );

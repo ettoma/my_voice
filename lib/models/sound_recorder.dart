@@ -9,7 +9,7 @@ import 'package:path_provider/path_provider.dart';
 class SoundRecorder {
   FlutterSoundRecorder? _audioRecorder;
   bool _isRecorderInitialised = false;
-  bool isRecording = false;
+  static bool? isRecording = false;
   bool isRecordingCompleted = false;
   Directory? _directory;
   String? _directoryPath;
@@ -45,13 +45,13 @@ class SoundRecorder {
 
   Future record() async {
     getFileName();
-    isRecording = true;
     if (!_isRecorderInitialised) return;
     await _audioRecorder!
         .startRecorder(toFile: '$_directoryPath/$_fileName.aac');
+    isRecording = true;
   }
 
-  Future updateDB(mood, tag) async {
+  void updateDB(mood, tag) {
     final db = AudioDatabase.instance;
     db.create(AudioFile(
         id: int.parse(_fileName!), fileName: _fileName!, mood: mood, tag: tag));
@@ -60,9 +60,9 @@ class SoundRecorder {
 
   Future stop() async {
     if (!_isRecorderInitialised) return;
-    isRecording = false;
-    isRecordingCompleted = true;
     await _audioRecorder!.stopRecorder();
+    isRecordingCompleted = true;
+    isRecording = false;
     // _fileName = null;
   }
 

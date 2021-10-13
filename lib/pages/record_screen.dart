@@ -21,7 +21,7 @@ class RecordScreen extends StatefulWidget {
 class _RecordScreenState extends State<RecordScreen>
     with TickerProviderStateMixin {
   final recorder = SoundRecorder();
-  bool _isRecording = false;
+  bool isRecording = false;
   AnimationController? _animationController;
   int _currentValue = 0;
   bool selected = false;
@@ -73,23 +73,11 @@ class _RecordScreenState extends State<RecordScreen>
         ),
         const SizedBox(height: 8),
         SizedBox(
-          height: 85,
-          child: AnimatedTextKit(
-            isRepeatingAnimation: false,
-            onFinished: () {
-              setState(() {
-                selected = !selected;
-              });
-            },
-            animatedTexts: [
-              TyperAnimatedText(
-                'Good ${_timeOfTheDay()}, \n${sharedPrefs.username}',
-                speed: const Duration(milliseconds: 125),
-                textStyle: Theme.of(context).textTheme.headline1,
-              )
-            ],
-          ),
-        ),
+            height: 85,
+            child: Text(
+              'Good ${_timeOfTheDay()}, \n${sharedPrefs.username}',
+              style: Theme.of(context).textTheme.headline1,
+            )),
         Container(
           alignment: Alignment.center,
           child: Lottie.asset(
@@ -111,110 +99,95 @@ class _RecordScreenState extends State<RecordScreen>
         const SizedBox(
           height: 24,
         ),
-        SizedBox(
-          height: 100,
-          width: MediaQuery.of(context).size.width,
-          child: Stack(children: [
-            AnimatedOpacity(
-              opacity: selected ? 1 : 0,
-              duration: const Duration(seconds: 1),
-              child: Center(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: const CircleBorder(),
-                    elevation: 2,
-                    primary: !_isRecording
-                        ? Colors.white
-                        : Colors.grey.withOpacity(0.5),
-                  ),
-                  child: SizedBox(
-                    height: 80,
-                    width: 80,
-                    child: Center(
-                      child: FaIcon(
-                        FontAwesomeIcons.microphone,
-                        color: !_isRecording
-                            ? Colors.blueAccent.withOpacity(0.85)
-                            : Colors.grey.withOpacity(0.75),
-                      ),
-                    ),
-                  ),
-                  onPressed: _isRecording == true || _currentValue != 0
-                      ? null
-                      : () {
-                          _animationController!.forward();
-                          setState(() {
-                            _isRecording = true;
-                          });
-                          _currentValue = 46;
-                          sharedPrefs.todayDate =
-                              DateTime.now().day.toString() +
-                                  DateTime.now().month.toString();
-                          recorder.record();
-                          Timer(
-                            const Duration(seconds: 5),
-                            () async {
-                              recorder.stop();
-                              setState(() {
-                                _currentValue = 0;
-                              });
-                              await showCupertinoModalPopup(
-                                barrierDismissible: false,
-                                context: context,
-                                builder: (context) => CupertinoAlertDialog(
-                                  title: const Text('Assign a tag'),
-                                  actions: [
-                                    CupertinoDialogAction(
-                                      onPressed: () {
-                                        _animationController!.reset();
-                                        Navigator.of(context).pop();
-                                      },
-                                      child:
-                                          const FaIcon(FontAwesomeIcons.check),
-                                    )
-                                  ],
-                                  content: Column(
-                                    children: [
-                                      const SizedBox(height: 12),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            CupertinoTextField(
-                                              placeholder: 'add a tag',
-                                              autofocus: true,
-                                              autocorrect: false,
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 5,
-                                                      horizontal: 10),
-                                              maxLength: 15,
-                                              maxLengthEnforcement:
-                                                  MaxLengthEnforcement.enforced,
-                                              controller: _tagTextController,
-                                              onChanged: (e) =>
-                                                  tag = _tagTextController.text,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                              recorder.updateDB(mood.isNotEmpty ? mood : '',
-                                  tag.isNotEmpty ? tag : '');
-                              _isRecording = false;
-                              setState(() {});
-                            },
-                          );
-                        },
-                ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            shape: const CircleBorder(),
+            elevation: 1,
+            primary: !isRecording ? Colors.white : Colors.grey.withOpacity(0.5),
+          ),
+          child: SizedBox(
+            height: 80,
+            width: 80,
+            child: Center(
+              child: FaIcon(
+                FontAwesomeIcons.microphone,
+                color: !isRecording
+                    ? Colors.blueAccent.withOpacity(0.85)
+                    : Colors.grey.withOpacity(0.75),
               ),
             ),
-          ]),
+          ),
+          onPressed: isRecording == true || _currentValue != 0
+              ? null
+              : () {
+                  _animationController!.forward();
+                  setState(() {
+                    isRecording = true;
+                  });
+                  _currentValue = 46;
+                  sharedPrefs.todayDate = DateTime.now().day.toString() +
+                      DateTime.now().month.toString();
+                  recorder.record();
+                  Timer(
+                    const Duration(seconds: 5),
+                    () async {
+                      recorder.stop();
+                      setState(() {
+                        _currentValue = 0;
+                      });
+                      await showCupertinoModalPopup(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (context) => CupertinoAlertDialog(
+                          title: const Text('Assign a tag'),
+                          actions: [
+                            CupertinoDialogAction(
+                              onPressed: () {
+                                _animationController!.reset();
+                                Navigator.of(context).pop();
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text('this is my snackbar')));
+                              },
+                              child: const FaIcon(FontAwesomeIcons.check),
+                            )
+                          ],
+                          content: Column(
+                            children: [
+                              const SizedBox(height: 12),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    //TODO: Validation of tags (=no empty tags)
+                                    CupertinoTextField(
+                                      placeholder: 'add a tag',
+                                      autofocus: true,
+                                      autocorrect: false,
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 5, horizontal: 10),
+                                      maxLength: 15,
+                                      maxLengthEnforcement:
+                                          MaxLengthEnforcement.enforced,
+                                      controller: _tagTextController,
+                                      onChanged: (e) =>
+                                          tag = _tagTextController.text,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                      recorder.updateDB(mood.isNotEmpty ? mood : '',
+                          tag.isNotEmpty ? tag : '');
+                      isRecording = false;
+                      setState(() {});
+                    },
+                  );
+                },
         ),
       ],
     );
