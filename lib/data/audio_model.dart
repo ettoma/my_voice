@@ -1,12 +1,12 @@
-final String audioFiles = 'audioFiles';
+const String audioFiles = 'audioFiles';
 
 class AudioFileFields {
   static final List<String> values = [id, fileName, mood, tag];
 
-  static final String id = '_id';
-  static final String fileName = 'fileName';
-  static final String mood = 'mood';
-  static final String tag = 'tag';
+  static const String id = '_id';
+  static const String fileName = 'fileName';
+  static const String mood = 'mood';
+  static const String tag = 'tag';
 }
 
 class AudioFile {

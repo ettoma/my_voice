@@ -146,8 +146,11 @@ class _RecordScreenState extends State<RecordScreen>
                                 _animationController!.reset();
                                 Navigator.of(context).pop();
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content: Text('this is my snackbar')));
+                                    const SnackBar(
+                                        backgroundColor:
+                                            Color.fromRGBO(0, 130, 210, 1),
+                                        content: Text(
+                                            'Your recording has been saved')));
                               },
                               child: const FaIcon(FontAwesomeIcons.check),
                             )
