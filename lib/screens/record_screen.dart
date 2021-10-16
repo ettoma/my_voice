@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:audio_journal/models/sound_recorder.dart';
 import 'package:audio_journal/utils/shared_prefs.dart';
 import 'package:flutter/cupertino.dart';
@@ -163,13 +162,11 @@ class _RecordScreenState extends State<RecordScreen>
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    //TODO: Validation of tags (=no empty tags)
                                     CupertinoTextField(
-                                      placeholder: 'add a tag',
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 10),
                                       autofocus: true,
                                       autocorrect: false,
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 5, horizontal: 10),
                                       maxLength: 15,
                                       maxLengthEnforcement:
                                           MaxLengthEnforcement.enforced,

@@ -1,7 +1,8 @@
 import 'package:audio_journal/models/app_bar.dart';
 import 'package:audio_journal/models/sound_recorder.dart';
-import 'package:audio_journal/pages/audio_player.dart';
-import 'package:audio_journal/pages/record_screen.dart';
+import 'package:audio_journal/screens/audio_player.dart';
+import 'package:audio_journal/screens/first_time_user.dart';
+import 'package:audio_journal/screens/record_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -29,8 +30,10 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
     return Scaffold(
       appBar: appBar(context),
+      // body: FirstTimeUser(),
       body: _selectedIndex == 0 ? const RecordScreen() : const AudioPlayer(),
       bottomNavigationBar: BottomNavigationBar(
+        elevation: 5,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         selectedItemColor: Colors.red.shade300,

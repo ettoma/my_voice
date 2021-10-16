@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:audio_journal/data/quotes.dart';
-import 'package:audio_journal/pages/first_time_user.dart';
-import 'package:audio_journal/pages/home.dart';
+import 'package:audio_journal/screens/first_time_user.dart';
+import 'package:audio_journal/screens/home.dart';
 import 'package:audio_journal/utils/shared_prefs.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
@@ -33,6 +33,7 @@ class DailyQuote extends StatelessWidget {
           width: MediaQuery.of(context).size.width * 0.85,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
                 quotes.quotes[randomQuoteInt]['quote'].toString(),
@@ -40,7 +41,7 @@ class DailyQuote extends StatelessWidget {
                 style: Theme.of(context)
                     .textTheme
                     .headline2!
-                    .copyWith(fontWeight: FontWeight.bold),
+                    .copyWith(fontWeight: FontWeight.w500),
               ),
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 5),
@@ -51,11 +52,13 @@ class DailyQuote extends StatelessWidget {
               Text(
                 quotes.quotes[randomQuoteInt]['author'].toString(),
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headline3,
+                style: Theme.of(context)
+                    .textTheme
+                    .headline3!
+                    .copyWith(fontSize: 24, color: Colors.green.shade800),
               ),
-              const SizedBox(
-                height: 150,
-              ),
+              // const SizedBox(
+              //   height: 150,
             ],
           ),
         ),

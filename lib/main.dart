@@ -1,5 +1,9 @@
 // import 'package:audio_journal/pages/daily_quote.dart';
-import 'package:audio_journal/pages/home.dart';
+import 'package:audio_journal/screens/daily_quote.dart';
+import 'package:audio_journal/screens/first_time_user.dart';
+import 'package:audio_journal/screens/home.dart';
+import 'package:audio_journal/screens/instructions.dart';
+import 'package:audio_journal/screens/splash.dart';
 import 'package:audio_journal/utils/shared_prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -38,7 +42,7 @@ class _MyAppState extends State<MyApp> {
           canvasColor: Colors.white),
       debugShowCheckedModeBanner: false,
       title: 'my voice',
-      home: const Home(),
+      home: const Instructions(),
     );
   }
 }
