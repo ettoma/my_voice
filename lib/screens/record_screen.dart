@@ -96,7 +96,7 @@ class _RecordScreenState extends State<RecordScreen>
           changeProgressColor: Colors.blueAccent.withOpacity(0.75),
         ),
         const SizedBox(
-          height: 24,
+          height: 16,
         ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
@@ -189,6 +189,7 @@ class _RecordScreenState extends State<RecordScreen>
                   );
                 },
         ),
+        // Text('Tap the microphone button to start your 10-seconds recording')
       ],
     );
   }

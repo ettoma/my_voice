@@ -16,15 +16,9 @@ class Instructions extends StatelessWidget {
               const Text(
                 'Put your thoughts into words, 10 seconds a day, and slowly build a lifetime diary.',
                 textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 21),
               ),
-              const Text(
-                'Click on the microphone button to start your daily 10-seconds recording',
-                textAlign: TextAlign.center,
-              ),
-              const Text(
-                'Play or delete your recordings from the Play screen',
-                textAlign: TextAlign.center,
-              ),
+              const SizedBox(height: 24),
               TextButton(
                   onPressed: () {
                     Navigator.pushReplacement(
@@ -36,7 +30,8 @@ class Instructions extends StatelessWidget {
                       ),
                     );
                   },
-                  child: const Text('Get started'))
+                  child:
+                      const Text('Get started', style: TextStyle(fontSize: 18)))
             ],
           ),
         ),

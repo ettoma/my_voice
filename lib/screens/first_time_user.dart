@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:audio_journal/screens/home.dart';
+import 'package:audio_journal/screens/instructions.dart';
 import 'package:audio_journal/utils/shared_prefs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +61,7 @@ class _FirstTimeUserState extends State<FirstTimeUser> {
                       Timer(const Duration(seconds: 5), () {
                         Navigator.pushReplacement(context,
                             MaterialPageRoute(builder: (context) {
-                          return const Home();
+                          return const Instructions();
                         }));
                       });
                     }
