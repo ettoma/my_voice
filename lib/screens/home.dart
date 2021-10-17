@@ -1,3 +1,5 @@
+import 'package:audio_journal/data/audio_file_db.dart';
+import 'package:audio_journal/data/audio_model.dart';
 import 'package:audio_journal/models/app_bar.dart';
 import 'package:audio_journal/models/sound_recorder.dart';
 import 'package:audio_journal/screens/audio_player.dart';
@@ -30,7 +32,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
     return Scaffold(
       appBar: appBar(context),
-      // body: FirstTimeUser(),
       body: _selectedIndex == 0 ? const RecordScreen() : const AudioPlayer(),
       bottomNavigationBar: BottomNavigationBar(
         elevation: 5,

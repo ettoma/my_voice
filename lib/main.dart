@@ -42,7 +42,7 @@ class _MyAppState extends State<MyApp> {
           canvasColor: Colors.white),
       debugShowCheckedModeBanner: false,
       title: 'my voice',
-      home: const Splash(),
+      home: const Home(),
     );
   }
 }

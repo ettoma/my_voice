@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:audio_journal/data/audio_file_db.dart';
+import 'package:audio_journal/data/audio_model.dart';
 import 'package:audio_journal/models/sound_recorder.dart';
 import 'package:audio_journal/utils/shared_prefs.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,9 +26,27 @@ class _RecordScreenState extends State<RecordScreen>
   AnimationController? _animationController;
   int _currentValue = 0;
   bool selected = false;
+  String today = DateTime.now().day.toString() +
+      DateTime.now().month.toString() +
+      DateTime.now().year.toString();
+  String latestAudioRecordingDate = '';
+
+  List<AudioFile> audioFiles = [];
+
+  Future refreshAudioFileList() async {
+    audioFiles = await AudioDatabase.instance.readAllAudioFiles();
+    var latestAudio = DateTime.fromMillisecondsSinceEpoch(
+        int.parse(audioFiles[audioFiles.length - 1].fileName));
+    latestAudioRecordingDate = latestAudio.day.toString() +
+        latestAudio.month.toString() +
+        latestAudio.year.toString();
+    print(latestAudioRecordingDate == today);
+    //TODO: implement 1 recording a day limitation
+  }
 
   @override
   void initState() {
+    refreshAudioFileList();
     super.initState();
     recorder.init();
     _animationController =
@@ -98,6 +118,7 @@ class _RecordScreenState extends State<RecordScreen>
         const SizedBox(
           height: 16,
         ),
+        //TODO: hide button if user already recorded an audio today
         ElevatedButton(
           style: ElevatedButton.styleFrom(
             shape: const CircleBorder(),
@@ -188,8 +209,7 @@ class _RecordScreenState extends State<RecordScreen>
                     },
                   );
                 },
-        ),
-        // Text('Tap the microphone button to start your 10-seconds recording')
+        )
       ],
     );
   }
