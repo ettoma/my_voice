@@ -40,6 +40,7 @@ class _RecordScreenState extends State<RecordScreen>
     latestAudioRecordingDate = latestAudio.day.toString() +
         latestAudio.month.toString() +
         latestAudio.year.toString();
+    setState(() {});
     print(latestAudioRecordingDate == today);
     //TODO: implement 1 recording a day limitation
   }
@@ -74,7 +75,7 @@ class _RecordScreenState extends State<RecordScreen>
         time = 'morning';
       } else if (12 <= todaysDate.hour && todaysDate.hour <= 17) {
         time = 'afternoon';
-      } else if (18 <= todaysDate.hour && todaysDate.hour <= 22) {
+      } else if (18 <= todaysDate.hour && todaysDate.hour <= 21) {
         time = 'evening';
       } else {
         time = 'night';
@@ -118,98 +119,111 @@ class _RecordScreenState extends State<RecordScreen>
         const SizedBox(
           height: 16,
         ),
-        //TODO: hide button if user already recorded an audio today
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            shape: const CircleBorder(),
-            elevation: 1,
-            primary: !isRecording ? Colors.white : Colors.grey.withOpacity(0.5),
-          ),
-          child: SizedBox(
-            height: 80,
-            width: 80,
-            child: Center(
-              child: FaIcon(
-                FontAwesomeIcons.microphone,
-                color: !isRecording
-                    ? Colors.blueAccent.withOpacity(0.85)
-                    : Colors.grey.withOpacity(0.75),
-              ),
-            ),
-          ),
-          onPressed: isRecording == true || _currentValue != 0
-              ? null
-              : () {
-                  _animationController!.forward();
-                  setState(() {
-                    isRecording = true;
-                  });
-                  _currentValue = 46;
-                  sharedPrefs.todayDate = DateTime.now().day.toString() +
-                      DateTime.now().month.toString();
-                  recorder.record();
-                  Timer(
-                    const Duration(seconds: 5),
-                    () async {
-                      recorder.stop();
-                      setState(() {
-                        _currentValue = 0;
-                      });
-                      await showCupertinoModalPopup(
-                        barrierDismissible: false,
-                        context: context,
-                        builder: (context) => CupertinoAlertDialog(
-                          title: const Text('Assign a tag'),
-                          actions: [
-                            CupertinoDialogAction(
-                              onPressed: () {
-                                _animationController!.reset();
-                                Navigator.of(context).pop();
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        backgroundColor:
-                                            Color.fromRGBO(0, 130, 210, 1),
-                                        content: Text(
-                                            'Your recording has been saved')));
-                              },
-                              child: const FaIcon(FontAwesomeIcons.check),
-                            )
-                          ],
-                          content: Column(
-                            children: [
-                              const SizedBox(height: 12),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+        //TODO: implement circular progress indicator when loading
+        latestAudioRecordingDate == today
+            ? Container(
+                margin: const EdgeInsets.only(top: 24),
+                alignment: Alignment.center,
+                child: const Text('Come back tomorrow to record a new audio'))
+            : ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: const CircleBorder(),
+                  elevation: 1,
+                  primary: !isRecording
+                      ? Colors.white
+                      : Colors.grey.withOpacity(0.5),
+                ),
+                child: SizedBox(
+                  height: 80,
+                  width: 80,
+                  child: Center(
+                    child: FaIcon(
+                      FontAwesomeIcons.microphone,
+                      color: !isRecording
+                          ? Colors.blueAccent.withOpacity(0.85)
+                          : Colors.grey.withOpacity(0.75),
+                    ),
+                  ),
+                ),
+                onPressed: isRecording == true || _currentValue != 0
+                    ? null
+                    : () {
+                        _animationController!.forward();
+                        setState(() {
+                          isRecording = true;
+                        });
+                        _currentValue = 46;
+                        sharedPrefs.todayDate = DateTime.now().day.toString() +
+                            DateTime.now().month.toString();
+                        recorder.record();
+                        Timer(
+                          const Duration(seconds: 5),
+                          () async {
+                            recorder.stop();
+                            setState(() {
+                              _currentValue = 0;
+                            });
+                            await showCupertinoModalPopup(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (context) => CupertinoAlertDialog(
+                                title: const Text('Assign a tag'),
+                                actions: [
+                                  CupertinoDialogAction(
+                                    onPressed: () {
+                                      _animationController!.reset();
+                                      Navigator.of(context).pop();
+
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              onVisible: () {
+                                                refreshAudioFileList();
+                                              },
+                                              backgroundColor:
+                                                  const Color.fromRGBO(
+                                                      0, 130, 210, 1),
+                                              content: const Text(
+                                                  'Your recording has been saved')));
+                                    },
+                                    child: const FaIcon(FontAwesomeIcons.check),
+                                  )
+                                ],
+                                content: Column(
                                   children: [
-                                    CupertinoTextField(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8, vertical: 10),
-                                      autofocus: true,
-                                      autocorrect: false,
-                                      maxLength: 15,
-                                      maxLengthEnforcement:
-                                          MaxLengthEnforcement.enforced,
-                                      controller: _tagTextController,
-                                      onChanged: (e) =>
-                                          tag = _tagTextController.text,
+                                    const SizedBox(height: 12),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          CupertinoTextField(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8, vertical: 10),
+                                            autofocus: true,
+                                            autocorrect: false,
+                                            maxLength: 15,
+                                            maxLengthEnforcement:
+                                                MaxLengthEnforcement.enforced,
+                                            controller: _tagTextController,
+                                            onChanged: (e) =>
+                                                tag = _tagTextController.text,
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                      );
-                      recorder.updateDB(mood.isNotEmpty ? mood : '',
-                          tag.isNotEmpty ? tag : '');
-                      isRecording = false;
-                      setState(() {});
-                    },
-                  );
-                },
-        )
+                            );
+                            recorder.updateDB(mood.isNotEmpty ? mood : '',
+                                tag.isNotEmpty ? tag : '');
+                            isRecording = false;
+                            setState(() {});
+                          },
+                        );
+                      },
+              )
       ],
     );
   }
