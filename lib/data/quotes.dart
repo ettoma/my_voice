@@ -29,5 +29,22 @@ class Quotes {
           '"Success is not final, failure is not fatal: it is the courage to continue that counts."',
       'author': 'Winston Churchill'
     },
+    {
+      'quote': 'Act as if what you do makes a difference. It does.',
+      'author': 'William James'
+    },
+    {
+      'quote':
+          'What you get by achieving your goals is not as important as what you become by achieving your goals.',
+      'author': 'Zig Ziglar'
+    },
+    {
+      'quote': 'Believe you can and you\'re halfway there.',
+      'author': 'Theodore Roosevelt'
+    },
+    {
+      'quote': 'Try to be a rainbow in someone else\'s cloud.',
+      'author': 'Maya Angelou'
+    },
   ];
 }
