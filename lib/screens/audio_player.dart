@@ -144,7 +144,13 @@ class _AudioPlayerState extends State<AudioPlayer> {
                                     setState(() {});
                                   },
                                   child: Container(
+                                    //TODO: implement mood colours
                                     decoration: BoxDecoration(
+                                        color: audio.mood == ''
+                                            ? Colors.green.withOpacity(0.05)
+                                            : Colors.white,
+                                        // borderRadius:
+                                        //     BorderRadius.circular(15)),
                                         border: Border(
                                             bottom: BorderSide(
                                                 width: 1,

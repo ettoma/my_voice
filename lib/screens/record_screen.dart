@@ -30,19 +30,20 @@ class _RecordScreenState extends State<RecordScreen>
       DateTime.now().month.toString() +
       DateTime.now().year.toString();
   String latestAudioRecordingDate = '';
+  bool isLoading = false;
 
   List<AudioFile> audioFiles = [];
 
   Future refreshAudioFileList() async {
+    isLoading = true;
     audioFiles = await AudioDatabase.instance.readAllAudioFiles();
     var latestAudio = DateTime.fromMillisecondsSinceEpoch(
         int.parse(audioFiles[audioFiles.length - 1].fileName));
     latestAudioRecordingDate = latestAudio.day.toString() +
         latestAudio.month.toString() +
         latestAudio.year.toString();
+    isLoading = false;
     setState(() {});
-    print(latestAudioRecordingDate == today);
-    //TODO: implement 1 recording a day limitation
   }
 
   @override
@@ -119,111 +120,132 @@ class _RecordScreenState extends State<RecordScreen>
         const SizedBox(
           height: 16,
         ),
-        //TODO: implement circular progress indicator when loading
-        latestAudioRecordingDate == today
-            ? Container(
-                margin: const EdgeInsets.only(top: 24),
-                alignment: Alignment.center,
-                child: const Text('Come back tomorrow to record a new audio'))
-            : ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  shape: const CircleBorder(),
-                  elevation: 1,
-                  primary: !isRecording
-                      ? Colors.white
-                      : Colors.grey.withOpacity(0.5),
-                ),
-                child: SizedBox(
-                  height: 80,
-                  width: 80,
-                  child: Center(
-                    child: FaIcon(
-                      FontAwesomeIcons.microphone,
-                      color: !isRecording
-                          ? Colors.blueAccent.withOpacity(0.85)
-                          : Colors.grey.withOpacity(0.75),
+        isLoading
+            ? const CircularProgressIndicator()
+            : latestAudioRecordingDate == today
+                ? Container(
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 12, horizontal: 26),
+                    alignment: Alignment.center,
+                    child: Column(children: [
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 10),
+                        child: const Text(
+                          'Great job today!',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      const Text(
+                        'Come back tomorrow to record a new audio',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ]))
+                : ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: const CircleBorder(),
+                      elevation: 1,
+                      primary: !isRecording
+                          ? Colors.white
+                          : Colors.grey.withOpacity(0.5),
                     ),
-                  ),
-                ),
-                onPressed: isRecording == true || _currentValue != 0
-                    ? null
-                    : () {
-                        _animationController!.forward();
-                        setState(() {
-                          isRecording = true;
-                        });
-                        _currentValue = 46;
-                        sharedPrefs.todayDate = DateTime.now().day.toString() +
-                            DateTime.now().month.toString();
-                        recorder.record();
-                        Timer(
-                          const Duration(seconds: 5),
-                          () async {
-                            recorder.stop();
+                    child: SizedBox(
+                      height: 80,
+                      width: 80,
+                      child: Center(
+                        child: FaIcon(
+                          FontAwesomeIcons.microphone,
+                          color: !isRecording
+                              ? Colors.blueAccent.withOpacity(0.85)
+                              : Colors.grey.withOpacity(0.75),
+                        ),
+                      ),
+                    ),
+                    onPressed: isRecording == true || _currentValue != 0
+                        ? null
+                        : () {
+                            _animationController!.forward();
                             setState(() {
-                              _currentValue = 0;
+                              isRecording = true;
                             });
-                            await showCupertinoModalPopup(
-                              barrierDismissible: false,
-                              context: context,
-                              builder: (context) => CupertinoAlertDialog(
-                                title: const Text('Assign a tag'),
-                                actions: [
-                                  CupertinoDialogAction(
-                                    onPressed: () {
-                                      _animationController!.reset();
-                                      Navigator.of(context).pop();
+                            _currentValue = 46;
+                            sharedPrefs.todayDate =
+                                DateTime.now().day.toString() +
+                                    DateTime.now().month.toString();
+                            recorder.record();
+                            Timer(
+                              const Duration(seconds: 5),
+                              () async {
+                                recorder.stop();
+                                setState(() {
+                                  _currentValue = 0;
+                                });
+                                await showCupertinoModalPopup(
+                                  barrierDismissible: false,
+                                  context: context,
+                                  builder: (context) => CupertinoAlertDialog(
+                                    title: const Text('Assign a tag'),
+                                    actions: [
+                                      CupertinoDialogAction(
+                                        onPressed: () {
+                                          _animationController!.reset();
+                                          Navigator.of(context).pop();
 
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                              onVisible: () {
-                                                refreshAudioFileList();
-                                              },
-                                              backgroundColor:
-                                                  const Color.fromRGBO(
-                                                      0, 130, 210, 1),
-                                              content: const Text(
-                                                  'Your recording has been saved')));
-                                    },
-                                    child: const FaIcon(FontAwesomeIcons.check),
-                                  )
-                                ],
-                                content: Column(
-                                  children: [
-                                    const SizedBox(height: 12),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          CupertinoTextField(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8, vertical: 10),
-                                            autofocus: true,
-                                            autocorrect: false,
-                                            maxLength: 15,
-                                            maxLengthEnforcement:
-                                                MaxLengthEnforcement.enforced,
-                                            controller: _tagTextController,
-                                            onChanged: (e) =>
-                                                tag = _tagTextController.text,
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  onVisible: () {
+                                                    refreshAudioFileList();
+                                                  },
+                                                  backgroundColor:
+                                                      const Color.fromRGBO(
+                                                          0, 130, 210, 1),
+                                                  content: const Text(
+                                                      'Your recording has been saved')));
+                                        },
+                                        child: const FaIcon(
+                                            FontAwesomeIcons.check),
+                                      )
+                                    ],
+                                    content: Column(
+                                      children: [
+                                        const SizedBox(height: 12),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              CupertinoTextField(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 8,
+                                                        vertical: 10),
+                                                autofocus: true,
+                                                autocorrect: false,
+                                                maxLength: 15,
+                                                maxLengthEnforcement:
+                                                    MaxLengthEnforcement
+                                                        .enforced,
+                                                controller: _tagTextController,
+                                                onChanged: (e) => tag =
+                                                    _tagTextController.text,
+                                              ),
+                                            ],
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                              ),
+                                  ),
+                                );
+                                recorder.updateDB(mood.isNotEmpty ? mood : '',
+                                    tag.isNotEmpty ? tag : '');
+                                isRecording = false;
+                                setState(() {});
+                              },
                             );
-                            recorder.updateDB(mood.isNotEmpty ? mood : '',
-                                tag.isNotEmpty ? tag : '');
-                            isRecording = false;
-                            setState(() {});
                           },
-                        );
-                      },
-              )
+                  )
       ],
     );
   }
