@@ -118,7 +118,7 @@ class _RecordScreenState extends State<RecordScreen>
           changeProgressColor: Colors.blueAccent.withOpacity(0.75),
         ),
         const SizedBox(
-          height: 16,
+          height: 20,
         ),
         isLoading
             ? const CircularProgressIndicator()

@@ -19,8 +19,10 @@ class AudioPlayer extends StatefulWidget {
 class _AudioPlayerState extends State<AudioPlayer> {
   List<AudioFile> audioFiles = [];
   List<AudioFile> reversedAudioFileList = [];
+  List<AudioFile> foundFilesWithTag = [];
   bool _isLoading = false;
   Color color = Colors.transparent;
+  TextEditingController controller = TextEditingController(text: '');
 
   final player = SoundPlayer();
 
@@ -54,17 +56,48 @@ class _AudioPlayerState extends State<AudioPlayer> {
       },
     );
     reversedAudioFileList = audioFiles.reversed.toList();
+    foundFilesWithTag = reversedAudioFileList;
+  }
+
+  void filterListPerTag(String enteredTag) {
+    List<AudioFile> results = [];
+    if (enteredTag.isEmpty) {
+      results = reversedAudioFileList;
+    } else {
+      results = reversedAudioFileList
+          .where((audioFile) =>
+              audioFile.tag.toLowerCase().contains(enteredTag.toLowerCase()))
+          .toList();
+    }
+
+    setState(() {
+      foundFilesWithTag = results;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final format = DateFormat('dd.MM.yyyy HH:mm');
 
-    return Column(
-      children: [
-        _isLoading == true
-            ? const Expanded(child: Center(child: CircularProgressIndicator()))
-            : Expanded(
+    return _isLoading == true
+        ? const Center(child: CircularProgressIndicator())
+        : Column(
+            children: [
+              const SizedBox(height: 18),
+              SizedBox(
+                width: 200,
+                child: CupertinoTextField(
+                  textAlign: TextAlign.center,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  placeholder: 'filter by tag',
+                  clearButtonMode: OverlayVisibilityMode.editing,
+                  controller: controller,
+                  onChanged: (value) => filterListPerTag(value),
+                ),
+              ),
+              const SizedBox(height: 24),
+              Expanded(
                 child: audioFiles.isEmpty
                     ? const Center(
                         child: Text(
@@ -72,11 +105,10 @@ class _AudioPlayerState extends State<AudioPlayer> {
                           style: TextStyle(fontSize: 18),
                         ),
                       )
-                    : Align(
-                        alignment: Alignment.topCenter,
-                        child: ListView.builder(
+                    : foundFilesWithTag.isNotEmpty
+                        ? ListView.builder(
                             itemBuilder: (context, index) {
-                              final audio = reversedAudioFileList[index];
+                              final audio = foundFilesWithTag[index];
                               return Dismissible(
                                 direction: DismissDirection.endToStart,
                                 confirmDismiss: (direction) async {
@@ -100,10 +132,9 @@ class _AudioPlayerState extends State<AudioPlayer> {
                                         CupertinoDialogAction(
                                           onPressed: () async {
                                             await AudioDatabase.instance.delete(
-                                                reversedAudioFileList[index]
-                                                    .id!);
+                                                foundFilesWithTag[index].id!);
                                             final targetFile = File(
-                                                "${directory!.path}/${reversedAudioFileList[index].fileName}.aac");
+                                                "${directory!.path}/${foundFilesWithTag[index].fileName}.aac");
                                             targetFile.deleteSync(
                                                 recursive: true);
                                             Navigator.of(context).pop();
@@ -118,15 +149,15 @@ class _AudioPlayerState extends State<AudioPlayer> {
                                 },
                                 onDismissed: (direction) {
                                   AudioDatabase.instance
-                                      .delete(reversedAudioFileList[index].id!);
+                                      .delete(foundFilesWithTag[index].id!);
                                   final targetFile = File(
-                                      "${directory!.path}/${reversedAudioFileList[index].fileName}.aac");
+                                      "${directory!.path}/${foundFilesWithTag[index].fileName}.aac");
                                   targetFile.deleteSync(recursive: true);
-                                  reversedAudioFileList.removeAt(index);
+                                  foundFilesWithTag.removeAt(index);
                                   setState(() {});
                                 },
-                                key: Key(
-                                    reversedAudioFileList[index].id.toString()),
+                                key:
+                                    Key(foundFilesWithTag[index].id.toString()),
                                 background: stackBehindDismiss(),
                                 child: InkWell(
                                   focusColor: Colors.lightBlueAccent,
@@ -138,19 +169,14 @@ class _AudioPlayerState extends State<AudioPlayer> {
                                         },
                                         fileName: directory!.uri
                                                 .toFilePath(windows: false) +
-                                            reversedAudioFileList[index]
-                                                .fileName +
+                                            foundFilesWithTag[index].fileName +
                                             '.aac');
                                     setState(() {});
                                   },
                                   child: Container(
                                     //TODO: implement mood colours
+
                                     decoration: BoxDecoration(
-                                        color: audio.mood == ''
-                                            ? Colors.green.withOpacity(0.05)
-                                            : Colors.white,
-                                        // borderRadius:
-                                        //     BorderRadius.circular(15)),
                                         border: Border(
                                             bottom: BorderSide(
                                                 width: 1,
@@ -196,11 +222,11 @@ class _AudioPlayerState extends State<AudioPlayer> {
                                 ),
                               );
                             },
-                            itemCount: audioFiles.length),
-                      ),
+                            itemCount: foundFilesWithTag.length)
+                        : const Center(child: Text('No files with this tag')),
               ),
-      ],
-    );
+            ],
+          );
   }
 }
 
