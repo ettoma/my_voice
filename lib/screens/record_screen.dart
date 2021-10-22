@@ -37,11 +37,13 @@ class _RecordScreenState extends State<RecordScreen>
   Future refreshAudioFileList() async {
     isLoading = true;
     audioFiles = await AudioDatabase.instance.readAllAudioFiles();
-    var latestAudio = DateTime.fromMillisecondsSinceEpoch(
-        int.parse(audioFiles[audioFiles.length - 1].fileName));
-    latestAudioRecordingDate = latestAudio.day.toString() +
-        latestAudio.month.toString() +
-        latestAudio.year.toString();
+    if (audioFiles.isNotEmpty) {
+      var latestAudio = DateTime.fromMillisecondsSinceEpoch(
+          int.parse(audioFiles[audioFiles.length - 1].fileName));
+      latestAudioRecordingDate = latestAudio.day.toString() +
+          latestAudio.month.toString() +
+          latestAudio.year.toString();
+    }
     isLoading = false;
     setState(() {});
   }
@@ -52,7 +54,7 @@ class _RecordScreenState extends State<RecordScreen>
     super.initState();
     recorder.init();
     _animationController =
-        AnimationController(vsync: this, duration: const Duration(seconds: 5));
+        AnimationController(vsync: this, duration: const Duration(seconds: 10));
   }
 
   @override
@@ -109,19 +111,17 @@ class _RecordScreenState extends State<RecordScreen>
           ),
         ),
         FAProgressBar(
-          animatedDuration: const Duration(seconds: 5),
+          animatedDuration: const Duration(seconds: 10),
           currentValue: _currentValue,
-          maxValue: 46,
+          maxValue: 45,
           size: 5,
-          progressColor: Colors.blueAccent.withOpacity(0.1),
-          changeColorValue: 20,
-          changeProgressColor: Colors.blueAccent.withOpacity(0.75),
+          progressColor: Colors.blueAccent.withOpacity(0.75),
         ),
         const SizedBox(
           height: 20,
         ),
         isLoading
-            ? const CircularProgressIndicator()
+            ? const LinearProgressIndicator()
             : latestAudioRecordingDate == today
                 ? Container(
                     margin: const EdgeInsets.symmetric(
@@ -175,7 +175,7 @@ class _RecordScreenState extends State<RecordScreen>
                                     DateTime.now().month.toString();
                             recorder.record();
                             Timer(
-                              const Duration(seconds: 5),
+                              const Duration(seconds: 10),
                               () async {
                                 recorder.stop();
                                 setState(() {

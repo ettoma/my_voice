@@ -80,32 +80,35 @@ class _AudioPlayerState extends State<AudioPlayer> {
     final format = DateFormat('dd.MM.yyyy HH:mm');
 
     return _isLoading == true
-        ? const Center(child: CircularProgressIndicator())
-        : Column(
-            children: [
-              const SizedBox(height: 18),
-              SizedBox(
-                width: 200,
-                child: CupertinoTextField(
-                  textAlign: TextAlign.center,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  placeholder: 'filter by tag',
-                  clearButtonMode: OverlayVisibilityMode.editing,
-                  controller: controller,
-                  onChanged: (value) => filterListPerTag(value),
+        ? Center(
+            child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 24),
+                child: const LinearProgressIndicator()))
+        : audioFiles.isEmpty
+            ? const Center(
+                child: Text(
+                  'No recordings yet',
+                  style: TextStyle(fontSize: 18),
                 ),
-              ),
-              const SizedBox(height: 24),
-              Expanded(
-                child: audioFiles.isEmpty
-                    ? const Center(
-                        child: Text(
-                          'No recordings yet',
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      )
-                    : foundFilesWithTag.isNotEmpty
+              )
+            : Column(
+                children: [
+                  const SizedBox(height: 18),
+                  SizedBox(
+                    width: 200,
+                    child: CupertinoTextField(
+                      textAlign: TextAlign.center,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 12),
+                      placeholder: 'filter by tag',
+                      clearButtonMode: OverlayVisibilityMode.editing,
+                      controller: controller,
+                      onChanged: (value) => filterListPerTag(value),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  Expanded(
+                    child: foundFilesWithTag.isNotEmpty
                         ? ListView.builder(
                             itemBuilder: (context, index) {
                               final audio = foundFilesWithTag[index];
@@ -209,6 +212,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
                                               const EdgeInsets.only(right: 40),
                                           child: Row(
                                             children: [
+                                              //TODO: implement mood?
                                               // Text(audio.mood),
                                               Text('#${audio.tag}',
                                                   style: const TextStyle(
@@ -224,9 +228,9 @@ class _AudioPlayerState extends State<AudioPlayer> {
                             },
                             itemCount: foundFilesWithTag.length)
                         : const Center(child: Text('No files with this tag')),
-              ),
-            ],
-          );
+                  ),
+                ],
+              );
   }
 }
 
