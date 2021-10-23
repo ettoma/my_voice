@@ -105,7 +105,8 @@ class _RecordScreenState extends State<RecordScreen>
         Container(
           alignment: Alignment.center,
           child: Lottie.asset(
-            'assets/yoga_light.json',
+            //TODO: implement toggle between man and woman animation
+            'assets/man.json',
             height: MediaQuery.of(context).size.width * 0.85,
             repeat: false,
             controller: _animationController,
