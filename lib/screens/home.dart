@@ -1,9 +1,6 @@
-import 'package:audio_journal/data/audio_file_db.dart';
-import 'package:audio_journal/data/audio_model.dart';
 import 'package:audio_journal/models/app_bar.dart';
 import 'package:audio_journal/models/sound_recorder.dart';
 import 'package:audio_journal/screens/audio_player.dart';
-import 'package:audio_journal/screens/first_time_user.dart';
 import 'package:audio_journal/screens/record_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

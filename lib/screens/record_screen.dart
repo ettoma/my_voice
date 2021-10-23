@@ -53,6 +53,7 @@ class _RecordScreenState extends State<RecordScreen>
     refreshAudioFileList();
     super.initState();
     recorder.init();
+
     _animationController =
         AnimationController(vsync: this, duration: const Duration(seconds: 10));
   }

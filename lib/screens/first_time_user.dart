@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:audio_journal/screens/home.dart';
 import 'package:audio_journal/screens/instructions.dart';
+import 'package:audio_journal/utils/notification_service.dart';
 import 'package:audio_journal/utils/shared_prefs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +10,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class FirstTimeUser extends StatefulWidget {
   const FirstTimeUser({Key? key}) : super(key: key);
-  // String? name;
 
   @override
   _FirstTimeUserState createState() => _FirstTimeUserState();
@@ -21,6 +20,8 @@ class _FirstTimeUserState extends State<FirstTimeUser> {
 
   @override
   void initState() {
+    //Create daily notification when the app is launched for the first time
+    NotificationService().scheduleDailyNotification();
     super.initState();
   }
 

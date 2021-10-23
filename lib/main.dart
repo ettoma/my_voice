@@ -1,17 +1,14 @@
-// import 'package:audio_journal/pages/daily_quote.dart';
-import 'package:audio_journal/screens/daily_quote.dart';
-import 'package:audio_journal/screens/first_time_user.dart';
-import 'package:audio_journal/screens/home.dart';
-import 'package:audio_journal/screens/instructions.dart';
 import 'package:audio_journal/screens/splash.dart';
 import 'package:audio_journal/utils/shared_prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-// import 'pages/splash.dart';
+import 'utils/notification_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService().init(); //
+  // NotificationService().cancelAllNotifications();
   await sharedPrefs.init();
   runApp(const MyApp());
 }

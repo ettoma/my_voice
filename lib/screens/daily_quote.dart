@@ -12,8 +12,7 @@ class DailyQuote extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final quotes = Quotes();
-    int randomQuoteInt = Random().nextInt(quotes.quotes.length);
+    int randomQuoteInt = Random().nextInt(Quotes().quotes.length);
 
     Timer(const Duration(seconds: 5), () {
       Navigator.pushReplacement(
@@ -36,7 +35,7 @@ class DailyQuote extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                quotes.quotes[randomQuoteInt]['quote'].toString(),
+                Quotes().quotes[randomQuoteInt]['quote'].toString(),
                 textAlign: TextAlign.center,
                 style: Theme.of(context)
                     .textTheme
@@ -50,7 +49,7 @@ class DailyQuote extends StatelessWidget {
                 color: Colors.black,
               ),
               Text(
-                quotes.quotes[randomQuoteInt]['author'].toString(),
+                Quotes().quotes[randomQuoteInt]['author'].toString(),
                 textAlign: TextAlign.center,
                 style: Theme.of(context)
                     .textTheme
