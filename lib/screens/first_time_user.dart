@@ -75,7 +75,7 @@ class _FirstTimeUserState extends State<FirstTimeUser> {
             : <Widget>[
                 Center(
                   child: Text(
-                    'Hello\n${sharedPrefs.username.trimRight()}',
+                    'Welcome,\n${sharedPrefs.username.trimRight()}',
                     textAlign: TextAlign.center,
                     style: Theme.of(context)
                         .textTheme
