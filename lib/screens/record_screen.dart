@@ -11,6 +11,7 @@ import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.da
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 
 class RecordScreen extends StatefulWidget {
   const RecordScreen({Key? key}) : super(key: key);
@@ -31,6 +32,11 @@ class _RecordScreenState extends State<RecordScreen>
       DateTime.now().year.toString();
   String latestAudioRecordingDate = '';
   bool isLoading = false;
+  final List<String> _selectedAnimation = [
+    'assets/man.json',
+    'assets/yoga_light.json'
+  ];
+  int toggleIndex = sharedPrefs.animationPref;
 
   List<AudioFile> audioFiles = [];
 
@@ -91,22 +97,50 @@ class _RecordScreenState extends State<RecordScreen>
       padding: const EdgeInsets.all(24),
       physics: const NeverScrollableScrollPhysics(),
       children: [
-        Text(
-          format.format(todaysDate).toUpperCase(),
-          style: const TextStyle(color: Colors.lightBlueAccent),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              format.format(todaysDate).toUpperCase(),
+              style: const TextStyle(color: Colors.lightBlueAccent),
+            ),
+            ToggleSwitch(
+              minWidth: 35.0,
+              minHeight: 35,
+              cornerRadius: 20.0,
+              activeBgColors: [
+                [Colors.green[400]!],
+                [Colors.red[300]!]
+              ],
+              activeFgColor: Colors.white,
+              inactiveBgColor: Colors.grey[200],
+              inactiveFgColor: Colors.white,
+              initialLabelIndex: toggleIndex,
+              totalSwitches: 2,
+              customIcons: const [
+                Icon(FontAwesomeIcons.mars, size: 15, color: Colors.white),
+                Icon(FontAwesomeIcons.venus, size: 15, color: Colors.white)
+              ],
+              radiusStyle: true,
+              onToggle: (index) {
+                setState(() {
+                  toggleIndex = index;
+                });
+                sharedPrefs.animationPref = index;
+              },
+            ),
+          ],
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 10),
         SizedBox(
-            height: 85,
+            height: 75,
             child: Text(
               'Good ${_timeOfTheDay()}, \n${sharedPrefs.username}',
               style: Theme.of(context).textTheme.headline1,
             )),
         Container(
-          alignment: Alignment.center,
           child: Lottie.asset(
-            //TODO: implement toggle between man and woman animation
-            'assets/man.json',
+            _selectedAnimation[toggleIndex],
             height: MediaQuery.of(context).size.width * 0.85,
             repeat: false,
             controller: _animationController,
@@ -172,9 +206,6 @@ class _RecordScreenState extends State<RecordScreen>
                               isRecording = true;
                             });
                             _currentValue = 46;
-                            sharedPrefs.todayDate =
-                                DateTime.now().day.toString() +
-                                    DateTime.now().month.toString();
                             recorder.record();
                             Timer(
                               const Duration(seconds: 10),

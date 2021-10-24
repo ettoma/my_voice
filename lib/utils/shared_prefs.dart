@@ -13,10 +13,10 @@ class SharedPrefs {
     _sharedPrefs!.setString(keyName, value);
   }
 
-  String get todayDate => _sharedPrefs!.getString(todayDateKey) ?? '';
+  int get animationPref => _sharedPrefs!.getInt(animationPrefInt) ?? 0;
 
-  set todayDate(String value) {
-    _sharedPrefs!.setString(todayDateKey, value);
+  set animationPref(int value) {
+    _sharedPrefs!.setInt(animationPrefInt, value);
   }
 
   clear() {
@@ -26,4 +26,4 @@ class SharedPrefs {
 
 final sharedPrefs = SharedPrefs();
 const String keyName = 'name';
-const String todayDateKey = 'today';
+const String animationPrefInt = 'animation';
