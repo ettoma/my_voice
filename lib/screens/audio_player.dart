@@ -92,15 +92,25 @@ class _AudioPlayerState extends State<AudioPlayer> {
                 ),
               )
             : Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   const SizedBox(height: 18),
-                  SizedBox(
-                    width: 200,
-                    child: CupertinoTextField(
-                      textAlign: TextAlign.center,
+                  Container(
+                    margin: const EdgeInsets.only(right: 32),
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    child: CupertinoTextField.borderless(
+                      decoration: const BoxDecoration(
+                          border: Border(
+                              bottom: BorderSide(color: Colors.black12))),
+                      suffix: const FaIcon(
+                        FontAwesomeIcons.search,
+                        size: 16,
+                        color: Colors.orangeAccent,
+                      ),
+                      textAlign: TextAlign.right,
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 12),
-                      placeholder: 'filter by tag',
+                          horizontal: 12, vertical: 10),
+                      placeholder: 'filter tags',
                       clearButtonMode: OverlayVisibilityMode.editing,
                       controller: controller,
                       onChanged: (value) => filterListPerTag(value),
@@ -177,7 +187,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
                                     setState(() {});
                                   },
                                   child: Container(
-                                    //TODO: implement mood colours
+                                    //TODO: implement mood colours?
 
                                     decoration: BoxDecoration(
                                         border: Border(
@@ -238,7 +248,7 @@ Widget stackBehindDismiss() {
   return Container(
     alignment: Alignment.centerRight,
     padding: const EdgeInsets.only(right: 20.0),
-    color: Colors.red,
+    color: Colors.red[400],
     child: const Icon(
       Icons.delete,
       color: Colors.white,

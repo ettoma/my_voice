@@ -99,6 +99,7 @@ class _RecordScreenState extends State<RecordScreen>
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
               format.format(todaysDate).toUpperCase(),
