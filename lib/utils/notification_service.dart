@@ -20,8 +20,8 @@ class NotificationService {
       FlutterLocalNotificationsPlugin();
 
   Future<void> init() async {
-    // final AndroidInitializationSettings initializationSettingsAndroid =
-    //     AndroidInitializationSettings('@mipmap/ic_launcher');
+    final AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
 
     const IOSInitializationSettings initializationSettingsIOS =
         IOSInitializationSettings(
@@ -30,9 +30,8 @@ class NotificationService {
       requestAlertPermission: true,
     );
 
-    const InitializationSettings initializationSettings =
-        InitializationSettings(
-      // android: initializationSettingsAndroid,
+    InitializationSettings initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid,
       iOS: initializationSettingsIOS,
     );
 
@@ -50,14 +49,14 @@ class NotificationService {
     // subtitle: 'This is the notification',
   );
 
-  // AndroidNotificationDetails _androidNotificationDetails =
-  //     AndroidNotificationDetails(
-  //   'channel ID',
-  //   'channel name',
-  //   playSound: true,
-  //   priority: Priority.high,
-  //   importance: Importance.high,
-  // );
+  AndroidNotificationDetails _androidNotificationDetails =
+      AndroidNotificationDetails(
+    'channel ID',
+    'channel name',
+    playSound: true,
+    priority: Priority.high,
+    importance: Importance.high,
+  );
 
   // void requestIOSPermissions(
   //     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) {
@@ -77,8 +76,7 @@ class NotificationService {
       "Today's voice",
       "Have you already recorded your audio today?",
       NotificationDetails(
-          // android: _androidNotificationDetails,
-          iOS: _iosNotificationDetails),
+          android: _androidNotificationDetails, iOS: _iosNotificationDetails),
     );
   }
 
