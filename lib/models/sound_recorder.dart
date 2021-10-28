@@ -46,8 +46,8 @@ class SoundRecorder {
   Future record() async {
     getFileName();
     if (!_isRecorderInitialised) return;
-    await _audioRecorder!.startRecorder(
-        toFile: '$_directoryPath/$_fileName.aac', codec: Codec.aacADTS);
+    await _audioRecorder!
+        .startRecorder(toFile: '$_directoryPath/$_fileName.aac');
     isRecording = true;
   }
 

@@ -5,6 +5,7 @@ import 'package:flutter_sound/public/flutter_sound_player.dart';
 class SoundPlayer {
   FlutterSoundPlayer? _audioPlayer;
   bool isPlaying = false;
+  String fileBeingPlayed = '';
 
   Future init() async {
     _audioPlayer = FlutterSoundPlayer();
@@ -29,10 +30,10 @@ class SoundPlayer {
   Future togglePlaying(
       {required VoidCallback whenFinished, String? fileName}) async {
     if (_audioPlayer!.isStopped) {
-      isPlaying = true;
+      fileBeingPlayed = fileName!;
       await _play(whenFinished, fileName);
     } else {
-      isPlaying = false;
+      fileBeingPlayed = '';
       await _stop();
     }
   }

@@ -23,6 +23,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
   bool _isLoading = false;
   Color color = Colors.transparent;
   TextEditingController controller = TextEditingController(text: '');
+  List<Color> selectedItem = [Colors.green, Colors.red];
 
   final player = SoundPlayer();
 
@@ -184,20 +185,40 @@ class _AudioPlayerState extends State<AudioPlayer> {
                                                 .toFilePath(windows: false) +
                                             foundFilesWithTag[index].fileName +
                                             '.aac');
+
                                     setState(() {});
                                   },
                                   child: Container(
                                     //TODO: implement mood colours?
 
                                     decoration: BoxDecoration(
+                                        color: Colors.white.withOpacity(0.85),
+                                        boxShadow: [
+                                          player.fileBeingPlayed ==
+                                                  directory!.uri.toFilePath(
+                                                          windows: false) +
+                                                      foundFilesWithTag[index]
+                                                          .fileName +
+                                                      '.aac'
+                                              ? BoxShadow(
+                                                  color: Colors.greenAccent
+                                                      .withOpacity(0.4),
+                                                  spreadRadius: 3,
+                                                  blurRadius: 6,
+                                                  offset: const Offset(0, 1))
+                                              : const BoxShadow(
+                                                  color: Colors.transparent)
+                                        ],
                                         border: Border(
                                             bottom: BorderSide(
                                                 width: 1,
                                                 color: Colors.grey
-                                                    .withOpacity(0.2)))),
+                                                    .withOpacity(0.15)))),
+
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 20),
                                     margin: const EdgeInsets.only(bottom: 5),
+
                                     child: Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
