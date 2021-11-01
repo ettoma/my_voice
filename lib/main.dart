@@ -25,6 +25,8 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
+          bottomSheetTheme:
+              BottomSheetThemeData(backgroundColor: Colors.transparent),
           backgroundColor: Colors.white,
           textTheme: GoogleFonts.montserratTextTheme(
             const TextTheme(

@@ -22,6 +22,7 @@ class RecordScreen extends StatefulWidget {
 
 class _RecordScreenState extends State<RecordScreen>
     with TickerProviderStateMixin {
+  String username = sharedPrefs.username;
   final recorder = SoundRecorder();
   bool isRecording = false;
   AnimationController? _animationController;
@@ -124,9 +125,11 @@ class _RecordScreenState extends State<RecordScreen>
               ],
               radiusStyle: true,
               onToggle: (index) {
-                setState(() {
-                  toggleIndex = index;
-                });
+                setState(
+                  () {
+                    toggleIndex = index;
+                  },
+                );
                 sharedPrefs.animationPref = index;
               },
             ),
@@ -134,11 +137,13 @@ class _RecordScreenState extends State<RecordScreen>
         ),
         const SizedBox(height: 10),
         SizedBox(
-            height: 75,
-            child: Text(
-              'Good ${_timeOfTheDay()}, \n${sharedPrefs.username}',
-              style: Theme.of(context).textTheme.headline1,
-            )),
+          height: 75,
+          child: Text(
+            //TODO: Update username every time it changes through Edit function
+            'Good ${_timeOfTheDay()}, \n$username',
+            style: Theme.of(context).textTheme.headline1,
+          ),
+        ),
         Container(
           child: Lottie.asset(
             _selectedAnimation[toggleIndex],
@@ -159,26 +164,29 @@ class _RecordScreenState extends State<RecordScreen>
         ),
         isLoading
             ? const LinearProgressIndicator()
-            : latestAudioRecordingDate == today
+            : latestAudioRecordingDate != today
                 ? Container(
                     margin: const EdgeInsets.symmetric(
                         vertical: 12, horizontal: 26),
                     alignment: Alignment.center,
-                    child: Column(children: [
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 10),
-                        child: const Text(
-                          'Great job today!',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
+                    child: Column(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 10),
+                          child: const Text(
+                            'Great job today!',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
-                      const Text(
-                        'Come back tomorrow to record a new audio',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ]))
+                        const Text(
+                          'Come back tomorrow to record a new audio',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ],
+                    ),
+                  )
                 : ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       shape: const CircleBorder(),
@@ -203,31 +211,75 @@ class _RecordScreenState extends State<RecordScreen>
                         ? null
                         : () {
                             _animationController!.forward();
-                            setState(() {
-                              isRecording = true;
-                            });
+                            setState(
+                              () {
+                                isRecording = true;
+                              },
+                            );
                             _currentValue = 46;
                             recorder.record();
                             Timer(
-                              const Duration(seconds: 10),
+                              const Duration(seconds: 1),
                               () async {
                                 recorder.stop();
-                                setState(() {
-                                  _currentValue = 0;
-                                });
-                                await showCupertinoModalPopup(
-                                  barrierDismissible: false,
+                                setState(
+                                  () {
+                                    _currentValue = 0;
+                                  },
+                                );
+                                await showModalBottomSheet(
+                                  isDismissible: true,
                                   context: context,
-                                  builder: (context) => CupertinoAlertDialog(
-                                    title: const Text('Assign a tag'),
-                                    actions: [
-                                      CupertinoDialogAction(
-                                        onPressed: () {
-                                          _animationController!.reset();
-                                          Navigator.of(context).pop();
+                                  builder: (context) => BottomSheet(
+                                    backgroundColor: Colors.transparent,
+                                    onClosing: () {},
+                                    builder: (context) => Container(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.80,
+                                      decoration: const BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(30.0),
+                                            topRight: Radius.circular(30.0),
+                                          )),
+                                      child: Column(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                CupertinoTextField(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 8,
+                                                      vertical: 10),
+                                                  autofocus: true,
+                                                  autocorrect: false,
+                                                  maxLength: 15,
+                                                  maxLengthEnforcement:
+                                                      MaxLengthEnforcement
+                                                          .enforced,
+                                                  controller:
+                                                      _tagTextController,
+                                                  onChanged: (e) => tag =
+                                                      _tagTextController.text,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          IconButton(
+                                            icon: const FaIcon(
+                                                FontAwesomeIcons.check),
+                                            onPressed: () {
+                                              _animationController!.reset();
+                                              Navigator.of(context).pop();
 
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
                                                   onVisible: () {
                                                     refreshAudioFileList();
                                                   },
@@ -235,40 +287,13 @@ class _RecordScreenState extends State<RecordScreen>
                                                       const Color.fromRGBO(
                                                           0, 130, 210, 1),
                                                   content: const Text(
-                                                      'Your recording has been saved')));
-                                        },
-                                        child: const FaIcon(
-                                            FontAwesomeIcons.check),
-                                      )
-                                    ],
-                                    content: Column(
-                                      children: [
-                                        const SizedBox(height: 12),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              CupertinoTextField(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 8,
-                                                        vertical: 10),
-                                                autofocus: true,
-                                                autocorrect: false,
-                                                maxLength: 15,
-                                                maxLengthEnforcement:
-                                                    MaxLengthEnforcement
-                                                        .enforced,
-                                                controller: _tagTextController,
-                                                onChanged: (e) => tag =
-                                                    _tagTextController.text,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
+                                                      'Your recording has been saved'),
+                                                ),
+                                              );
+                                            },
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 );

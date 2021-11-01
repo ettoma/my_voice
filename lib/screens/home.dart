@@ -1,7 +1,9 @@
 import 'package:audio_journal/models/app_bar.dart';
+import 'package:audio_journal/models/side_menu.dart';
 import 'package:audio_journal/models/sound_recorder.dart';
 import 'package:audio_journal/screens/audio_player.dart';
 import 'package:audio_journal/screens/record_screen.dart';
+import 'package:audio_journal/utils/shared_prefs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -16,6 +18,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> with TickerProviderStateMixin {
   bool selected = false;
   int _selectedIndex = 0;
+  TextEditingController controller =
+      TextEditingController(text: sharedPrefs.username);
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +32,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     }
 
     return Scaffold(
+      drawer: const SideMenu(),
       appBar: appBar(context),
       body: _selectedIndex == 0 ? const RecordScreen() : const AudioPlayer(),
       bottomNavigationBar: BottomNavigationBar(
