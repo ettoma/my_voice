@@ -11,7 +11,6 @@ import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.da
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
-import 'package:toggle_switch/toggle_switch.dart';
 
 class RecordScreen extends StatefulWidget {
   const RecordScreen({Key? key}) : super(key: key);
@@ -37,7 +36,9 @@ class _RecordScreenState extends State<RecordScreen>
     'assets/man.json',
     'assets/yoga_light.json'
   ];
+
   int toggleIndex = sharedPrefs.animationPref;
+  bool isRecordingCompleted = false;
 
   List<AudioFile> audioFiles = [];
 
@@ -106,40 +107,12 @@ class _RecordScreenState extends State<RecordScreen>
               format.format(todaysDate).toUpperCase(),
               style: const TextStyle(color: Colors.lightBlueAccent),
             ),
-            ToggleSwitch(
-              minWidth: 35.0,
-              minHeight: 35,
-              cornerRadius: 20.0,
-              activeBgColors: [
-                [Colors.green[400]!],
-                [Colors.red[300]!]
-              ],
-              activeFgColor: Colors.white,
-              inactiveBgColor: Colors.grey[200],
-              inactiveFgColor: Colors.white,
-              initialLabelIndex: toggleIndex,
-              totalSwitches: 2,
-              customIcons: const [
-                Icon(FontAwesomeIcons.mars, size: 15, color: Colors.white),
-                Icon(FontAwesomeIcons.venus, size: 15, color: Colors.white)
-              ],
-              radiusStyle: true,
-              onToggle: (index) {
-                setState(
-                  () {
-                    toggleIndex = index;
-                  },
-                );
-                sharedPrefs.animationPref = index;
-              },
-            ),
           ],
         ),
         const SizedBox(height: 10),
         SizedBox(
           height: 75,
           child: Text(
-            //TODO: Update username every time it changes through Edit function
             'Good ${_timeOfTheDay()}, \n$username',
             style: Theme.of(context).textTheme.headline1,
           ),
@@ -164,6 +137,7 @@ class _RecordScreenState extends State<RecordScreen>
         ),
         isLoading
             ? const LinearProgressIndicator()
+            //TODO: to enable recording everyday
             : latestAudioRecordingDate != today
                 ? Container(
                     margin: const EdgeInsets.symmetric(
@@ -234,15 +208,17 @@ class _RecordScreenState extends State<RecordScreen>
                                     backgroundColor: Colors.transparent,
                                     onClosing: () {},
                                     builder: (context) => Container(
+                                      padding: const EdgeInsets.all(24),
                                       height:
                                           MediaQuery.of(context).size.height *
-                                              0.80,
+                                              0.30,
                                       decoration: const BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(30.0),
-                                            topRight: Radius.circular(30.0),
-                                          )),
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(30.0),
+                                          topRight: Radius.circular(30.0),
+                                        ),
+                                      ),
                                       child: Column(
                                         children: [
                                           Padding(
@@ -251,7 +227,24 @@ class _RecordScreenState extends State<RecordScreen>
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
+                                                const Text(
+                                                    'Enter a tag for your audio',
+                                                    style: TextStyle(
+                                                        fontSize: 18)),
+                                                const SizedBox(
+                                                  height: 18,
+                                                ),
                                                 CupertinoTextField(
+                                                  prefix: const Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 12.0),
+                                                    child: Icon(
+                                                        FontAwesomeIcons
+                                                            .hashtag,
+                                                        size: 14,
+                                                        color: Colors.black54),
+                                                  ),
                                                   padding: const EdgeInsets
                                                           .symmetric(
                                                       horizontal: 8,
@@ -276,7 +269,6 @@ class _RecordScreenState extends State<RecordScreen>
                                             onPressed: () {
                                               _animationController!.reset();
                                               Navigator.of(context).pop();
-
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(
                                                 SnackBar(

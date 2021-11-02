@@ -189,8 +189,6 @@ class _AudioPlayerState extends State<AudioPlayer> {
                                     setState(() {});
                                   },
                                   child: Container(
-                                    //TODO: implement mood colours?
-
                                     decoration: BoxDecoration(
                                         color: Colors.white.withOpacity(0.85),
                                         boxShadow: [
@@ -214,11 +212,9 @@ class _AudioPlayerState extends State<AudioPlayer> {
                                                 width: 1,
                                                 color: Colors.grey
                                                     .withOpacity(0.15)))),
-
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 20),
                                     margin: const EdgeInsets.only(bottom: 5),
-
                                     child: Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
