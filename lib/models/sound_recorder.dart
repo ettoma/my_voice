@@ -29,10 +29,12 @@ class SoundRecorder {
   Future init() async {
     await getDirectory();
     _audioRecorder = FlutterSoundRecorder();
-    // final status = await Permission.microphone.request();
-    // if (status != PermissionStatus.granted) {
-    //   throw RecordingPermissionException('Microphone permission not granted');
-    // }
+    if (Platform.isAndroid) {
+      final status = await Permission.microphone.request();
+      if (status != PermissionStatus.granted) {
+        throw RecordingPermissionException('Microphone permission not granted');
+      }
+    }
     await _audioRecorder!.openAudioSession();
     _isRecorderInitialised = true;
   }

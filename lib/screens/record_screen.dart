@@ -111,7 +111,7 @@ class _RecordScreenState extends State<RecordScreen>
         ),
         const SizedBox(height: 10),
         SizedBox(
-          height: 75,
+          height: 80,
           child: Text(
             'Good ${_timeOfTheDay()}, \n$username',
             style: Theme.of(context).textTheme.headline1,
@@ -138,7 +138,7 @@ class _RecordScreenState extends State<RecordScreen>
         isLoading
             ? const LinearProgressIndicator()
             //TODO: to enable recording everyday
-            : latestAudioRecordingDate != today
+            : latestAudioRecordingDate == today
                 ? Container(
                     margin: const EdgeInsets.symmetric(
                         vertical: 12, horizontal: 26),
@@ -193,7 +193,7 @@ class _RecordScreenState extends State<RecordScreen>
                             _currentValue = 46;
                             recorder.record();
                             Timer(
-                              const Duration(seconds: 1),
+                              const Duration(seconds: 10),
                               () async {
                                 recorder.stop();
                                 setState(
@@ -211,7 +211,7 @@ class _RecordScreenState extends State<RecordScreen>
                                       padding: const EdgeInsets.all(24),
                                       height:
                                           MediaQuery.of(context).size.height *
-                                              0.30,
+                                              0.75,
                                       decoration: const BoxDecoration(
                                         color: Colors.white,
                                         borderRadius: BorderRadius.only(
