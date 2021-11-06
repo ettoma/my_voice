@@ -193,7 +193,7 @@ class _RecordScreenState extends State<RecordScreen>
                             _currentValue = 46;
                             recorder.record();
                             Timer(
-                              const Duration(seconds: 1),
+                              const Duration(seconds: 10),
                               () async {
                                 recorder.stop();
                                 setState(
