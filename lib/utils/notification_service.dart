@@ -49,8 +49,8 @@ class NotificationService {
     // subtitle: 'This is the notification',
   );
 
-  AndroidNotificationDetails _androidNotificationDetails =
-      AndroidNotificationDetails(
+  final AndroidNotificationDetails _androidNotificationDetails =
+      const AndroidNotificationDetails(
     'channel ID',
     'channel name',
     playSound: true,
@@ -73,7 +73,7 @@ class NotificationService {
   Future<void> showNotifications() async {
     await flutterLocalNotificationsPlugin.show(
       0,
-      "Today's voice",
+      "My voice",
       "Have you already recorded your audio today?",
       NotificationDetails(
           android: _androidNotificationDetails, iOS: _iosNotificationDetails),
@@ -87,9 +87,7 @@ class NotificationService {
         "Have you already recorded your audio today?",
         _nextInstanceOfSevenPM(),
         NotificationDetails(
-          // android: AndroidNotificationDetails('daily notification channel id',
-          //     'daily notification channel name',
-          //     channelDescription: 'daily notification description'),
+          android: _androidNotificationDetails,
           iOS: _iosNotificationDetails,
         ),
         androidAllowWhileIdle: true,

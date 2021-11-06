@@ -137,7 +137,7 @@ class _RecordScreenState extends State<RecordScreen>
         ),
         isLoading
             ? const LinearProgressIndicator()
-            //TODO: to enable recording everyday
+            // ! to enable recording everyday
             : latestAudioRecordingDate == today
                 ? Container(
                     margin: const EdgeInsets.symmetric(
@@ -193,7 +193,7 @@ class _RecordScreenState extends State<RecordScreen>
                             _currentValue = 46;
                             recorder.record();
                             Timer(
-                              const Duration(seconds: 10),
+                              const Duration(seconds: 1),
                               () async {
                                 recorder.stop();
                                 setState(
@@ -201,98 +201,60 @@ class _RecordScreenState extends State<RecordScreen>
                                     _currentValue = 0;
                                   },
                                 );
-                                await showModalBottomSheet(
-                                  isDismissible: true,
+                                await showCupertinoModalPopup(
+                                  barrierDismissible: false,
                                   context: context,
-                                  builder: (context) => BottomSheet(
-                                    backgroundColor: Colors.transparent,
-                                    onClosing: () {},
-                                    builder: (context) => Container(
-                                      padding: const EdgeInsets.all(24),
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.75,
-                                      decoration: const BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(30.0),
-                                          topRight: Radius.circular(30.0),
-                                        ),
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                const Text(
-                                                    'Enter a tag for your audio',
-                                                    style: TextStyle(
-                                                        fontSize: 18)),
-                                                const SizedBox(
-                                                  height: 18,
-                                                ),
-                                                CupertinoTextField(
-                                                  prefix: const Padding(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 12.0),
-                                                    child: Icon(
-                                                        FontAwesomeIcons
-                                                            .hashtag,
-                                                        size: 14,
-                                                        color: Colors.black54),
-                                                  ),
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal: 8,
-                                                      vertical: 10),
-                                                  autofocus: true,
-                                                  autocorrect: false,
-                                                  maxLength: 15,
-                                                  maxLengthEnforcement:
-                                                      MaxLengthEnforcement
-                                                          .enforced,
-                                                  controller:
-                                                      _tagTextController,
-                                                  onChanged: (e) => tag =
-                                                      _tagTextController.text,
-                                                ),
-                                              ],
+                                  builder: (context) => CupertinoAlertDialog(
+                                    actions: [
+                                      CupertinoDialogAction(
+                                        child: const FaIcon(
+                                            FontAwesomeIcons.check),
+                                        onPressed: () {
+                                          _animationController!.reset();
+                                          Navigator.of(context).pop();
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              onVisible: () {
+                                                refreshAudioFileList();
+                                              },
+                                              backgroundColor:
+                                                  const Color.fromRGBO(
+                                                      0, 130, 210, 1),
+                                              content: const Text(
+                                                  'Your recording has been saved'),
                                             ),
-                                          ),
-                                          IconButton(
-                                            icon: const FaIcon(
-                                                FontAwesomeIcons.check),
-                                            onPressed: () {
-                                              _animationController!.reset();
-                                              Navigator.of(context).pop();
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                SnackBar(
-                                                  onVisible: () {
-                                                    refreshAudioFileList();
-                                                  },
-                                                  backgroundColor:
-                                                      const Color.fromRGBO(
-                                                          0, 130, 210, 1),
-                                                  content: const Text(
-                                                      'Your recording has been saved'),
-                                                ),
-                                              );
-                                            },
-                                          )
-                                        ],
+                                          );
+                                          recorder.updateDB(
+                                              mood.isNotEmpty ? mood : '',
+                                              tag.isNotEmpty ? tag : '');
+                                          isRecording = false;
+                                          setState(() {});
+                                        },
+                                      )
+                                    ],
+                                    title: const Text(
+                                        'Enter a tag for your audio'),
+                                    content: CupertinoTextField(
+                                      prefix: const Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 12.0),
+                                        child: Icon(FontAwesomeIcons.hashtag,
+                                            size: 14, color: Colors.black54),
                                       ),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 10),
+                                      autofocus: true,
+                                      autocorrect: false,
+                                      maxLength: 15,
+                                      maxLengthEnforcement:
+                                          MaxLengthEnforcement.enforced,
+                                      controller: _tagTextController,
+                                      onChanged: (e) =>
+                                          tag = _tagTextController.text,
                                     ),
                                   ),
                                 );
-                                recorder.updateDB(mood.isNotEmpty ? mood : '',
-                                    tag.isNotEmpty ? tag : '');
-                                isRecording = false;
-                                setState(() {});
                               },
                             );
                           },

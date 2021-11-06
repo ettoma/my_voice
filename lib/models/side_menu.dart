@@ -1,7 +1,9 @@
 import 'package:audio_journal/screens/home.dart';
+import 'package:audio_journal/utils/notification_service.dart';
 import 'package:audio_journal/utils/shared_prefs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
@@ -15,7 +17,10 @@ class SideMenu extends StatefulWidget {
 class _SideMenuState extends State<SideMenu> {
   TextEditingController controller =
       TextEditingController(text: sharedPrefs.username);
-  int toggleIndex = sharedPrefs.animationPref;
+  int toggleIndexAnimation = sharedPrefs.animationPref;
+  int toggleIndexNotification = sharedPrefs.notificationPref == true ? 0 : 1;
+  TextStyle tileText =
+      const TextStyle(fontSize: 16, fontWeight: FontWeight.w500);
 
   @override
   Widget build(BuildContext context) {
@@ -31,21 +36,29 @@ class _SideMenuState extends State<SideMenu> {
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
             ),
           ),
+          const SizedBox(height: 24),
           ListTile(
-            title: const Text('Edit name'),
+            minVerticalPadding: 24,
+            title: Text('Edit name', style: tileText),
             trailing: IconButton(
-              icon: const FaIcon(FontAwesomeIcons.pen),
+              icon: FaIcon(FontAwesomeIcons.pencilAlt,
+                  color: Colors.deepOrange.withOpacity(0.7)),
               onPressed: () async {
                 await showCupertinoModalPopup(
+                    barrierDismissible: false,
                     context: context,
                     builder: (context) {
                       return CupertinoAlertDialog(
                         title: const Text('Enter a name'),
-                        content: CupertinoTextField(controller: controller),
+                        content: CupertinoTextField(
+                          controller: controller,
+                          maxLength: 18,
+                          maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                        ),
                         actions: [
                           CupertinoDialogAction(
                               onPressed: () {
-                                sharedPrefs.username = controller.text;
+                                sharedPrefs.username = controller.text.trim();
                                 Navigator.pushReplacement(context,
                                     MaterialPageRoute(builder: (context) {
                                   return const Home();
@@ -59,19 +72,20 @@ class _SideMenuState extends State<SideMenu> {
             ),
           ),
           ListTile(
-            title: Text('Change illustration'),
+            minVerticalPadding: 24,
+            title: Text('Illustration', style: tileText),
             trailing: ToggleSwitch(
               minWidth: 35.0,
               minHeight: 35,
               cornerRadius: 20.0,
               activeBgColors: [
-                [Colors.green[400]!],
-                [Colors.red[300]!]
+                [Colors.blue[400]!],
+                [Colors.purple[300]!]
               ],
               activeFgColor: Colors.white,
               inactiveBgColor: Colors.grey[200],
               inactiveFgColor: Colors.white,
-              initialLabelIndex: toggleIndex,
+              initialLabelIndex: toggleIndexAnimation,
               totalSwitches: 2,
               customIcons: const [
                 Icon(FontAwesomeIcons.mars, size: 15, color: Colors.white),
@@ -81,7 +95,7 @@ class _SideMenuState extends State<SideMenu> {
               onToggle: (index) {
                 setState(
                   () {
-                    toggleIndex = index;
+                    toggleIndexAnimation = index;
                   },
                 );
                 sharedPrefs.animationPref = index;
@@ -93,10 +107,42 @@ class _SideMenuState extends State<SideMenu> {
             ),
           ),
           ListTile(
-            title: Text('disable notifications'),
-          ),
+              minVerticalPadding: 24,
+              title: Text('Notifications', style: tileText),
+              trailing: ToggleSwitch(
+                totalSwitches: 2,
+                minWidth: 35.0,
+                minHeight: 35,
+                cornerRadius: 20.0,
+                activeBgColors: [
+                  [Colors.green[400]!],
+                  [Colors.red[300]!]
+                ],
+                activeFgColor: Colors.white,
+                inactiveBgColor: Colors.grey[200],
+                inactiveFgColor: Colors.white,
+                customIcons: const [
+                  Icon(FontAwesomeIcons.bell, size: 15, color: Colors.white),
+                  Icon(FontAwesomeIcons.bellSlash,
+                      size: 15, color: Colors.white)
+                ],
+                initialLabelIndex: toggleIndexNotification,
+                radiusStyle: true,
+                onToggle: (index) {
+                  setState(() {
+                    toggleIndexNotification = index;
+                  });
+                  sharedPrefs.notificationPref = index == 0 ? true : false;
+                  if (index == 0) {
+                    NotificationService().cancelAllNotifications();
+                  } else if (index == 1) {
+                    NotificationService().scheduleDailyNotification();
+                  }
+                },
+              )),
           ListTile(
-            title: Text('dark mode'),
+            minVerticalPadding: 24,
+            title: Text('Dark mode', style: tileText),
           )
         ],
       ),

@@ -20,8 +20,6 @@ class _FirstTimeUserState extends State<FirstTimeUser> {
 
   @override
   void initState() {
-    //Create daily notification when the app is launched for the first time
-    NotificationService().scheduleDailyNotification();
     super.initState();
   }
 
@@ -57,9 +55,10 @@ class _FirstTimeUserState extends State<FirstTimeUser> {
                     if (controller.text == '') {
                       return;
                     } else {
-                      sharedPrefs.username = controller.text;
+                      sharedPrefs.username = controller.text.trim();
                       setState(() {});
                       Timer(const Duration(seconds: 5), () {
+                        NotificationService().scheduleDailyNotification();
                         Navigator.pushReplacement(context,
                             MaterialPageRoute(builder: (context) {
                           return const Instructions();
@@ -68,15 +67,11 @@ class _FirstTimeUserState extends State<FirstTimeUser> {
                     }
                   },
                 ),
-                IconButton(
-                  onPressed: () => sharedPrefs.clear(),
-                  icon: const FaIcon(FontAwesomeIcons.blind),
-                )
               ]
             : <Widget>[
                 Center(
                   child: Text(
-                    'Welcome,\n${sharedPrefs.username.trimRight()}',
+                    'Welcome,\n${sharedPrefs.username}',
                     textAlign: TextAlign.center,
                     style: Theme.of(context)
                         .textTheme
@@ -84,13 +79,6 @@ class _FirstTimeUserState extends State<FirstTimeUser> {
                         .copyWith(fontSize: 34),
                   ),
                 ),
-                IconButton(
-                  onPressed: () {
-                    sharedPrefs.clear();
-                    setState(() {});
-                  },
-                  icon: const FaIcon(FontAwesomeIcons.blind),
-                )
               ],
       ),
     );

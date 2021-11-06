@@ -19,6 +19,13 @@ class SharedPrefs {
     _sharedPrefs!.setInt(animationPrefInt, value);
   }
 
+  bool get notificationPref =>
+      _sharedPrefs!.getBool(notificationPrefBool) ?? true;
+
+  set notificationPref(bool value) {
+    _sharedPrefs!.setBool(notificationPrefBool, value);
+  }
+
   clear() {
     _sharedPrefs!.clear();
   }
@@ -27,3 +34,4 @@ class SharedPrefs {
 final sharedPrefs = SharedPrefs();
 const String keyName = 'name';
 const String animationPrefInt = 'animation';
+const String notificationPrefBool = 'notification';

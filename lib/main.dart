@@ -8,7 +8,6 @@ import 'utils/notification_service.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await NotificationService().init(); //
-  // NotificationService().cancelAllNotifications();
   await sharedPrefs.init();
   runApp(const MyApp());
 }
@@ -26,7 +25,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       theme: ThemeData(
           bottomSheetTheme:
-              BottomSheetThemeData(backgroundColor: Colors.transparent),
+              const BottomSheetThemeData(backgroundColor: Colors.transparent),
           backgroundColor: Colors.white,
           textTheme: GoogleFonts.montserratTextTheme(
             const TextTheme(

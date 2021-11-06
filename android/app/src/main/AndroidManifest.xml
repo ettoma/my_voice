@@ -3,7 +3,7 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
    <application
-        android:label="audio_journal"
+        android:label="My voice"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
