@@ -133,7 +133,7 @@ class _RecordScreenState extends State<RecordScreen>
           height: 20,
         ),
         isLoading
-            ? const LinearProgressIndicator()
+            ? const CircularProgressIndicator()
             // ! to enable recording everyday
             : latestAudioRecordingDate == today
                 ? Container(
@@ -159,22 +159,32 @@ class _RecordScreenState extends State<RecordScreen>
                   )
                 : ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      shape: const CircleBorder(),
-                      elevation: 1,
-                      primary: !isRecording
-                          ? Colors.white
-                          : Colors.grey.withOpacity(0.5),
-                    ),
+                        shape: const CircleBorder(),
+                        elevation: 1,
+                        primary: !isRecording
+                            ? sharedPrefs.darkThemePreference == 'dark'
+                                ? Colors.grey[800]
+                                : Colors.white
+                            : sharedPrefs.darkThemePreference == 'dark' ||
+                                    MediaQuery.of(context).platformBrightness ==
+                                        Brightness.dark
+                                ? Colors.grey
+                                : Colors.blueAccent),
                     child: SizedBox(
                       height: 80,
                       width: 80,
                       child: Center(
-                        child: FaIcon(
-                          FontAwesomeIcons.microphone,
-                          color: !isRecording
-                              ? Colors.blueAccent.withOpacity(0.85)
-                              : Colors.grey.withOpacity(0.75),
-                        ),
+                        child: FaIcon(FontAwesomeIcons.microphone,
+                            color: !isRecording
+                                ? sharedPrefs.darkThemePreference == 'dark'
+                                    ? Colors.blueGrey[200]
+                                    : Colors.blueAccent.withOpacity(0.85)
+                                : sharedPrefs.darkThemePreference == 'dark' ||
+                                        MediaQuery.of(context)
+                                                .platformBrightness ==
+                                            Brightness.dark
+                                    ? Colors.grey
+                                    : Colors.blueAccent),
                       ),
                     ),
                     onPressed: isRecording == true || _currentValue != 0

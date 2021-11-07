@@ -84,7 +84,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
         ? Center(
             child: Container(
                 margin: const EdgeInsets.symmetric(horizontal: 24),
-                child: const LinearProgressIndicator()))
+                child: const CircularProgressIndicator()))
         : audioFiles.isEmpty
             ? Center(
                 child: Text(
