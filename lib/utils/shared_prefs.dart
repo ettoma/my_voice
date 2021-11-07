@@ -7,6 +7,10 @@ class SharedPrefs {
     _sharedPrefs ??= _sharedPrefs = await SharedPreferences.getInstance();
   }
 
+  clear() {
+    _sharedPrefs!.clear();
+  }
+
   String get username => _sharedPrefs!.getString(keyName) ?? '';
 
   set username(String value) {
@@ -26,8 +30,11 @@ class SharedPrefs {
     _sharedPrefs!.setBool(notificationPrefBool, value);
   }
 
-  clear() {
-    _sharedPrefs!.clear();
+  String get darkThemePreference =>
+      _sharedPrefs!.getString(darkThemePref) ?? '';
+
+  set darkThemePreference(String value) {
+    _sharedPrefs!.setString(darkThemePref, value);
   }
 }
 
@@ -35,3 +42,4 @@ final sharedPrefs = SharedPrefs();
 const String keyName = 'name';
 const String animationPrefInt = 'animation';
 const String notificationPrefBool = 'notification';
+const String darkThemePref = 'darkTheme';

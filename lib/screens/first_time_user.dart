@@ -6,7 +6,6 @@ import 'package:audio_journal/utils/shared_prefs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class FirstTimeUser extends StatefulWidget {
   const FirstTimeUser({Key? key}) : super(key: key);

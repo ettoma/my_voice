@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 PreferredSizeWidget appBar(context) {
   return AppBar(
     automaticallyImplyLeading: true,
-    iconTheme: const IconThemeData(color: Color.fromRGBO(0, 0, 0, 0.5)),
-    backgroundColor: Theme.of(context).backgroundColor,
     elevation: 0,
     centerTitle: true,
     title: Text(

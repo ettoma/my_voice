@@ -76,7 +76,6 @@ class _RecordScreenState extends State<RecordScreen>
   Widget build(BuildContext context) {
     String mood = '';
     String tag = '';
-    // TextEditingController _moodTextController = TextEditingController();
     TextEditingController _tagTextController = TextEditingController();
     DateTime todaysDate = DateTime.now();
     DateFormat format = DateFormat('EEEE dd MMM');
@@ -112,10 +111,8 @@ class _RecordScreenState extends State<RecordScreen>
         const SizedBox(height: 10),
         SizedBox(
           height: 80,
-          child: Text(
-            'Good ${_timeOfTheDay()}, \n$username',
-            style: Theme.of(context).textTheme.headline1,
-          ),
+          child: Text('Good ${_timeOfTheDay()}, \n$username',
+              style: Theme.of(context).textTheme.headline1),
         ),
         Container(
           child: Lottie.asset(
@@ -147,16 +144,15 @@ class _RecordScreenState extends State<RecordScreen>
                       children: [
                         Container(
                           margin: const EdgeInsets.only(bottom: 10),
-                          child: const Text(
+                          child: Text(
                             'Great job today!',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
+                            style: Theme.of(context).textTheme.subtitle1,
                           ),
                         ),
-                        const Text(
+                        Text(
                           'Come back tomorrow to record a new audio',
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 18),
+                          style: Theme.of(context).textTheme.bodyText1,
                         ),
                       ],
                     ),

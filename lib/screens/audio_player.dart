@@ -86,10 +86,13 @@ class _AudioPlayerState extends State<AudioPlayer> {
                 margin: const EdgeInsets.symmetric(horizontal: 24),
                 child: const LinearProgressIndicator()))
         : audioFiles.isEmpty
-            ? const Center(
+            ? Center(
                 child: Text(
                   'No recordings yet',
-                  style: TextStyle(fontSize: 18),
+                  style: Theme.of(context)
+                      .textTheme
+                      .subtitle1!
+                      .copyWith(color: Colors.orangeAccent),
                 ),
               )
             : Column(
@@ -100,6 +103,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
                     margin: const EdgeInsets.only(right: 32),
                     width: MediaQuery.of(context).size.width * 0.4,
                     child: CupertinoTextField.borderless(
+                      style: Theme.of(context).textTheme.bodyText1,
                       decoration: const BoxDecoration(
                           border: Border(
                               bottom: BorderSide(color: Colors.black12))),
@@ -112,6 +116,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 12, vertical: 10),
                       placeholder: 'filter tags',
+                      placeholderStyle: Theme.of(context).textTheme.bodyText2,
                       clearButtonMode: OverlayVisibilityMode.editing,
                       controller: controller,
                       onChanged: (value) => filterListPerTag(value),
@@ -190,7 +195,6 @@ class _AudioPlayerState extends State<AudioPlayer> {
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(
-                                        color: Colors.white.withOpacity(0.85),
                                         boxShadow: [
                                           player.fileBeingPlayed ==
                                                   directory!.uri.toFilePath(
@@ -199,10 +203,10 @@ class _AudioPlayerState extends State<AudioPlayer> {
                                                           .fileName +
                                                       '.aac'
                                               ? BoxShadow(
-                                                  color: Colors.greenAccent
-                                                      .withOpacity(0.4),
-                                                  spreadRadius: 3,
-                                                  blurRadius: 6,
+                                                  color: Colors.grey
+                                                      .withOpacity(0.1),
+                                                  spreadRadius: 1,
+                                                  blurRadius: 0,
                                                   offset: const Offset(0, 1))
                                               : const BoxShadow(
                                                   color: Colors.transparent)
@@ -222,28 +226,29 @@ class _AudioPlayerState extends State<AudioPlayer> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Container(
-                                          margin:
-                                              const EdgeInsets.only(left: 40),
-                                          child: Text(
+                                            margin:
+                                                const EdgeInsets.only(left: 40),
+                                            child: Text(
                                               format.format(DateTime
                                                   .fromMillisecondsSinceEpoch(
                                                       int.parse(audio.fileName
                                                           .split('.aac')
                                                           .first))),
-                                              style: const TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.w700)),
-                                        ),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .subtitle1,
+                                            )),
                                         Container(
                                           margin:
                                               const EdgeInsets.only(right: 40),
                                           child: Row(
                                             children: [
-                                              //TODO: implement mood?
-                                              // Text(audio.mood),
-                                              Text('#${audio.tag}',
-                                                  style: const TextStyle(
-                                                      fontSize: 16)),
+                                              Text(
+                                                '#${audio.tag}',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1,
+                                              )
                                             ],
                                           ),
                                         )
@@ -254,7 +259,14 @@ class _AudioPlayerState extends State<AudioPlayer> {
                               );
                             },
                             itemCount: foundFilesWithTag.length)
-                        : const Center(child: Text('No files with this tag')),
+                        : Center(
+                            child: Text(
+                            'No files with this tag',
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle1!
+                                .copyWith(color: Colors.orangeAccent),
+                          )),
                   ),
                 ],
               );

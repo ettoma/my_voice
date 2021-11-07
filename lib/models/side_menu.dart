@@ -15,25 +15,45 @@ class SideMenu extends StatefulWidget {
 }
 
 class _SideMenuState extends State<SideMenu> {
+  int getToggleDarkSelection() {
+    int selection = 0;
+    if (sharedPrefs.darkThemePreference.isEmpty) {
+      if (MediaQuery.of(context).platformBrightness == Brightness.light) {
+        selection = 0;
+      } else {
+        selection = 1;
+      }
+    } else if (sharedPrefs.darkThemePreference == 'light') {
+      selection = 0;
+    } else if (sharedPrefs.darkThemePreference == 'dark') {
+      selection = 1;
+    }
+    return selection;
+  }
+
   TextEditingController controller =
       TextEditingController(text: sharedPrefs.username);
   int toggleIndexAnimation = sharedPrefs.animationPref;
   int toggleIndexNotification = sharedPrefs.notificationPref == true ? 0 : 1;
-  TextStyle tileText =
-      const TextStyle(fontSize: 16, fontWeight: FontWeight.w500);
+  // int toggleDarkTheme = getToggleDarkSelection();
 
   @override
   Widget build(BuildContext context) {
+    TextStyle? tileText = Theme.of(context).textTheme.bodyText1;
+
     return Drawer(
         child: Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12),
       child: ListView(
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 12),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12),
             child: Text(
               'my voice',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+              style: Theme.of(context)
+                  .textTheme
+                  .headline2!
+                  .copyWith(fontWeight: FontWeight.w600),
             ),
           ),
           const SizedBox(height: 24),
@@ -83,8 +103,12 @@ class _SideMenuState extends State<SideMenu> {
                 [Colors.purple[300]!]
               ],
               activeFgColor: Colors.white,
-              inactiveBgColor: Colors.grey[200],
-              inactiveFgColor: Colors.white,
+              inactiveBgColor: sharedPrefs.darkThemePreference == 'light'
+                  ? Colors.grey[200]
+                  : Colors.black.withOpacity(0.7),
+              inactiveFgColor: sharedPrefs.darkThemePreference == 'light'
+                  ? Colors.grey[200]
+                  : Colors.grey[500],
               initialLabelIndex: toggleIndexAnimation,
               totalSwitches: 2,
               customIcons: const [
@@ -115,12 +139,16 @@ class _SideMenuState extends State<SideMenu> {
                 minHeight: 35,
                 cornerRadius: 20.0,
                 activeBgColors: [
-                  [Colors.green[400]!],
+                  [Colors.green[800]!],
                   [Colors.red[300]!]
                 ],
                 activeFgColor: Colors.white,
-                inactiveBgColor: Colors.grey[200],
-                inactiveFgColor: Colors.white,
+                inactiveBgColor: sharedPrefs.darkThemePreference == 'light'
+                    ? Colors.grey[200]
+                    : Colors.black.withOpacity(0.7),
+                inactiveFgColor: sharedPrefs.darkThemePreference == 'light'
+                    ? Colors.grey[200]
+                    : Colors.grey[500],
                 customIcons: const [
                   Icon(FontAwesomeIcons.bell, size: 15, color: Colors.white),
                   Icon(FontAwesomeIcons.bellSlash,
@@ -141,9 +169,37 @@ class _SideMenuState extends State<SideMenu> {
                 },
               )),
           ListTile(
-            minVerticalPadding: 24,
-            title: Text('Dark mode', style: tileText),
-          )
+              minVerticalPadding: 24,
+              title: Text('Dark mode', style: tileText),
+              trailing: ToggleSwitch(
+                totalSwitches: 2,
+                minWidth: 35.0,
+                minHeight: 35,
+                cornerRadius: 20.0,
+                activeBgColors: [
+                  [Colors.orange[800]!],
+                  [Colors.blue[300]!]
+                ],
+                activeFgColor: Colors.white,
+                inactiveBgColor: sharedPrefs.darkThemePreference == 'light'
+                    ? Colors.grey[200]
+                    : Colors.black.withOpacity(0.7),
+                inactiveFgColor: sharedPrefs.darkThemePreference == 'light'
+                    ? Colors.grey[200]
+                    : Colors.grey[500],
+                customIcons: const [
+                  Icon(FontAwesomeIcons.lightbulb,
+                      size: 15, color: Colors.white),
+                  Icon(FontAwesomeIcons.moon, size: 15, color: Colors.white)
+                ],
+                initialLabelIndex: getToggleDarkSelection(),
+                radiusStyle: true,
+                onToggle: (index) {
+                  sharedPrefs.darkThemePreference =
+                      index == 0 ? 'light' : 'dark';
+                  setState(() {});
+                },
+              )),
         ],
       ),
     ));

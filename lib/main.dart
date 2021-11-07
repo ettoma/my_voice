@@ -1,7 +1,7 @@
 import 'package:audio_journal/screens/splash.dart';
+import 'package:audio_journal/utils/app_theme.dart';
 import 'package:audio_journal/utils/shared_prefs.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'utils/notification_service.dart';
 
@@ -23,23 +23,12 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-          bottomSheetTheme:
-              const BottomSheetThemeData(backgroundColor: Colors.transparent),
-          backgroundColor: Colors.white,
-          textTheme: GoogleFonts.montserratTextTheme(
-            const TextTheme(
-              headline1: TextStyle(
-                  fontSize: 32,
-                  color: Color.fromRGBO(46, 48, 64, 1),
-                  fontWeight: FontWeight.w500),
-              headline2:
-                  TextStyle(fontSize: 24, color: Color.fromRGBO(46, 48, 64, 1)),
-            ),
-          ),
-          canvasColor: Colors.white),
+      //TODO: implement provider to listen to Shared Prefs
+      themeMode: AppTheme.themeMode(),
+      darkTheme: AppTheme.darkTheme,
+      theme: AppTheme.lightTheme,
       debugShowCheckedModeBanner: false,
-      title: 'my voice',
+      title: 'My voice',
       home: const Splash(),
     );
   }
