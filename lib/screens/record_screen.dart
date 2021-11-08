@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:audio_journal/data/audio_file_db.dart';
 import 'package:audio_journal/data/audio_model.dart';
 import 'package:audio_journal/models/sound_recorder.dart';
+import 'package:audio_journal/utils/app_theme.dart';
 import 'package:audio_journal/utils/shared_prefs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.da
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 
 class RecordScreen extends StatefulWidget {
   const RecordScreen({Key? key}) : super(key: key);
@@ -54,6 +56,58 @@ class _RecordScreenState extends State<RecordScreen>
     }
     isLoading = false;
     setState(() {});
+  }
+
+  Color buttonColourNotRecording() {
+    Color? buttonColour;
+    ThemeProvider provider = Provider.of<ThemeProvider>(context);
+
+    if (provider.isDarkMode == true) {
+      buttonColour = Colors.grey[800];
+    } else if (provider.isDarkMode == false) {
+      buttonColour = Colors.white;
+    }
+
+    return buttonColour!;
+  }
+
+  Color iconColourNotRecording() {
+    Color? iconColour;
+    ThemeProvider provider = Provider.of<ThemeProvider>(context);
+
+    if (provider.isDarkMode == true) {
+      iconColour = Colors.grey[500];
+    } else if (provider.isDarkMode == false) {
+      iconColour = Colors.blue[400];
+    }
+
+    return iconColour!;
+  }
+
+  Color buttonColourRecording() {
+    Color? buttonColour;
+    ThemeProvider provider = Provider.of<ThemeProvider>(context);
+
+    if (provider.isDarkMode == true) {
+      buttonColour = Colors.grey[850];
+    } else if (provider.isDarkMode == false) {
+      buttonColour = Colors.grey[400];
+    }
+
+    return buttonColour!;
+  }
+
+  Color iconColourRecording() {
+    Color? iconColour;
+    ThemeProvider provider = Provider.of<ThemeProvider>(context);
+
+    if (provider.isDarkMode == true) {
+      iconColour = Colors.grey[750];
+    } else if (provider.isDarkMode == false) {
+      iconColour = Colors.grey[600];
+    }
+
+    return iconColour!;
   }
 
   @override
@@ -159,32 +213,20 @@ class _RecordScreenState extends State<RecordScreen>
                   )
                 : ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        shape: const CircleBorder(),
-                        elevation: 1,
-                        primary: !isRecording
-                            ? sharedPrefs.darkThemePreference == 'dark'
-                                ? Colors.grey[800]
-                                : Colors.white
-                            : sharedPrefs.darkThemePreference == 'dark' ||
-                                    MediaQuery.of(context).platformBrightness ==
-                                        Brightness.dark
-                                ? Colors.grey
-                                : Colors.blueAccent),
+                      shape: const CircleBorder(),
+                      elevation: 1,
+                      primary: isRecording
+                          ? buttonColourRecording()
+                          : buttonColourNotRecording(),
+                    ),
                     child: SizedBox(
                       height: 80,
                       width: 80,
                       child: Center(
                         child: FaIcon(FontAwesomeIcons.microphone,
-                            color: !isRecording
-                                ? sharedPrefs.darkThemePreference == 'dark'
-                                    ? Colors.blueGrey[200]
-                                    : Colors.blueAccent.withOpacity(0.85)
-                                : sharedPrefs.darkThemePreference == 'dark' ||
-                                        MediaQuery.of(context)
-                                                .platformBrightness ==
-                                            Brightness.dark
-                                    ? Colors.grey
-                                    : Colors.blueAccent),
+                            color: isRecording
+                                ? Colors.grey[600]
+                                : Colors.blue[400]),
                       ),
                     ),
                     onPressed: isRecording == true || _currentValue != 0

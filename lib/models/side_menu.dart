@@ -124,8 +124,8 @@ class _SideMenuState extends State<SideMenu> {
                 minHeight: 35,
                 cornerRadius: 20.0,
                 activeBgColors: [
-                  [Colors.green[800]!],
-                  [Colors.red[300]!]
+                  [Colors.teal[800]!],
+                  [Colors.brown[300]!]
                 ],
                 activeFgColor: Colors.white,
                 inactiveBgColor: sharedPrefs.darkThemePreference == 'light'
@@ -162,7 +162,7 @@ class _SideMenuState extends State<SideMenu> {
                 minHeight: 35,
                 cornerRadius: 20.0,
                 activeBgColors: [
-                  [Colors.orange[800]!],
+                  [Colors.yellow[800]!],
                   [Colors.blue[300]!]
                 ],
                 activeFgColor: Colors.white,
