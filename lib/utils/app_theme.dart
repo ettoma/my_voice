@@ -5,6 +5,21 @@ import 'package:google_fonts/google_fonts.dart';
 Color darkText = Colors.white70;
 Color lightText = const Color.fromRGBO(46, 48, 64, 1);
 
+class ThemeProvider extends ChangeNotifier {
+  ThemeMode themeMode = sharedPrefs.darkThemePreference.isEmpty
+      ? ThemeMode.system
+      : sharedPrefs.darkThemePreference == 'light'
+          ? ThemeMode.light
+          : ThemeMode.dark;
+
+  bool get isDarkMode => themeMode == ThemeMode.dark;
+
+  void toggleMode(bool isOn) {
+    themeMode = isOn ? ThemeMode.dark : ThemeMode.light;
+    notifyListeners();
+  }
+}
+
 class AppTheme {
   static ThemeMode themeMode() {
     ThemeMode themeModePref;

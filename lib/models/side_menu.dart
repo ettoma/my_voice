@@ -1,10 +1,12 @@
 import 'package:audio_journal/screens/home.dart';
+import 'package:audio_journal/utils/app_theme.dart';
 import 'package:audio_journal/utils/notification_service.dart';
 import 'package:audio_journal/utils/shared_prefs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 class SideMenu extends StatefulWidget {
@@ -15,27 +17,10 @@ class SideMenu extends StatefulWidget {
 }
 
 class _SideMenuState extends State<SideMenu> {
-  int getToggleDarkSelection() {
-    int selection = 0;
-    if (sharedPrefs.darkThemePreference.isEmpty) {
-      if (MediaQuery.of(context).platformBrightness == Brightness.light) {
-        selection = 0;
-      } else {
-        selection = 1;
-      }
-    } else if (sharedPrefs.darkThemePreference == 'light') {
-      selection = 0;
-    } else if (sharedPrefs.darkThemePreference == 'dark') {
-      selection = 1;
-    }
-    return selection;
-  }
-
   TextEditingController controller =
       TextEditingController(text: sharedPrefs.username);
   int toggleIndexAnimation = sharedPrefs.animationPref;
   int toggleIndexNotification = sharedPrefs.notificationPref == true ? 0 : 1;
-  // int toggleDarkTheme = getToggleDarkSelection();
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +84,7 @@ class _SideMenuState extends State<SideMenu> {
               minHeight: 35,
               cornerRadius: 20.0,
               activeBgColors: [
-                [Colors.blue[400]!],
+                const [Color.fromRGBO(238, 123, 130, 1)],
                 [Colors.purple[300]!]
               ],
               activeFgColor: Colors.white,
@@ -192,9 +177,13 @@ class _SideMenuState extends State<SideMenu> {
                       size: 15, color: Colors.white),
                   Icon(FontAwesomeIcons.moon, size: 15, color: Colors.white)
                 ],
-                initialLabelIndex: getToggleDarkSelection(),
+                initialLabelIndex:
+                    Provider.of<ThemeProvider>(context).isDarkMode ? 1 : 0,
                 radiusStyle: true,
                 onToggle: (index) {
+                  final provider =
+                      Provider.of<ThemeProvider>(context, listen: false);
+                  provider.toggleMode(index == 0 ? false : true);
                   sharedPrefs.darkThemePreference =
                       index == 0 ? 'light' : 'dark';
                   setState(() {});

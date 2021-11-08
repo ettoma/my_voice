@@ -2,6 +2,7 @@ import 'package:audio_journal/screens/splash.dart';
 import 'package:audio_journal/utils/app_theme.dart';
 import 'package:audio_journal/utils/shared_prefs.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'utils/notification_service.dart';
 
@@ -22,14 +23,17 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      //TODO: implement provider to listen to Shared Prefs
-      themeMode: AppTheme.themeMode(),
-      darkTheme: AppTheme.darkTheme,
-      theme: AppTheme.lightTheme,
-      debugShowCheckedModeBanner: false,
-      title: 'My voice',
-      home: const Splash(),
-    );
+    return ChangeNotifierProvider(
+        create: (context) => ThemeProvider(),
+        builder: (context, _) {
+          return MaterialApp(
+            themeMode: Provider.of<ThemeProvider>(context).themeMode,
+            darkTheme: AppTheme.darkTheme,
+            theme: AppTheme.lightTheme,
+            debugShowCheckedModeBanner: false,
+            title: 'My voice',
+            home: const Splash(),
+          );
+        });
   }
 }
