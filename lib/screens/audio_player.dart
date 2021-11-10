@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:audio_journal/data/audio_file_db.dart';
 import 'package:audio_journal/data/audio_model.dart';
+import 'package:audio_journal/utils/app_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
@@ -133,34 +134,42 @@ class _AudioPlayerState extends State<AudioPlayer> {
                                   await showCupertinoModalPopup(
                                     barrierDismissible: false,
                                     context: context,
-                                    builder: (context) => CupertinoAlertDialog(
-                                      title: const Text(
-                                        'Are you sure?',
-                                        style: TextStyle(fontSize: 20),
-                                      ),
-                                      content: const Text(
-                                          'This can\'t be undone',
-                                          style: TextStyle(fontSize: 16)),
-                                      actions: [
-                                        CupertinoDialogAction(
-                                            onPressed: () =>
-                                                Navigator.of(context).pop(),
-                                            child: const FaIcon(
-                                                FontAwesomeIcons.times)),
-                                        CupertinoDialogAction(
-                                          onPressed: () async {
-                                            await AudioDatabase.instance.delete(
-                                                foundFilesWithTag[index].id!);
-                                            final targetFile = File(
-                                                "${directory!.path}/${foundFilesWithTag[index].fileName}.aac");
-                                            targetFile.deleteSync(
-                                                recursive: true);
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: const FaIcon(
-                                              FontAwesomeIcons.check),
+                                    builder: (context) => CupertinoTheme(
+                                      data: CupertinoThemeData(
+                                          brightness: ThemeProvider().isDarkMode
+                                              ? Brightness.dark
+                                              : Brightness.light),
+                                      child: CupertinoAlertDialog(
+                                        title: const Text(
+                                          'Are you sure?',
+                                          style: TextStyle(fontSize: 20),
                                         ),
-                                      ],
+                                        content: const Text(
+                                            'This can\'t be undone',
+                                            style: TextStyle(fontSize: 16)),
+                                        actions: [
+                                          CupertinoDialogAction(
+                                              onPressed: () =>
+                                                  Navigator.of(context).pop(),
+                                              child: const FaIcon(
+                                                  FontAwesomeIcons.times)),
+                                          CupertinoDialogAction(
+                                            onPressed: () async {
+                                              await AudioDatabase.instance
+                                                  .delete(
+                                                      foundFilesWithTag[index]
+                                                          .id!);
+                                              final targetFile = File(
+                                                  "${directory!.path}/${foundFilesWithTag[index].fileName}.aac");
+                                              targetFile.deleteSync(
+                                                  recursive: true);
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: const FaIcon(
+                                                FontAwesomeIcons.check),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   );
                                   refreshAudioFileList();

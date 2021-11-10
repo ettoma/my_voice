@@ -254,54 +254,60 @@ class _RecordScreenState extends State<RecordScreen>
                                 await showCupertinoModalPopup(
                                   barrierDismissible: false,
                                   context: context,
-                                  builder: (context) => CupertinoAlertDialog(
-                                    actions: [
-                                      CupertinoDialogAction(
-                                        child: const FaIcon(
-                                            FontAwesomeIcons.check),
-                                        onPressed: () {
-                                          _animationController!.reset();
-                                          Navigator.of(context).pop();
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            SnackBar(
-                                              onVisible: () {
-                                                refreshAudioFileList();
-                                              },
-                                              backgroundColor:
-                                                  const Color.fromRGBO(
-                                                      0, 130, 210, 1),
-                                              content: const Text(
-                                                  'Your recording has been saved'),
-                                            ),
-                                          );
-                                          recorder.updateDB(
-                                              mood.isNotEmpty ? mood : '',
-                                              tag.isNotEmpty ? tag : '');
-                                          isRecording = false;
-                                          setState(() {});
-                                        },
-                                      )
-                                    ],
-                                    title: const Text(
-                                        'Enter a tag for your audio'),
-                                    content: CupertinoTextField(
-                                      prefix: const Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 12.0),
-                                        child: Icon(FontAwesomeIcons.hashtag,
-                                            size: 14, color: Colors.black54),
+                                  builder: (context) => CupertinoTheme(
+                                    data: CupertinoThemeData(
+                                        brightness: ThemeProvider().isDarkMode
+                                            ? Brightness.dark
+                                            : Brightness.light),
+                                    child: CupertinoAlertDialog(
+                                      actions: [
+                                        CupertinoDialogAction(
+                                          child: const FaIcon(
+                                              FontAwesomeIcons.check),
+                                          onPressed: () {
+                                            _animationController!.reset();
+                                            Navigator.of(context).pop();
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                onVisible: () {
+                                                  refreshAudioFileList();
+                                                },
+                                                backgroundColor:
+                                                    const Color.fromRGBO(
+                                                        0, 130, 210, 1),
+                                                content: const Text(
+                                                    'Your recording has been saved'),
+                                              ),
+                                            );
+                                            recorder.updateDB(
+                                                mood.isNotEmpty ? mood : '',
+                                                tag.isNotEmpty ? tag : '');
+                                            isRecording = false;
+                                            setState(() {});
+                                          },
+                                        )
+                                      ],
+                                      title: const Text(
+                                          'Enter a tag for your audio'),
+                                      content: CupertinoTextField(
+                                        prefix: const Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 12.0),
+                                          child: Icon(FontAwesomeIcons.hashtag,
+                                              size: 14, color: Colors.black54),
+                                        ),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8, vertical: 10),
+                                        autofocus: true,
+                                        autocorrect: false,
+                                        maxLength: 15,
+                                        maxLengthEnforcement:
+                                            MaxLengthEnforcement.enforced,
+                                        controller: _tagTextController,
+                                        onChanged: (e) =>
+                                            tag = _tagTextController.text,
                                       ),
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8, vertical: 10),
-                                      autofocus: true,
-                                      autocorrect: false,
-                                      maxLength: 15,
-                                      maxLengthEnforcement:
-                                          MaxLengthEnforcement.enforced,
-                                      controller: _tagTextController,
-                                      onChanged: (e) =>
-                                          tag = _tagTextController.text,
                                     ),
                                   ),
                                 );

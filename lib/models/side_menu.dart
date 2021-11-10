@@ -53,24 +53,30 @@ class _SideMenuState extends State<SideMenu> {
                     barrierDismissible: false,
                     context: context,
                     builder: (context) {
-                      return CupertinoAlertDialog(
-                        title: const Text('Enter a name'),
-                        content: CupertinoTextField(
-                          controller: controller,
-                          maxLength: 18,
-                          maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                      return CupertinoTheme(
+                        data: CupertinoThemeData(
+                            brightness: ThemeProvider().isDarkMode
+                                ? Brightness.dark
+                                : Brightness.light),
+                        child: CupertinoAlertDialog(
+                          title: const Text('Enter a name'),
+                          content: CupertinoTextField(
+                            controller: controller,
+                            maxLength: 18,
+                            maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                          ),
+                          actions: [
+                            CupertinoDialogAction(
+                                onPressed: () {
+                                  sharedPrefs.username = controller.text.trim();
+                                  Navigator.pushReplacement(context,
+                                      MaterialPageRoute(builder: (context) {
+                                    return const Home();
+                                  }));
+                                },
+                                child: const FaIcon(FontAwesomeIcons.check))
+                          ],
                         ),
-                        actions: [
-                          CupertinoDialogAction(
-                              onPressed: () {
-                                sharedPrefs.username = controller.text.trim();
-                                Navigator.pushReplacement(context,
-                                    MaterialPageRoute(builder: (context) {
-                                  return const Home();
-                                }));
-                              },
-                              child: const FaIcon(FontAwesomeIcons.check))
-                        ],
                       );
                     });
               },
