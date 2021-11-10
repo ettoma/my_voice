@@ -58,18 +58,6 @@ class NotificationService {
     importance: Importance.high,
   );
 
-  // void requestIOSPermissions(
-  //     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) {
-  //   flutterLocalNotificationsPlugin
-  //       .resolvePlatformSpecificImplementation<
-  //           IOSFlutterLocalNotificationsPlugin>()
-  //       ?.requestPermissions(
-  //         alert: true,
-  //         badge: true,
-  //         sound: true,
-  //       );
-  // }
-
   Future<void> showNotifications() async {
     await flutterLocalNotificationsPlugin.show(
       0,
@@ -112,6 +100,13 @@ class NotificationService {
 
   Future<void> cancelAllNotifications() async {
     await flutterLocalNotificationsPlugin.cancelAll();
+  }
+
+  // to check pending notifications
+  Future<void> printNotifications() async {
+    List pendingNotifications =
+        await flutterLocalNotificationsPlugin.pendingNotificationRequests();
+    print(pendingNotifications.length);
   }
 }
 

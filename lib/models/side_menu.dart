@@ -147,9 +147,9 @@ class _SideMenuState extends State<SideMenu> {
                   });
                   sharedPrefs.notificationPref = index == 0 ? true : false;
                   if (index == 0) {
-                    NotificationService().cancelAllNotifications();
-                  } else if (index == 1) {
                     NotificationService().scheduleDailyNotification();
+                  } else if (index == 1) {
+                    NotificationService().cancelAllNotifications();
                   }
                 },
               )),

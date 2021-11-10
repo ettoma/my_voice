@@ -42,11 +42,8 @@ class DailyQuote extends StatelessWidget {
                     .headline2!
                     .copyWith(fontWeight: FontWeight.w500),
               ),
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 5),
+              const SizedBox(
                 height: 14,
-                width: 1,
-                color: Colors.black,
               ),
               Text(
                 Quotes().quotes[randomQuoteInt]['author'].toString(),

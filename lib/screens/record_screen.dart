@@ -188,7 +188,6 @@ class _RecordScreenState extends State<RecordScreen>
         ),
         isLoading
             ? const CircularProgressIndicator()
-            // ! to enable recording everyday
             : latestAudioRecordingDate == today
                 ? Container(
                     margin: const EdgeInsets.symmetric(
@@ -200,7 +199,10 @@ class _RecordScreenState extends State<RecordScreen>
                           margin: const EdgeInsets.only(bottom: 10),
                           child: Text(
                             'Great job today!',
-                            style: Theme.of(context).textTheme.subtitle1,
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle1!
+                                .copyWith(color: Colors.orangeAccent),
                           ),
                         ),
                         Text(

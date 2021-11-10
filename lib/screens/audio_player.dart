@@ -23,7 +23,6 @@ class _AudioPlayerState extends State<AudioPlayer> {
   bool _isLoading = false;
   Color color = Colors.transparent;
   TextEditingController controller = TextEditingController(text: '');
-  List<Color> selectedItem = [Colors.green, Colors.red];
 
   final player = SoundPlayer();
 
