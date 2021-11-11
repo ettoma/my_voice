@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:audio_journal/screens/home.dart';
 import 'package:audio_journal/utils/app_theme.dart';
 import 'package:audio_journal/utils/notification_service.dart';
@@ -49,36 +51,9 @@ class _SideMenuState extends State<SideMenu> {
               icon: FaIcon(FontAwesomeIcons.pencilAlt,
                   color: Colors.deepOrange.withOpacity(0.7)),
               onPressed: () async {
-                await showCupertinoModalPopup(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (context) {
-                      return CupertinoTheme(
-                        data: CupertinoThemeData(
-                            brightness: ThemeProvider().isDarkMode
-                                ? Brightness.dark
-                                : Brightness.light),
-                        child: CupertinoAlertDialog(
-                          title: const Text('Enter a name'),
-                          content: CupertinoTextField(
-                            controller: controller,
-                            maxLength: 18,
-                            maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                          ),
-                          actions: [
-                            CupertinoDialogAction(
-                                onPressed: () {
-                                  sharedPrefs.username = controller.text.trim();
-                                  Navigator.pushReplacement(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return const Home();
-                                  }));
-                                },
-                                child: const FaIcon(FontAwesomeIcons.check))
-                          ],
-                        ),
-                      );
-                    });
+                Platform.isIOS
+                    ? iosModal(context, controller)
+                    : androidModal(context, controller);
               },
             ),
           ),
@@ -199,4 +174,67 @@ class _SideMenuState extends State<SideMenu> {
       ),
     ));
   }
+}
+
+Future<dynamic> iosModal(context, controller) async {
+  return await showCupertinoModalPopup(
+      context: context,
+      builder: (context) {
+        return CupertinoTheme(
+          data: CupertinoThemeData(
+              brightness: ThemeProvider().isDarkMode
+                  ? Brightness.dark
+                  : Brightness.light),
+          child: CupertinoAlertDialog(
+            title: const Text('Enter a name'),
+            content: CupertinoTextField(
+              controller: controller,
+              maxLength: 18,
+              maxLengthEnforcement: MaxLengthEnforcement.enforced,
+            ),
+            actions: [
+              CupertinoDialogAction(
+                  onPressed: () {
+                    sharedPrefs.username = controller.text.trim();
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) {
+                      return const Home();
+                    }));
+                  },
+                  child: const FaIcon(FontAwesomeIcons.check))
+            ],
+          ),
+        );
+      });
+}
+
+// TODO style this modal!
+Future<dynamic> androidModal(context, controller) async {
+  return await showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+            child: Container(
+                height: 200,
+                width: 150,
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: controller,
+                      maxLength: 18,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    IconButton(
+                        onPressed: () {
+                          sharedPrefs.username = controller.text.trim();
+                          Navigator.pushReplacement(context,
+                              MaterialPageRoute(builder: (context) {
+                            return const Home();
+                          }));
+                        },
+                        icon: FaIcon(FontAwesomeIcons.check))
+                  ],
+                )));
+      });
 }
