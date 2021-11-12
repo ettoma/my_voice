@@ -3,6 +3,7 @@ import 'package:audio_journal/data/audio_file_db.dart';
 import 'package:audio_journal/data/audio_model.dart';
 import 'package:audio_journal/utils/app_theme.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 import 'package:audio_journal/models/player.dart';
@@ -131,47 +132,22 @@ class _AudioPlayerState extends State<AudioPlayer> {
                               return Dismissible(
                                 direction: DismissDirection.endToStart,
                                 confirmDismiss: (direction) async {
-                                  await showCupertinoModalPopup(
-                                    barrierDismissible: false,
-                                    context: context,
-                                    builder: (context) => CupertinoTheme(
-                                      data: CupertinoThemeData(
-                                          brightness: ThemeProvider().isDarkMode
-                                              ? Brightness.dark
-                                              : Brightness.light),
-                                      child: CupertinoAlertDialog(
-                                        title: const Text(
-                                          'Are you sure?',
-                                          style: TextStyle(fontSize: 20),
-                                        ),
-                                        content: const Text(
-                                            'This can\'t be undone',
-                                            style: TextStyle(fontSize: 16)),
-                                        actions: [
-                                          CupertinoDialogAction(
-                                              onPressed: () =>
-                                                  Navigator.of(context).pop(),
-                                              child: const FaIcon(
-                                                  FontAwesomeIcons.times)),
-                                          CupertinoDialogAction(
-                                            onPressed: () async {
-                                              await AudioDatabase.instance
-                                                  .delete(
-                                                      foundFilesWithTag[index]
-                                                          .id!);
-                                              final targetFile = File(
-                                                  "${directory!.path}/${foundFilesWithTag[index].fileName}.aac");
-                                              targetFile.deleteSync(
-                                                  recursive: true);
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: const FaIcon(
-                                                FontAwesomeIcons.check),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
+                                  Platform.isIOS
+                                      ? await iosModal(
+                                          context,
+                                          controller,
+                                          directory,
+                                          foundFilesWithTag,
+                                          index,
+                                          audio)
+                                      : await androidModal(
+                                          context,
+                                          controller,
+                                          directory,
+                                          foundFilesWithTag,
+                                          index,
+                                          audio);
+
                                   refreshAudioFileList();
                                 },
                                 onDismissed: (direction) {
@@ -291,4 +267,76 @@ Widget stackBehindDismiss() {
       color: Colors.white,
     ),
   );
+}
+
+Future<dynamic> iosModal(
+    context, controller, directory, foundFilesWithTag, index, audio) async {
+  return await showCupertinoModalPopup(
+    barrierDismissible: false,
+    context: context,
+    builder: (context) => CupertinoTheme(
+      data: CupertinoThemeData(
+          brightness:
+              ThemeProvider().isDarkMode ? Brightness.dark : Brightness.light),
+      child: CupertinoAlertDialog(
+        title: const Text(
+          'Are you sure?',
+          style: TextStyle(fontSize: 20),
+        ),
+        content:
+            const Text('This can\'t be undone', style: TextStyle(fontSize: 16)),
+        actions: [
+          CupertinoDialogAction(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const FaIcon(FontAwesomeIcons.times)),
+          CupertinoDialogAction(
+            onPressed: () async {
+              await AudioDatabase.instance.delete(foundFilesWithTag[index].id!);
+              final targetFile = File(
+                  "${directory!.path}/${foundFilesWithTag[index].fileName}.aac");
+              targetFile.deleteSync(recursive: true);
+              Navigator.of(context).pop();
+            },
+            child: const FaIcon(FontAwesomeIcons.check),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+//TODO: finish styling Android and iOS modals
+Future<dynamic> androidModal(
+    context, controller, directory, foundFilesWithTag, index, audio) async {
+  return await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor:
+              ThemeProvider().isDarkMode ? Colors.grey[800] : Colors.white,
+          title: const Text('Are you sure?'),
+          content: SingleChildScrollView(
+              child: Text(
+            'This can\'t be undone',
+            style: TextStyle(
+                color:
+                    ThemeProvider().isDarkMode ? Colors.white : Colors.black),
+          )),
+          actions: [
+            TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('CANCEL')),
+            TextButton(
+                onPressed: () async {
+                  await AudioDatabase.instance
+                      .delete(foundFilesWithTag[index].id!);
+                  final targetFile = File(
+                      "${directory!.path}/${foundFilesWithTag[index].fileName}.aac");
+                  targetFile.deleteSync(recursive: true);
+                  Navigator.of(context).pop();
+                },
+                child: const Text('DELETE'))
+          ],
+        );
+      });
 }

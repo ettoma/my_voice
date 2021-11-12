@@ -208,33 +208,59 @@ Future<dynamic> iosModal(context, controller) async {
       });
 }
 
-// TODO style this modal!
 Future<dynamic> androidModal(context, controller) async {
   return await showDialog(
       context: context,
       builder: (context) {
         return Dialog(
-            child: Container(
-                height: 200,
-                width: 150,
-                child: Column(
-                  children: [
-                    TextField(
+          child: Container(
+            color: ThemeProvider().isDarkMode ? Colors.grey[800] : Colors.white,
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 18.0, horizontal: 24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Enter a name',
+                    style: TextStyle(
+                        color: ThemeProvider().isDarkMode
+                            ? Colors.white
+                            : Colors.black),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 12),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                          counterStyle: TextStyle(
+                              color: ThemeProvider().isDarkMode
+                                  ? Colors.white
+                                  : Colors.black)),
                       controller: controller,
                       maxLength: 18,
                       maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                      style: TextStyle(color: Colors.black),
+                      style: TextStyle(
+                          color: ThemeProvider().isDarkMode
+                              ? Colors.white
+                              : Colors.black),
                     ),
-                    IconButton(
-                        onPressed: () {
-                          sharedPrefs.username = controller.text.trim();
-                          Navigator.pushReplacement(context,
-                              MaterialPageRoute(builder: (context) {
-                            return const Home();
-                          }));
-                        },
-                        icon: FaIcon(FontAwesomeIcons.check))
-                  ],
-                )));
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        sharedPrefs.username = controller.text.trim();
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (context) {
+                          return const Home();
+                        }));
+                      },
+                      icon: const FaIcon(
+                        FontAwesomeIcons.check,
+                        color: Colors.blueAccent,
+                      ))
+                ],
+              ),
+            ),
+          ),
+        );
       });
 }

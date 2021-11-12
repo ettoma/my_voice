@@ -20,7 +20,7 @@ class NotificationService {
       FlutterLocalNotificationsPlugin();
 
   Future<void> init() async {
-    final AndroidInitializationSettings initializationSettingsAndroid =
+    const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
 
     const IOSInitializationSettings initializationSettingsIOS =
@@ -30,7 +30,8 @@ class NotificationService {
       requestAlertPermission: true,
     );
 
-    InitializationSettings initializationSettings = InitializationSettings(
+    InitializationSettings initializationSettings =
+        const InitializationSettings(
       android: initializationSettingsAndroid,
       iOS: initializationSettingsIOS,
     );
@@ -103,11 +104,11 @@ class NotificationService {
   }
 
   // to check pending notifications
-  Future<void> printNotifications() async {
-    List pendingNotifications =
-        await flutterLocalNotificationsPlugin.pendingNotificationRequests();
-    print(pendingNotifications.length);
-  }
+  // Future<void> printNotifications() async {
+  //   List pendingNotifications =
+  //       await flutterLocalNotificationsPlugin.pendingNotificationRequests();
+  //   print(pendingNotifications.length);
+  // }
 }
 
 Future selectNotification(context) async {
