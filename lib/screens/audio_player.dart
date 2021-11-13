@@ -305,7 +305,6 @@ Future<dynamic> iosModal(
   );
 }
 
-//TODO: finish styling Android and iOS modals
 Future<dynamic> androidModal(
     context, controller, directory, foundFilesWithTag, index, audio) async {
   return await showDialog(
@@ -314,13 +313,15 @@ Future<dynamic> androidModal(
         return AlertDialog(
           backgroundColor:
               ThemeProvider().isDarkMode ? Colors.grey[800] : Colors.white,
-          title: const Text('Are you sure?'),
+          title: const Text('Are you sure?',
+              style: TextStyle(color: Colors.redAccent)),
           content: SingleChildScrollView(
               child: Text(
             'This can\'t be undone',
             style: TextStyle(
-                color:
-                    ThemeProvider().isDarkMode ? Colors.white : Colors.black),
+                color: ThemeProvider().isDarkMode
+                    ? Colors.white
+                    : Colors.grey[800]),
           )),
           actions: [
             TextButton(

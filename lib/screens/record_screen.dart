@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:audio_journal/data/audio_file_db.dart';
 import 'package:audio_journal/data/audio_model.dart';
@@ -251,66 +252,175 @@ class _RecordScreenState extends State<RecordScreen>
                                     _currentValue = 0;
                                   },
                                 );
-                                await showCupertinoModalPopup(
-                                  barrierDismissible: false,
-                                  context: context,
-                                  builder: (context) => CupertinoTheme(
-                                    data: CupertinoThemeData(
-                                        brightness: ThemeProvider().isDarkMode
-                                            ? Brightness.dark
-                                            : Brightness.light),
-                                    child: CupertinoAlertDialog(
-                                      actions: [
-                                        CupertinoDialogAction(
-                                          child: const FaIcon(
-                                              FontAwesomeIcons.check),
-                                          onPressed: () {
-                                            _animationController!.reset();
-                                            Navigator.of(context).pop();
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                onVisible: () {
-                                                  refreshAudioFileList();
+                                Platform.isIOS
+                                    // iOS modal
+                                    ? await showCupertinoModalPopup(
+                                        barrierDismissible: false,
+                                        context: context,
+                                        builder: (context) => CupertinoTheme(
+                                          data: CupertinoThemeData(
+                                              brightness:
+                                                  ThemeProvider().isDarkMode
+                                                      ? Brightness.dark
+                                                      : Brightness.light),
+                                          child: CupertinoAlertDialog(
+                                            actions: [
+                                              CupertinoDialogAction(
+                                                child: const FaIcon(
+                                                    FontAwesomeIcons.check),
+                                                onPressed: () {
+                                                  _animationController!.reset();
+                                                  Navigator.of(context).pop();
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      onVisible: () {
+                                                        refreshAudioFileList();
+                                                      },
+                                                      backgroundColor:
+                                                          const Color.fromRGBO(
+                                                              0, 130, 210, 1),
+                                                      content: const Text(
+                                                          'Your recording has been saved'),
+                                                    ),
+                                                  );
+                                                  recorder.updateDB(
+                                                      mood.isNotEmpty
+                                                          ? mood
+                                                          : '',
+                                                      tag.isNotEmpty
+                                                          ? tag
+                                                          : '');
+                                                  isRecording = false;
+                                                  setState(() {});
                                                 },
-                                                backgroundColor:
-                                                    const Color.fromRGBO(
-                                                        0, 130, 210, 1),
-                                                content: const Text(
-                                                    'Your recording has been saved'),
+                                              )
+                                            ],
+                                            title: const Text(
+                                                'Enter a tag for your audio'),
+                                            content: CupertinoTextField(
+                                              prefix: const Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 12.0),
+                                                child: Icon(
+                                                    FontAwesomeIcons.hashtag,
+                                                    size: 14,
+                                                    color: Colors.black54),
                                               ),
-                                            );
-                                            recorder.updateDB(
-                                                mood.isNotEmpty ? mood : '',
-                                                tag.isNotEmpty ? tag : '');
-                                            isRecording = false;
-                                            setState(() {});
-                                          },
-                                        )
-                                      ],
-                                      title: const Text(
-                                          'Enter a tag for your audio'),
-                                      content: CupertinoTextField(
-                                        prefix: const Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 12.0),
-                                          child: Icon(FontAwesomeIcons.hashtag,
-                                              size: 14, color: Colors.black54),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 8,
+                                                      vertical: 10),
+                                              autofocus: true,
+                                              autocorrect: false,
+                                              maxLength: 15,
+                                              maxLengthEnforcement:
+                                                  MaxLengthEnforcement.enforced,
+                                              controller: _tagTextController,
+                                              onChanged: (e) =>
+                                                  tag = _tagTextController.text,
+                                            ),
+                                          ),
                                         ),
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8, vertical: 10),
-                                        autofocus: true,
-                                        autocorrect: false,
-                                        maxLength: 15,
-                                        maxLengthEnforcement:
-                                            MaxLengthEnforcement.enforced,
-                                        controller: _tagTextController,
-                                        onChanged: (e) =>
-                                            tag = _tagTextController.text,
-                                      ),
-                                    ),
-                                  ),
-                                );
+                                      )
+                                    // Android Modal
+                                    : await showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return Dialog(
+                                            child: Container(
+                                              color: ThemeProvider().isDarkMode
+                                                  ? Colors.grey[800]
+                                                  : Colors.white,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 18.0,
+                                                        horizontal: 24),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    Text(
+                                                      'Add a tag',
+                                                      style: TextStyle(
+                                                          color: ThemeProvider()
+                                                                  .isDarkMode
+                                                              ? Colors.white
+                                                              : Colors.black),
+                                                    ),
+                                                    Container(
+                                                      margin:
+                                                          const EdgeInsets.only(
+                                                              top: 12),
+                                                      child: TextFormField(
+                                                        decoration: InputDecoration(
+                                                            counterStyle: TextStyle(
+                                                                color: ThemeProvider()
+                                                                        .isDarkMode
+                                                                    ? Colors
+                                                                        .white
+                                                                    : Colors
+                                                                        .black)),
+                                                        controller:
+                                                            _tagTextController,
+                                                        maxLength: 18,
+                                                        maxLengthEnforcement:
+                                                            MaxLengthEnforcement
+                                                                .enforced,
+                                                        style: TextStyle(
+                                                            color: ThemeProvider()
+                                                                    .isDarkMode
+                                                                ? Colors.white
+                                                                : Colors.black),
+                                                      ),
+                                                    ),
+                                                    IconButton(
+                                                        onPressed: () {
+                                                          _animationController!
+                                                              .reset();
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                            SnackBar(
+                                                              onVisible: () {
+                                                                refreshAudioFileList();
+                                                              },
+                                                              backgroundColor:
+                                                                  const Color
+                                                                          .fromRGBO(
+                                                                      0,
+                                                                      130,
+                                                                      210,
+                                                                      1),
+                                                              content: const Text(
+                                                                  'Your recording has been saved'),
+                                                            ),
+                                                          );
+                                                          recorder.updateDB(
+                                                              mood.isNotEmpty
+                                                                  ? mood
+                                                                  : '',
+                                                              tag.isNotEmpty
+                                                                  ? tag
+                                                                  : '');
+                                                          isRecording = false;
+                                                          setState(() {});
+                                                        },
+                                                        icon: const FaIcon(
+                                                          FontAwesomeIcons
+                                                              .check,
+                                                          color:
+                                                              Colors.blueAccent,
+                                                        ))
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        });
                               },
                             );
                           },
