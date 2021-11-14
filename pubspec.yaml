@@ -56,10 +56,9 @@ dev_dependencies:
   flutter_lints: ^1.0.0
 
 flutter_icons:
-  android: true
+  android: "launcher_icon"
   ios: true
-  image_path_android: "assets/icon/android/icon.png"
-  image_path_ios: "assets/icon/ios/icon.png"
+  image_path: "assets/1024.png"
   remove_alpha_ios: true
 
   # The "flutter_lints" package below contains a set of recommended lints to
