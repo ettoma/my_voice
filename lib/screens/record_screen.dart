@@ -364,6 +364,9 @@ class _RecordScreenState extends State<RecordScreen>
                                                                         .black)),
                                                         controller:
                                                             _tagTextController,
+                                                        onChanged: (e) => tag =
+                                                            _tagTextController
+                                                                .text,
                                                         maxLength: 18,
                                                         maxLengthEnforcement:
                                                             MaxLengthEnforcement
