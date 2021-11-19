@@ -13,10 +13,13 @@ class Instructions extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
+              Text(
                 'Put your thoughts into words, 10 seconds a day, and slowly build a lifetime diary.',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 21),
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText1!
+                    .copyWith(fontSize: 21),
               ),
               const SizedBox(height: 24),
               TextButton(

@@ -1,18 +1,21 @@
 import 'package:audio_journal/utils/shared_prefs.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 Color darkText = Colors.white70;
 Color lightText = const Color.fromRGBO(46, 48, 64, 1);
+var brightness = SchedulerBinding.instance!.window.platformBrightness;
 
 class ThemeProvider extends ChangeNotifier {
-  ThemeMode themeMode = sharedPrefs.darkThemePreference.isEmpty
+  ThemeMode themeMode = sharedPrefs.darkThemePreference == ''
       ? ThemeMode.system
       : sharedPrefs.darkThemePreference == 'light'
           ? ThemeMode.light
           : ThemeMode.dark;
 
-  bool get isDarkMode => themeMode == ThemeMode.dark;
+  bool get isDarkMode =>
+      themeMode == ThemeMode.dark || brightness == Brightness.dark;
 
   void toggleMode(bool isOn) {
     themeMode = isOn ? ThemeMode.dark : ThemeMode.light;

@@ -23,6 +23,21 @@ class _SideMenuState extends State<SideMenu> {
       TextEditingController(text: sharedPrefs.username);
   int toggleIndexAnimation = sharedPrefs.animationPref;
   int toggleIndexNotification = sharedPrefs.notificationPref == true ? 0 : 1;
+  Color? _inactiveBg() {
+    if (sharedPrefs.darkThemePreference.isNotEmpty) {
+      if (sharedPrefs.darkThemePreference == 'light') {
+        return Colors.grey[200];
+      } else if (sharedPrefs.darkThemePreference == 'dark') {
+        return Colors.black.withOpacity(0.7);
+      }
+    } else if (sharedPrefs.darkThemePreference.isEmpty) {
+      if (MediaQuery.of(context).platformBrightness == Brightness.dark) {
+        return Colors.black.withOpacity(0.7);
+      } else {
+        return Colors.grey[200];
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,9 +84,7 @@ class _SideMenuState extends State<SideMenu> {
                 [Colors.purple[300]!]
               ],
               activeFgColor: Colors.white,
-              inactiveBgColor: sharedPrefs.darkThemePreference == 'light'
-                  ? Colors.grey[200]
-                  : Colors.black.withOpacity(0.7),
+              inactiveBgColor: _inactiveBg(),
               inactiveFgColor: sharedPrefs.darkThemePreference == 'light'
                   ? Colors.grey[200]
                   : Colors.grey[500],
@@ -109,9 +122,7 @@ class _SideMenuState extends State<SideMenu> {
                   [Colors.brown[300]!]
                 ],
                 activeFgColor: Colors.white,
-                inactiveBgColor: sharedPrefs.darkThemePreference == 'light'
-                    ? Colors.grey[200]
-                    : Colors.black.withOpacity(0.7),
+                inactiveBgColor: _inactiveBg(),
                 inactiveFgColor: sharedPrefs.darkThemePreference == 'light'
                     ? Colors.grey[200]
                     : Colors.grey[500],
@@ -147,9 +158,7 @@ class _SideMenuState extends State<SideMenu> {
                   [Colors.blue[300]!]
                 ],
                 activeFgColor: Colors.white,
-                inactiveBgColor: sharedPrefs.darkThemePreference == 'light'
-                    ? Colors.grey[200]
-                    : Colors.black.withOpacity(0.7),
+                inactiveBgColor: _inactiveBg(),
                 inactiveFgColor: sharedPrefs.darkThemePreference == 'light'
                     ? Colors.grey[200]
                     : Colors.grey[500],

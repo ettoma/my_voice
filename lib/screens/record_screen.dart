@@ -59,30 +59,20 @@ class _RecordScreenState extends State<RecordScreen>
     setState(() {});
   }
 
-  Color buttonColourNotRecording() {
-    Color? buttonColour;
-    ThemeProvider provider = Provider.of<ThemeProvider>(context);
-
-    if (provider.isDarkMode == true) {
-      buttonColour = Colors.grey[800];
-    } else if (provider.isDarkMode == false) {
-      buttonColour = Colors.white;
+  Color? buttonColourNotRecording() {
+    if (MediaQuery.of(context).platformBrightness == Brightness.dark) {
+      return Colors.grey[800];
+    } else {
+      return Colors.white;
     }
-
-    return buttonColour!;
   }
 
-  Color iconColourNotRecording() {
-    Color? iconColour;
-    ThemeProvider provider = Provider.of<ThemeProvider>(context);
-
-    if (provider.isDarkMode == true) {
-      iconColour = Colors.grey[500];
-    } else if (provider.isDarkMode == false) {
-      iconColour = Colors.blue[400];
+  Color? iconColourNotRecording() {
+    if (MediaQuery.of(context).platformBrightness == Brightness.dark) {
+      return Colors.grey[500];
+    } else {
+      return Colors.blue[400];
     }
-
-    return iconColour!;
   }
 
   Color buttonColourRecording() {
