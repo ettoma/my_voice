@@ -48,8 +48,13 @@ class _FirstTimeUserState extends State<FirstTimeUser> {
                   controller: controller,
                   maxLength: 13,
                   maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 34),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 34,
+                      color: MediaQuery.of(context).platformBrightness ==
+                              Brightness.dark
+                          ? Colors.white
+                          : Colors.black),
                   onEditingComplete: () {
                     if (controller.text == '') {
                       return;
