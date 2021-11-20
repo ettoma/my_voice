@@ -3,6 +3,7 @@ import 'package:audio_journal/utils/app_theme.dart';
 import 'package:audio_journal/utils/shared_prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'utils/notification_service.dart';
 
@@ -33,6 +34,19 @@ class _MyAppState extends State<MyApp> {
             debugShowCheckedModeBanner: false,
             title: 'My voice',
             home: const Splash(),
+
+            // TODO: localizations
+            localizationsDelegates: [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: [
+              Locale('kr', ''),
+              Locale('jp', ''),
+              Locale('it', 'IT'),
+              Locale('en', '')
+            ],
           );
         });
   }

@@ -20,18 +20,22 @@ class Splash extends StatelessWidget {
         ),
       );
     });
-    return Scaffold(
-      body: Center(
-        child: AnimatedTextKit(
-          isRepeatingAnimation: false,
-          animatedTexts: [
-            TypewriterAnimatedText('my voice',
-                textStyle: Theme.of(context)
-                    .textTheme
-                    .headline2!
-                    .copyWith(fontSize: 46),
-                speed: const Duration(milliseconds: 350))
-          ],
+    return Semantics(
+      image: true,
+      label: 'My voice splash screen',
+      child: Scaffold(
+        body: Center(
+          child: AnimatedTextKit(
+            isRepeatingAnimation: false,
+            animatedTexts: [
+              TypewriterAnimatedText('my voice',
+                  textStyle: Theme.of(context)
+                      .textTheme
+                      .headline2!
+                      .copyWith(fontSize: 46),
+                  speed: const Duration(milliseconds: 350))
+            ],
+          ),
         ),
       ),
     );
