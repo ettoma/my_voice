@@ -60,45 +60,67 @@ class _RecordScreenState extends State<RecordScreen>
   }
 
   Color? buttonColourNotRecording() {
-    if (MediaQuery.of(context).platformBrightness == Brightness.dark) {
-      return Colors.grey[800];
-    } else {
-      return Colors.white;
+    if (sharedPrefs.darkThemePreference.isNotEmpty) {
+      if (sharedPrefs.darkThemePreference == 'light') {
+        return Colors.white;
+      } else if (sharedPrefs.darkThemePreference == 'dark') {
+        return Colors.grey[800];
+      }
+    } else if (sharedPrefs.darkThemePreference.isEmpty) {
+      if (MediaQuery.of(context).platformBrightness == Brightness.dark) {
+        return Colors.grey[800];
+      } else {
+        return Colors.white;
+      }
     }
   }
 
   Color? iconColourNotRecording() {
-    if (MediaQuery.of(context).platformBrightness == Brightness.dark) {
-      return Colors.grey[500];
-    } else {
-      return Colors.blue[400];
+    if (sharedPrefs.darkThemePreference.isNotEmpty) {
+      if (sharedPrefs.darkThemePreference == 'light') {
+        return Colors.blue[400];
+      } else if (sharedPrefs.darkThemePreference == 'dark') {
+        return Colors.grey[500];
+      }
+    } else if (sharedPrefs.darkThemePreference.isEmpty) {
+      if (MediaQuery.of(context).platformBrightness == Brightness.dark) {
+        return Colors.blue[400];
+      } else {
+        return Colors.grey[500];
+      }
     }
   }
 
-  Color buttonColourRecording() {
-    Color? buttonColour;
-    ThemeProvider provider = Provider.of<ThemeProvider>(context);
-
-    if (provider.isDarkMode == true) {
-      buttonColour = Colors.grey[850];
-    } else if (provider.isDarkMode == false) {
-      buttonColour = Colors.grey[400];
+  Color? buttonColourRecording() {
+    if (sharedPrefs.darkThemePreference.isNotEmpty) {
+      if (sharedPrefs.darkThemePreference == 'light') {
+        return Colors.grey[400];
+      } else if (sharedPrefs.darkThemePreference == 'dark') {
+        return Colors.grey[850];
+      }
+    } else if (sharedPrefs.darkThemePreference.isEmpty) {
+      if (MediaQuery.of(context).platformBrightness == Brightness.dark) {
+        return Colors.grey[850];
+      } else {
+        return Colors.grey[400];
+      }
     }
-
-    return buttonColour!;
   }
 
-  Color iconColourRecording() {
-    Color? iconColour;
-    ThemeProvider provider = Provider.of<ThemeProvider>(context);
-
-    if (provider.isDarkMode == true) {
-      iconColour = Colors.grey[750];
-    } else if (provider.isDarkMode == false) {
-      iconColour = Colors.grey[600];
+  Color? iconColourRecording() {
+    if (sharedPrefs.darkThemePreference.isNotEmpty) {
+      if (sharedPrefs.darkThemePreference == 'light') {
+        return Colors.grey[600];
+      } else if (sharedPrefs.darkThemePreference == 'dark') {
+        return Colors.grey[750];
+      }
+    } else if (sharedPrefs.darkThemePreference.isEmpty) {
+      if (MediaQuery.of(context).platformBrightness == Brightness.dark) {
+        return Colors.grey[750];
+      } else {
+        return Colors.grey[600];
+      }
     }
-
-    return iconColour!;
   }
 
   @override

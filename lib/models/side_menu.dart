@@ -39,6 +39,22 @@ class _SideMenuState extends State<SideMenu> {
     }
   }
 
+  int? _getLabelIndex() {
+    if (sharedPrefs.darkThemePreference.isNotEmpty) {
+      if (sharedPrefs.darkThemePreference == 'light') {
+        return 0;
+      } else if (sharedPrefs.darkThemePreference == 'dark') {
+        return 1;
+      }
+    } else if (sharedPrefs.darkThemePreference.isEmpty) {
+      if (MediaQuery.of(context).platformBrightness == Brightness.dark) {
+        return 1;
+      } else {
+        return 0;
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     TextStyle? tileText = Theme.of(context).textTheme.bodyText1;
@@ -167,8 +183,7 @@ class _SideMenuState extends State<SideMenu> {
                       size: 15, color: Colors.white),
                   Icon(FontAwesomeIcons.moon, size: 15, color: Colors.white)
                 ],
-                initialLabelIndex:
-                    Provider.of<ThemeProvider>(context).isDarkMode ? 1 : 0,
+                initialLabelIndex: _getLabelIndex()!,
                 radiusStyle: true,
                 onToggle: (index) {
                   final provider =
