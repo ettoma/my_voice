@@ -177,7 +177,7 @@ class _RecordScreenState extends State<RecordScreen>
         ),
         const SizedBox(height: 10),
         SizedBox(
-          height: 80,
+          height: 100,
           child: Text('Good ${_timeOfTheDay()}, \n$username',
               style: Theme.of(context).textTheme.headline1),
         ),

@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:audio_journal/models/player.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
 class AudioPlayer extends StatefulWidget {
@@ -180,67 +181,32 @@ class _AudioPlayerState extends State<AudioPlayer> {
                                     setState(() {});
                                   },
                                   child: Container(
-                                    decoration: BoxDecoration(
-                                        boxShadow: [
-                                          player.fileBeingPlayed ==
-                                                  directory!.uri.toFilePath(
-                                                          windows: false) +
-                                                      foundFilesWithTag[index]
-                                                          .fileName +
-                                                      '.aac'
-                                              ? BoxShadow(
+                                      decoration: BoxDecoration(
+                                          boxShadow: [
+                                            player.fileBeingPlayed ==
+                                                    directory!.uri.toFilePath(
+                                                            windows: false) +
+                                                        foundFilesWithTag[index]
+                                                            .fileName +
+                                                        '.aac'
+                                                ? BoxShadow(
+                                                    color: Colors.grey
+                                                        .withOpacity(0.1),
+                                                    spreadRadius: 1,
+                                                    blurRadius: 0,
+                                                    offset: const Offset(0, 1))
+                                                : const BoxShadow(
+                                                    color: Colors.transparent)
+                                          ],
+                                          border: Border(
+                                              bottom: BorderSide(
+                                                  width: 1,
                                                   color: Colors.grey
-                                                      .withOpacity(0.1),
-                                                  spreadRadius: 1,
-                                                  blurRadius: 0,
-                                                  offset: const Offset(0, 1))
-                                              : const BoxShadow(
-                                                  color: Colors.transparent)
-                                        ],
-                                        border: Border(
-                                            bottom: BorderSide(
-                                                width: 1,
-                                                color: Colors.grey
-                                                    .withOpacity(0.15)))),
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 20),
-                                    margin: const EdgeInsets.only(bottom: 5),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Container(
-                                            margin:
-                                                const EdgeInsets.only(left: 40),
-                                            child: Text(
-                                              format.format(DateTime
-                                                  .fromMillisecondsSinceEpoch(
-                                                      int.parse(audio.fileName
-                                                          .split('.aac')
-                                                          .first))),
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .subtitle1,
-                                            )),
-                                        Container(
-                                          margin:
-                                              const EdgeInsets.only(right: 40),
-                                          child: Row(
-                                            children: [
-                                              Text(
-                                                '#${audio.tag}',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyText1,
-                                              )
-                                            ],
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
+                                                      .withOpacity(0.15)))),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 20),
+                                      margin: const EdgeInsets.only(bottom: 5),
+                                      child: tile(context, format, audio)),
                                 ),
                               );
                             },
@@ -257,6 +223,60 @@ class _AudioPlayerState extends State<AudioPlayer> {
                 ],
               );
   }
+}
+
+Widget tile(context, format, audio) {
+  return MediaQuery.of(context).textScaleFactor > 1
+      ? Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                  margin: EdgeInsets.only(
+                      left:
+                          MediaQuery.of(context).textScaleFactor > 1 ? 20 : 30),
+                  child: Text(
+                    format.format(DateTime.fromMillisecondsSinceEpoch(
+                        int.parse(audio.fileName.split('.aac').first))),
+                    style: Theme.of(context).textTheme.subtitle1,
+                    softWrap: true,
+                  )),
+              Container(
+                margin: EdgeInsets.only(
+                    right:
+                        MediaQuery.of(context).textScaleFactor > 1 ? 20 : 30),
+                child: Text(
+                  '${audio.tag}',
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+              )
+            ],
+          ),
+        )
+      : Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+                margin: EdgeInsets.only(
+                    left: MediaQuery.of(context).textScaleFactor > 1 ? 20 : 30),
+                child: Text(
+                  format.format(DateTime.fromMillisecondsSinceEpoch(
+                      int.parse(audio.fileName.split('.aac').first))),
+                  style: Theme.of(context).textTheme.subtitle1,
+                  softWrap: true,
+                )),
+            Container(
+              margin: EdgeInsets.only(
+                  right: MediaQuery.of(context).textScaleFactor > 1 ? 20 : 30),
+              child: Text(
+                '${audio.tag}',
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+            )
+          ],
+        );
 }
 
 Widget stackBehindDismiss() {
