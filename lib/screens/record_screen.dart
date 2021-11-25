@@ -13,7 +13,6 @@ import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.da
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
-import 'package:provider/provider.dart';
 
 class RecordScreen extends StatefulWidget {
   const RecordScreen({Key? key}) : super(key: key);
@@ -176,8 +175,9 @@ class _RecordScreenState extends State<RecordScreen>
           ],
         ),
         const SizedBox(height: 10),
-        SizedBox(
-          height: 100,
+        Container(
+          margin: const EdgeInsets.only(bottom: 10),
+          // height: 150,
           child: Text('Good ${_timeOfTheDay()}, \n$username',
               style: Theme.of(context).textTheme.headline1),
         ),
