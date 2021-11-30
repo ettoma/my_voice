@@ -1,0 +1,8 @@
+{
+    "morning": "giorno",
+    "afternoon": "pomeriggio",
+    "evening": "sera",
+    "night": "notte",
+    "greetingText": "Buona {timeOfTheDay} \n{username}"
+}
+

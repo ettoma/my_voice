@@ -1,0 +1,8 @@
+{
+    "morning": "morning",
+    "afternoon": "afternoon",
+    "evening": "evening",
+    "night": "night",
+    "greetingText": "Good {timeOfTheDay} \n{username}"
+}
+

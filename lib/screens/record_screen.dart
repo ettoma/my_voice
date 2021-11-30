@@ -13,6 +13,7 @@ import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.da
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RecordScreen extends StatefulWidget {
   const RecordScreen({Key? key}) : super(key: key);
@@ -146,16 +147,16 @@ class _RecordScreenState extends State<RecordScreen>
     DateTime todaysDate = DateTime.now();
     DateFormat format = DateFormat('EEEE dd MMM');
 
-    String _timeOfTheDay() {
+    String timeOfTheDay() {
       String time = '';
       if (5 <= todaysDate.hour && todaysDate.hour <= 11) {
-        time = 'morning';
+        time = AppLocalizations.of(context)!.morning;
       } else if (12 <= todaysDate.hour && todaysDate.hour <= 17) {
-        time = 'afternoon';
+        time = AppLocalizations.of(context)!.afternoon;
       } else if (18 <= todaysDate.hour && todaysDate.hour <= 21) {
-        time = 'evening';
+        time = AppLocalizations.of(context)!.evening;
       } else {
-        time = 'night';
+        time = AppLocalizations.of(context)!.night;
       }
       return time;
     }
@@ -177,8 +178,9 @@ class _RecordScreenState extends State<RecordScreen>
         const SizedBox(height: 10),
         Container(
           margin: const EdgeInsets.only(bottom: 10),
-          // height: 150,
-          child: Text('Good ${_timeOfTheDay()}, \n$username',
+          child: Text('Good ${timeOfTheDay()}, \n$username',
+              // child: Text(
+              //     AppLocalizations.of(context)!.greetingText('ettore', 'toma'),
               style: Theme.of(context).textTheme.headline1),
         ),
         Container(
