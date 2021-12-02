@@ -178,9 +178,9 @@ class _RecordScreenState extends State<RecordScreen>
         const SizedBox(height: 10),
         Container(
           margin: const EdgeInsets.only(bottom: 10),
-          child: Text('Good ${timeOfTheDay()}, \n$username',
-              // child: Text(
-              //     AppLocalizations.of(context)!.greetingText('ettore', 'toma'),
+          child: Text(
+              AppLocalizations.of(context)!.greetingText(timeOfTheDay()) +
+                  '\n$username',
               style: Theme.of(context).textTheme.headline1),
         ),
         Container(

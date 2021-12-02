@@ -3,6 +3,17 @@
     "afternoon": "afternoon",
     "evening": "evening",
     "night": "night",
-    "greetingText": "Good {timeOfTheDay} \n{username}"
-}
+    "greetingText": "Good {timeOfTheDay}",
+    "@greetingText": {
+        "description": "Greet user by the name",
+        "placeholders": {
+            
+            "timeOfTheDay": {
+                "type": "String",
+                "example": "night"
+            }
+        }
 
+    }
+
+}

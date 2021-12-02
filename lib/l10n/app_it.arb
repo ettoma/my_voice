@@ -3,6 +3,17 @@
     "afternoon": "pomeriggio",
     "evening": "sera",
     "night": "notte",
-    "greetingText": "Buona {timeOfTheDay} \n{username}"
+    "greetingText": "Buona {timeOfTheDay}",
+    "@greetingText": {
+        "description": "Greet user by the name",
+        "placeholders": {
+            
+            "timeOfTheDay": {
+                "type": "String",
+                "example": "sera"
+            }
+        }
+
+    }
 }
 
