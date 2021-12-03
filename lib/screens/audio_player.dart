@@ -10,6 +10,7 @@ import 'package:audio_journal/models/player.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AudioPlayer extends StatefulWidget {
   const AudioPlayer({Key? key}) : super(key: key);
@@ -91,7 +92,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
         : audioFiles.isEmpty
             ? Center(
                 child: Text(
-                  'No recordings yet',
+                  AppLocalizations.of(context)!.noFiles,
                   style: Theme.of(context)
                       .textTheme
                       .subtitle1!
@@ -118,7 +119,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
                       textAlign: TextAlign.right,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 12, vertical: 10),
-                      placeholder: 'filter tags',
+                      placeholder: AppLocalizations.of(context)!.filterTags,
                       placeholderStyle: Theme.of(context).textTheme.bodyText2,
                       clearButtonMode: OverlayVisibilityMode.editing,
                       controller: controller,
@@ -212,7 +213,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
                             itemCount: foundFilesWithTag.length)
                         : Center(
                             child: Text(
-                            'No files with this tag',
+                            AppLocalizations.of(context)!.noFilesWithThisTag,
                             style: Theme.of(context)
                                 .textTheme
                                 .subtitle1!
@@ -300,12 +301,12 @@ Future<dynamic> iosModal(
           brightness:
               ThemeProvider().isDarkMode ? Brightness.dark : Brightness.light),
       child: CupertinoAlertDialog(
-        title: const Text(
-          'Are you sure?',
-          style: TextStyle(fontSize: 20),
+        title: Text(
+          AppLocalizations.of(context)!.areYouSure,
+          style: const TextStyle(fontSize: 20),
         ),
-        content:
-            const Text('This can\'t be undone', style: TextStyle(fontSize: 16)),
+        content: Text(AppLocalizations.of(context)!.thisCantBeUndone,
+            style: const TextStyle(fontSize: 16)),
         actions: [
           CupertinoDialogAction(
               onPressed: () => Navigator.of(context).pop(),
@@ -334,11 +335,11 @@ Future<dynamic> androidModal(
         return AlertDialog(
           backgroundColor:
               ThemeProvider().isDarkMode ? Colors.grey[800] : Colors.white,
-          title: const Text('Are you sure?',
-              style: TextStyle(color: Colors.redAccent)),
+          title: Text(AppLocalizations.of(context)!.areYouSure,
+              style: const TextStyle(color: Colors.redAccent)),
           content: SingleChildScrollView(
               child: Text(
-            'This can\'t be undone',
+            AppLocalizations.of(context)!.thisCantBeUndone,
             style: TextStyle(
                 color: ThemeProvider().isDarkMode
                     ? Colors.white
@@ -347,7 +348,7 @@ Future<dynamic> androidModal(
           actions: [
             TextButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: const Text('CANCEL')),
+                child: Text(AppLocalizations.of(context)!.cancel)),
             TextButton(
                 onPressed: () async {
                   await AudioDatabase.instance
@@ -357,7 +358,7 @@ Future<dynamic> androidModal(
                   targetFile.deleteSync(recursive: true);
                   Navigator.of(context).pop();
                 },
-                child: const Text('DELETE'))
+                child: Text(AppLocalizations.of(context)!.confirm))
           ],
         );
       });

@@ -1,11 +1,13 @@
 import 'package:audio_journal/screens/home.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Instructions extends StatelessWidget {
   const Instructions({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations al = AppLocalizations.of(context)!;
     return Scaffold(
       body: Center(
         child: SizedBox(
@@ -14,7 +16,7 @@ class Instructions extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Put your thoughts into words, 10 seconds a day, and slowly build a lifetime diary.',
+                al.instructions,
                 textAlign: TextAlign.center,
                 style: Theme.of(context)
                     .textTheme

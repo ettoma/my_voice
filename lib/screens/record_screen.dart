@@ -139,8 +139,11 @@ class _RecordScreenState extends State<RecordScreen>
     super.dispose();
   }
 
+  // TODO! localization day of the week and month
+  // TODO!: localization daily quotes
   @override
   Widget build(BuildContext context) {
+    AppLocalizations al = AppLocalizations.of(context)!;
     String mood = '';
     String tag = '';
     TextEditingController _tagTextController = TextEditingController();
@@ -178,9 +181,7 @@ class _RecordScreenState extends State<RecordScreen>
         const SizedBox(height: 10),
         Container(
           margin: const EdgeInsets.only(bottom: 10),
-          child: Text(
-              AppLocalizations.of(context)!.greetingText(timeOfTheDay()) +
-                  '\n$username',
+          child: Text(al.greetingText(timeOfTheDay()) + '\n$username',
               style: Theme.of(context).textTheme.headline1),
         ),
         Container(
@@ -213,7 +214,7 @@ class _RecordScreenState extends State<RecordScreen>
                         Container(
                           margin: const EdgeInsets.only(bottom: 10),
                           child: Text(
-                            'Great job today!',
+                            al.greatJobToday,
                             style: Theme.of(context)
                                 .textTheme
                                 .subtitle1!
@@ -221,7 +222,7 @@ class _RecordScreenState extends State<RecordScreen>
                           ),
                         ),
                         Text(
-                          'Come back tomorrow to record a new audio',
+                          al.comeBackTomorrow,
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.bodyText1,
                         ),
@@ -294,8 +295,8 @@ class _RecordScreenState extends State<RecordScreen>
                                                       backgroundColor:
                                                           const Color.fromRGBO(
                                                               0, 130, 210, 1),
-                                                      content: const Text(
-                                                          'Your recording has been saved'),
+                                                      content: Text(
+                                                          al.recordingSaved),
                                                     ),
                                                   );
                                                   recorder.updateDB(
@@ -310,8 +311,7 @@ class _RecordScreenState extends State<RecordScreen>
                                                 },
                                               )
                                             ],
-                                            title: const Text(
-                                                'Enter a tag for your audio'),
+                                            title: Text(al.addTag),
                                             content: CupertinoTextField(
                                               prefix: const Padding(
                                                 padding: EdgeInsets.symmetric(
@@ -356,7 +356,7 @@ class _RecordScreenState extends State<RecordScreen>
                                                       MainAxisSize.min,
                                                   children: [
                                                     Text(
-                                                      'Add a tag',
+                                                      al.addTag,
                                                       style: TextStyle(
                                                           color: ThemeProvider()
                                                                   .isDarkMode
@@ -412,8 +412,8 @@ class _RecordScreenState extends State<RecordScreen>
                                                                       130,
                                                                       210,
                                                                       1),
-                                                              content: const Text(
-                                                                  'Your recording has been saved'),
+                                                              content: Text(al
+                                                                  .recordingSaved),
                                                             ),
                                                           );
                                                           recorder.updateDB(

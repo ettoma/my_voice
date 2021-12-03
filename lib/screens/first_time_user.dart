@@ -6,6 +6,7 @@ import 'package:audio_journal/utils/shared_prefs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FirstTimeUser extends StatefulWidget {
   const FirstTimeUser({Key? key}) : super(key: key);
@@ -24,6 +25,7 @@ class _FirstTimeUserState extends State<FirstTimeUser> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations al = AppLocalizations.of(context)!;
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -32,7 +34,7 @@ class _FirstTimeUserState extends State<FirstTimeUser> {
                 Container(
                   margin: const EdgeInsets.only(bottom: 16),
                   child: Text(
-                    'What\'s your name?',
+                    al.whatName,
                     style: Theme.of(context).textTheme.headline2,
                   ),
                 ),
@@ -75,7 +77,7 @@ class _FirstTimeUserState extends State<FirstTimeUser> {
             : <Widget>[
                 Center(
                   child: Text(
-                    'Welcome,\n${sharedPrefs.username}',
+                    al.welcome + '\n${sharedPrefs.username}',
                     textAlign: TextAlign.center,
                     style: Theme.of(context)
                         .textTheme

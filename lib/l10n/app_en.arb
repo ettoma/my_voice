@@ -3,11 +3,29 @@
     "afternoon": "afternoon",
     "evening": "evening",
     "night": "night",
+    "noFiles": "No recordings yet",
+    "filterTags": "filter tags",
+    "noFilesWithThisTag": "No files with this tag",
+    "areYouSure": "Are you sure?",
+    "thisCantBeUndone": "This can't be undone",
+    "cancel": "CANCEL",
+    "confirm": "CONFIRM",
+    "greatJobToday": "Great job today!",
+    "comeBackTomorrow": "Come back tomorrow to record a new audio",
+    "recordingSaved": "Your recording has been saved",
+    "addTag": "Add a tag",
+    "welcome": "Welcome",
+    "whatName": "What's your name?",
+    "editName": "Edit name",
+    "illustration": "Illustration",
+    "notifications": "Notifications",
+    "darkMode": "Dark mode",
+    "enterName": "Enter a name",
+    "instructions": "Put your thoughts into words, 10 seconds a day, and slowly build a lifetime diary.",
     "greetingText": "Good {timeOfTheDay}",
     "@greetingText": {
         "description": "Greet user by the name",
         "placeholders": {
-            
             "timeOfTheDay": {
                 "type": "String",
                 "example": "night"

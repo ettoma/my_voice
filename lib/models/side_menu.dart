@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:toggle_switch/toggle_switch.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SideMenu extends StatefulWidget {
   const SideMenu({Key? key}) : super(key: key);
@@ -58,6 +59,7 @@ class _SideMenuState extends State<SideMenu> {
   @override
   Widget build(BuildContext context) {
     TextStyle? tileText = Theme.of(context).textTheme.bodyText1;
+    AppLocalizations al = AppLocalizations.of(context)!;
 
     return Drawer(
         child: Padding(
@@ -77,7 +79,7 @@ class _SideMenuState extends State<SideMenu> {
           const SizedBox(height: 24),
           ListTile(
             minVerticalPadding: 24,
-            title: Text('Edit name', style: tileText),
+            title: Text(al.editName, style: tileText),
             trailing: IconButton(
               icon: FaIcon(FontAwesomeIcons.pencilAlt,
                   color: Colors.deepOrange.withOpacity(0.7)),
@@ -90,7 +92,7 @@ class _SideMenuState extends State<SideMenu> {
           ),
           ListTile(
             minVerticalPadding: 24,
-            title: Text('Illustration', style: tileText),
+            title: Text(al.illustration, style: tileText),
             trailing: ToggleSwitch(
               minWidth: 35.0,
               minHeight: 35,
@@ -127,7 +129,7 @@ class _SideMenuState extends State<SideMenu> {
           ),
           ListTile(
               minVerticalPadding: 24,
-              title: Text('Notifications', style: tileText),
+              title: Text(al.notifications, style: tileText),
               trailing: ToggleSwitch(
                 totalSwitches: 2,
                 minWidth: 35.0,
@@ -163,7 +165,7 @@ class _SideMenuState extends State<SideMenu> {
               )),
           ListTile(
               minVerticalPadding: 24,
-              title: Text('Dark mode', style: tileText),
+              title: Text(al.darkMode, style: tileText),
               trailing: ToggleSwitch(
                 totalSwitches: 2,
                 minWidth: 35.0,
@@ -201,6 +203,7 @@ class _SideMenuState extends State<SideMenu> {
 }
 
 Future<dynamic> iosModal(context, controller) async {
+  AppLocalizations al = AppLocalizations.of(context)!;
   return await showCupertinoModalPopup(
       context: context,
       builder: (context) {
@@ -210,7 +213,7 @@ Future<dynamic> iosModal(context, controller) async {
                   ? Brightness.dark
                   : Brightness.light),
           child: CupertinoAlertDialog(
-            title: const Text('Enter a name'),
+            title: Text(al.enterName),
             content: CupertinoTextField(
               controller: controller,
               maxLength: 18,
@@ -233,6 +236,7 @@ Future<dynamic> iosModal(context, controller) async {
 }
 
 Future<dynamic> androidModal(context, controller) async {
+  AppLocalizations al = AppLocalizations.of(context)!;
   return await showDialog(
       context: context,
       builder: (context) {
@@ -246,7 +250,7 @@ Future<dynamic> androidModal(context, controller) async {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'Enter a name',
+                    al.enterName,
                     style: TextStyle(
                         color: ThemeProvider().isDarkMode
                             ? Colors.white
