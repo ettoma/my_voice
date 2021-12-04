@@ -12,6 +12,17 @@ class DailyQuote extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String getSystemLocale() {
+      String systemLocale = Localizations.localeOf(context).toString();
+      if (systemLocale.contains("en")) {
+        return "en";
+      } else if (systemLocale.contains("it")) {
+        return "it";
+      } else {
+        return "en";
+      }
+    }
+
     int randomQuoteInt = Random().nextInt(Quotes().quotes.length);
 
     Timer(const Duration(seconds: 5), () {
@@ -35,7 +46,7 @@ class DailyQuote extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                Quotes().quotes[randomQuoteInt]['quote'].toString(),
+                Quotes().quotes[randomQuoteInt][getSystemLocale()].toString(),
                 textAlign: TextAlign.center,
                 style: Theme.of(context)
                     .textTheme
