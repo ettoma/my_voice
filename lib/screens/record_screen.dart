@@ -148,24 +148,36 @@ class _RecordScreenState extends State<RecordScreen>
     String tag = '';
     TextEditingController _tagTextController = TextEditingController();
     DateTime todaysDate = DateTime.now();
-    DateFormat format = DateFormat('EEEE dd MMM');
+    DateFormat format = DateFormat('dd.MM.yyy');
 
     String timeOfTheDay() {
       String time = '';
       if (5 <= todaysDate.hour && todaysDate.hour <= 11) {
-        time = AppLocalizations.of(context)!.morning;
+        time = al.morning;
       } else if (12 <= todaysDate.hour && todaysDate.hour <= 17) {
-        time = AppLocalizations.of(context)!.afternoon;
+        time = al.afternoon;
       } else if (18 <= todaysDate.hour && todaysDate.hour <= 21) {
-        time = AppLocalizations.of(context)!.evening;
+        time = al.evening;
       } else {
-        time = AppLocalizations.of(context)!.night;
+        time = al.night;
       }
       return time;
     }
 
+    bool isGenderMale() {
+      if (5 <= todaysDate.hour && todaysDate.hour <= 11) {
+        return true;
+      } else if (12 <= todaysDate.hour && todaysDate.hour <= 17) {
+        return true;
+      } else if (18 <= todaysDate.hour && todaysDate.hour <= 21) {
+        return false;
+      } else {
+        return false;
+      }
+    }
+
     return ListView(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       physics: const NeverScrollableScrollPhysics(),
       children: [
         Row(
@@ -181,13 +193,18 @@ class _RecordScreenState extends State<RecordScreen>
         const SizedBox(height: 10),
         Container(
           margin: const EdgeInsets.only(bottom: 10),
-          child: Text(al.greetingText(timeOfTheDay()) + '\n$username',
+          child: Text(
+              isGenderMale()
+                  ? al.greetingIntroMale + al.greetingText(timeOfTheDay())
+                  : al.greetingIntroFemale +
+                      al.greetingText(timeOfTheDay()) +
+                      '\n$username',
               style: Theme.of(context).textTheme.headline1),
         ),
         Container(
           child: Lottie.asset(
             _selectedAnimation[toggleIndex],
-            height: MediaQuery.of(context).size.width * 0.85,
+            height: MediaQuery.of(context).textScaleFactor > 1.25 ? 300 : 350,
             repeat: false,
             controller: _animationController,
           ),
@@ -200,7 +217,7 @@ class _RecordScreenState extends State<RecordScreen>
           progressColor: Colors.blueAccent.withOpacity(0.75),
         ),
         const SizedBox(
-          height: 20,
+          height: 12,
         ),
         isLoading
             ? const CircularProgressIndicator()
@@ -212,7 +229,7 @@ class _RecordScreenState extends State<RecordScreen>
                     child: Column(
                       children: [
                         Container(
-                          margin: const EdgeInsets.only(bottom: 10),
+                          margin: const EdgeInsets.only(bottom: 2),
                           child: Text(
                             al.greatJobToday,
                             style: Theme.of(context)

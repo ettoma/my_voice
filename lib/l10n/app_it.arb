@@ -22,11 +22,12 @@
     "darkMode": "Tema scuro",
     "enterName": "Inserisci un nome",
     "instructions": "Trasforma i pensieri in parole, 10 secondi al giorno, e costruisci il diario di una vita.",
-    "greetingText": "Buona {timeOfTheDay}",
+    "greetingIntroMale": "Buon ",
+    "greetingIntroFemale": "Buona ",
+    "greetingText": "{timeOfTheDay}",
     "@greetingText": {
         "description": "Greet user by the name",
         "placeholders": {
-            
             "timeOfTheDay": {
                 "type": "String",
                 "example": "sera"

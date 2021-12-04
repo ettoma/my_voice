@@ -83,6 +83,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
   @override
   Widget build(BuildContext context) {
     final format = DateFormat('dd.MM.yyyy HH:mm');
+    AppLocalizations al = AppLocalizations.of(context)!;
 
     return _isLoading == true
         ? Center(
@@ -92,7 +93,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
         : audioFiles.isEmpty
             ? Center(
                 child: Text(
-                  AppLocalizations.of(context)!.noFiles,
+                  al.noFiles,
                   style: Theme.of(context)
                       .textTheme
                       .subtitle1!
@@ -119,7 +120,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
                       textAlign: TextAlign.right,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 12, vertical: 10),
-                      placeholder: AppLocalizations.of(context)!.filterTags,
+                      placeholder: al.filterTags,
                       placeholderStyle: Theme.of(context).textTheme.bodyText2,
                       clearButtonMode: OverlayVisibilityMode.editing,
                       controller: controller,
@@ -142,14 +143,16 @@ class _AudioPlayerState extends State<AudioPlayer> {
                                           directory,
                                           foundFilesWithTag,
                                           index,
-                                          audio)
+                                          audio,
+                                          al)
                                       : await androidModal(
                                           context,
                                           controller,
                                           directory,
                                           foundFilesWithTag,
                                           index,
-                                          audio);
+                                          audio,
+                                          al);
 
                                   refreshAudioFileList();
                                 },
@@ -213,7 +216,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
                             itemCount: foundFilesWithTag.length)
                         : Center(
                             child: Text(
-                            AppLocalizations.of(context)!.noFilesWithThisTag,
+                            al.noFilesWithThisTag,
                             style: Theme.of(context)
                                 .textTheme
                                 .subtitle1!
@@ -292,7 +295,7 @@ Widget stackBehindDismiss() {
 }
 
 Future<dynamic> iosModal(
-    context, controller, directory, foundFilesWithTag, index, audio) async {
+    context, controller, directory, foundFilesWithTag, index, audio, al) async {
   return await showCupertinoModalPopup(
     barrierDismissible: false,
     context: context,
@@ -302,11 +305,11 @@ Future<dynamic> iosModal(
               ThemeProvider().isDarkMode ? Brightness.dark : Brightness.light),
       child: CupertinoAlertDialog(
         title: Text(
-          AppLocalizations.of(context)!.areYouSure,
+          al.areYouSure,
           style: const TextStyle(fontSize: 20),
         ),
-        content: Text(AppLocalizations.of(context)!.thisCantBeUndone,
-            style: const TextStyle(fontSize: 16)),
+        content:
+            Text(al.thisCantBeUndone, style: const TextStyle(fontSize: 16)),
         actions: [
           CupertinoDialogAction(
               onPressed: () => Navigator.of(context).pop(),
@@ -328,18 +331,18 @@ Future<dynamic> iosModal(
 }
 
 Future<dynamic> androidModal(
-    context, controller, directory, foundFilesWithTag, index, audio) async {
+    context, controller, directory, foundFilesWithTag, index, audio, al) async {
   return await showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
           backgroundColor:
               ThemeProvider().isDarkMode ? Colors.grey[800] : Colors.white,
-          title: Text(AppLocalizations.of(context)!.areYouSure,
+          title: Text(al.areYouSure,
               style: const TextStyle(color: Colors.redAccent)),
           content: SingleChildScrollView(
               child: Text(
-            AppLocalizations.of(context)!.thisCantBeUndone,
+            al.thisCantBeUndone,
             style: TextStyle(
                 color: ThemeProvider().isDarkMode
                     ? Colors.white
@@ -348,7 +351,7 @@ Future<dynamic> androidModal(
           actions: [
             TextButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: Text(AppLocalizations.of(context)!.cancel)),
+                child: Text(al.cancel)),
             TextButton(
                 onPressed: () async {
                   await AudioDatabase.instance
@@ -358,7 +361,7 @@ Future<dynamic> androidModal(
                   targetFile.deleteSync(recursive: true);
                   Navigator.of(context).pop();
                 },
-                child: Text(AppLocalizations.of(context)!.confirm))
+                child: Text(al.confirm))
           ],
         );
       });

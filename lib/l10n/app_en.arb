@@ -21,8 +21,10 @@
     "notifications": "Notifications",
     "darkMode": "Dark mode",
     "enterName": "Enter a name",
+    "greetingIntroMale": "Good ",
+    "greetingIntroFemale": "Good ",
     "instructions": "Put your thoughts into words, 10 seconds a day, and slowly build a lifetime diary.",
-    "greetingText": "Good {timeOfTheDay}",
+    "greetingText": "{timeOfTheDay}",
     "@greetingText": {
         "description": "Greet user by the name",
         "placeholders": {
