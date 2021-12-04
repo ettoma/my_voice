@@ -139,8 +139,6 @@ class _RecordScreenState extends State<RecordScreen>
     super.dispose();
   }
 
-  // TODO! localization day of the week and month
-  // TODO!: localization daily quotes
   @override
   Widget build(BuildContext context) {
     AppLocalizations al = AppLocalizations.of(context)!;
