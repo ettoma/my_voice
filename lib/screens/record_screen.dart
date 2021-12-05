@@ -193,7 +193,9 @@ class _RecordScreenState extends State<RecordScreen>
           margin: const EdgeInsets.only(bottom: 10),
           child: Text(
               isGenderMale()
-                  ? al.greetingIntroMale + al.greetingText(timeOfTheDay())
+                  ? al.greetingIntroMale +
+                      al.greetingText(timeOfTheDay()) +
+                      '\n$username'
                   : al.greetingIntroFemale +
                       al.greetingText(timeOfTheDay()) +
                       '\n$username',
