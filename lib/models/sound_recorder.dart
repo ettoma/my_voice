@@ -35,12 +35,12 @@ class SoundRecorder {
         throw RecordingPermissionException('Microphone permission not granted');
       }
     }
-    await _audioRecorder!.openAudioSession();
+    await _audioRecorder!.openRecorder();
     _isRecorderInitialised = true;
   }
 
   void dispose() {
-    _audioRecorder!.closeAudioSession();
+    _audioRecorder!.closeRecorder();
     _audioRecorder = null;
     _isRecorderInitialised = false;
   }

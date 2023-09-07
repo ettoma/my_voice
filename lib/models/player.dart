@@ -9,11 +9,11 @@ class SoundPlayer {
 
   Future init() async {
     _audioPlayer = FlutterSoundPlayer();
-    await _audioPlayer!.openAudioSession();
+    await _audioPlayer!.openPlayer();
   }
 
   void dispose() {
-    _audioPlayer!.closeAudioSession();
+    _audioPlayer!.closePlayer();
     _audioPlayer = null;
   }
 

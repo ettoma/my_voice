@@ -23,17 +23,17 @@ class NotificationService {
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
 
-    const IOSInitializationSettings initializationSettingsIOS =
-        IOSInitializationSettings(
-      requestSoundPermission: true,
-      requestBadgePermission: true,
-      requestAlertPermission: true,
-    );
+    // const IOSInitializationSettings initializationSettingsIOS =
+    //     IOSInitializationSettings(
+    //   requestSoundPermission: true,
+    //   requestBadgePermission: true,
+    //   requestAlertPermission: true,
+    // );
 
     InitializationSettings initializationSettings =
         const InitializationSettings(
       android: initializationSettingsAndroid,
-      iOS: initializationSettingsIOS,
+      // iOS: initializationSettingsIOS,
     );
 
     tz.initializeTimeZones();
@@ -42,13 +42,13 @@ class NotificationService {
         onSelectNotification: selectNotification);
   }
 
-  final IOSNotificationDetails _iosNotificationDetails =
-      const IOSNotificationDetails(
-    presentAlert: true,
-    presentBadge: true,
-    presentSound: true,
-    // subtitle: 'This is the notification',
-  );
+  // final IOSNotificationDetails _iosNotificationDetails =
+  //     const IOSNotificationDetails(
+  //   presentAlert: true,
+  //   presentBadge: true,
+  //   presentSound: true,
+  //   // subtitle: 'This is the notification',
+  // );
 
   final AndroidNotificationDetails _androidNotificationDetails =
       const AndroidNotificationDetails(
@@ -65,7 +65,9 @@ class NotificationService {
       "My voice",
       "Have you already recorded your audio today?",
       NotificationDetails(
-          android: _androidNotificationDetails, iOS: _iosNotificationDetails),
+        android: _androidNotificationDetails,
+        // iOS: _iosNotificationDetails
+      ),
     );
   }
 
@@ -77,7 +79,7 @@ class NotificationService {
         _nextInstanceOfSevenPM(),
         NotificationDetails(
           android: _androidNotificationDetails,
-          iOS: _iosNotificationDetails,
+          // iOS: _iosNotificationDetails,
         ),
         androidAllowWhileIdle: true,
         uiLocalNotificationDateInterpretation:

@@ -38,6 +38,7 @@ class _SideMenuState extends State<SideMenu> {
         return Colors.grey[200];
       }
     }
+    return null;
   }
 
   int? _getLabelIndex() {
@@ -54,11 +55,12 @@ class _SideMenuState extends State<SideMenu> {
         return 0;
       }
     }
+    return null;
   }
 
   @override
   Widget build(BuildContext context) {
-    TextStyle? tileText = Theme.of(context).textTheme.bodyText1;
+    TextStyle? tileText = Theme.of(context).textTheme.bodyLarge;
     AppLocalizations al = AppLocalizations.of(context)!;
 
     return Drawer(
@@ -72,7 +74,7 @@ class _SideMenuState extends State<SideMenu> {
               'my voice',
               style: Theme.of(context)
                   .textTheme
-                  .headline2!
+                  .displayMedium!
                   .copyWith(fontWeight: FontWeight.w600),
             ),
           ),
@@ -81,7 +83,7 @@ class _SideMenuState extends State<SideMenu> {
             minVerticalPadding: 24,
             title: Text(al.editName, style: tileText),
             trailing: IconButton(
-              icon: FaIcon(FontAwesomeIcons.pencilAlt,
+              icon: FaIcon(FontAwesomeIcons.pencil,
                   color: Colors.deepOrange.withOpacity(0.7)),
               onPressed: () async {
                 Platform.isIOS
@@ -116,10 +118,10 @@ class _SideMenuState extends State<SideMenu> {
               onToggle: (index) {
                 setState(
                   () {
-                    toggleIndexAnimation = index;
+                    toggleIndexAnimation = index!;
                   },
                 );
-                sharedPrefs.animationPref = index;
+                sharedPrefs.animationPref = index!;
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) {
                   return const Home();
@@ -153,7 +155,7 @@ class _SideMenuState extends State<SideMenu> {
                 radiusStyle: true,
                 onToggle: (index) {
                   setState(() {
-                    toggleIndexNotification = index;
+                    toggleIndexNotification = index!;
                   });
                   sharedPrefs.notificationPref = index == 0 ? true : false;
                   if (index == 0) {

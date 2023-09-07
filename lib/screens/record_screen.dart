@@ -211,7 +211,7 @@ class _RecordScreenState extends State<RecordScreen>
         ),
         FAProgressBar(
           animatedDuration: const Duration(seconds: 10),
-          currentValue: _currentValue,
+          currentValue: double.parse(_currentValue.toString()),
           maxValue: 45,
           size: 5,
           progressColor: Colors.blueAccent.withOpacity(0.75),
@@ -234,7 +234,7 @@ class _RecordScreenState extends State<RecordScreen>
                             al.greatJobToday,
                             style: Theme.of(context)
                                 .textTheme
-                                .subtitle1!
+                                .titleMedium!
                                 .copyWith(color: Colors.orangeAccent),
                           ),
                         ),
@@ -424,7 +424,7 @@ class _RecordScreenState extends State<RecordScreen>
                                                               },
                                                               backgroundColor:
                                                                   const Color
-                                                                          .fromRGBO(
+                                                                      .fromRGBO(
                                                                       0,
                                                                       130,
                                                                       210,
